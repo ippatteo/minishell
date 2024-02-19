@@ -1,23 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_esa_x.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 15:33:09 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/09/22 14:39:28 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/05/10 12:17:25 by mcamilli          #+#    #+#             */
+/*   Updated: 2023/09/22 00:37:42 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_printf.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_esa_x(unsigned int k, char *f, int base)
 {
-	size_t	i;
+	int	i;
 
-	i = 0;
-	while (s[i] != '\0')
-		i++;
+	i = 1;
+	if ((k / base) == 0)
+		ft_putchar(f[k % base]);
+	else
+	{
+		i += ft_esa(k / base, f, base);
+		ft_esa(k % base, f, base);
+	}
 	return (i);
 }

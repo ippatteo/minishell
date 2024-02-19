@@ -1,23 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_mini_split.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 15:33:09 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/09/22 14:39:28 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
+/*   Updated: 2024/02/19 10:09:55 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../mini.h"
 
-size_t	ft_strlen(const char *s)
+//esattamente come split ma mette "*", '*', |, >>, <<, >, < 
+//in stringhe diverse oltre alle parole
+char	**ft_mini_split(char *s)
 {
-	size_t	i;
-
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	char	**str;
+	
+	if (!s)
+		return (NULL);
+	if ((int)count_mem(s) == -1)
+	{
+		printf("errore");
+		return (NULL);
+	}
+	str = malloc(sizeof (char *) * (count_mem(s) + 1));
+	if (!str)
+		return (NULL);
+	split_mem(s, str);
+	return (str);
 }

@@ -1,29 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_striteri.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/15 19:32:00 by lpicciri         ###   ########.fr       */
+/*   Created: 2023/04/25 11:48:39 by mcamilli          #+#    #+#             */
+/*   Updated: 2023/04/26 12:33:23 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main()
+void	ft_striteri(char *s, void (*f)(unsigned int, char*))
 {
-	char *cmd;
+	int		i;
 
-	cmd = NULL;
-	while(1)
+	i = 0;
+	if (!s || !f)
+		return ;
+	while (s[i])
 	{
-		cmd = readline("minishell$ ");
-		if (cmd == NULL)
-			return(-1);
-		lexer(cmd);
-		add_history(cmd);
+		f(i, &s[i]);
+		i++;
 	}
-	return(0);
+	return ;
 }

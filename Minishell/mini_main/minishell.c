@@ -1,23 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/29 15:33:09 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/09/22 14:39:28 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
+/*   Updated: 2024/02/19 10:00:42 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "/minishell.h"
 
-size_t	ft_strlen(const char *s)
+int	main()
 {
-	size_t	i;
+	char *cmd;
 
-	i = 0;
-	while (s[i] != '\0')
-		i++;
-	return (i);
+	cmd = NULL;
+	while(1)
+	{
+		cmd = readline("minishell$ ");
+		if (cmd == NULL)
+			return(-1);
+		//printf("\n%d\n", (int)count_mem(cmd));
+		//	lexer(cmd);
+		//add_history(cmd);
+	}
+	return(0);
 }

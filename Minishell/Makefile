@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    MAKEFILE                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+         #
+#    By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/01/24 15:54:17 by lpicciri         ###   ########.fr        #
+#    Updated: 2024/02/19 09:30:06 by mcamilli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT =	./libft/libft.a
 
 ALL = minishell
 
-SRCS = lexer.c minishell.c
+SRCS = lexer/*.c mini_main/*.c
 
 OBJS = ${SRCS:.c=.o}
 
@@ -32,11 +32,11 @@ $(NAME): $(LIBFT) ${OBJS}
 all: ${NAME}
 
 $(LIBFT):
-		make -C ./libft
+		make -C libft
 
 clean:
 		${RM} ${OBJS}
-		make clean -C ./libft
+		make clean -C libft
 
 fclean: clean
 		${RM} ${NAME}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/15 19:33:35 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/02/16 12:21:59 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,9 +25,7 @@ int	ft_isspace(char c)
 size_t	count_mem_quote(char *str, char c)
 {
 	size_t	mem;
-	bool	closed;
 
-	closed = false;
 	mem = 1;
 	str++;
 	while(*str && *str != c)
@@ -72,8 +70,6 @@ size_t	count_mem(char *str)
 		if (*str == QUOTE || *str == D_QUOTE)
 		{
 			quote_mem = count_mem_quote(str, *str);
-			if (quote_mem == 0)
-				return (0);
 			mem += quote_mem;
 			str += quote_mem;
 		}
