@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/19 10:06:18 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/19 10:29:29 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ size_t	count_mem(char *s);
 size_t	split_mem(char *s, char **str);
 char	**ft_mini_split(char *s);
 char	**ft_mini_split(char *s);
+int		lexer(char *prompt);
 
 
 

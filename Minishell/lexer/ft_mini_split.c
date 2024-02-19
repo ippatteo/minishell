@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/19 10:09:55 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/19 10:27:44 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,7 @@ char	**ft_mini_split(char *s)
 	if (!s)
 		return (NULL);
 	if ((int)count_mem(s) == -1)
-	{
-		printf("errore");
 		return (NULL);
-	}
 	str = malloc(sizeof (char *) * (count_mem(s) + 1));
 	if (!str)
 		return (NULL);
