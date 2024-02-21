@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/19 10:27:44 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:41:04 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 //esattamente come split ma mette "*", '*', |, >>, <<, >, < 
 //in stringhe diverse oltre alle parole
+
+
+
 char	**ft_mini_split(char *s)
 {
 	char	**str;
@@ -28,3 +31,4 @@ char	**ft_mini_split(char *s)
 	split_mem(s, str);
 	return (str);
 }
+

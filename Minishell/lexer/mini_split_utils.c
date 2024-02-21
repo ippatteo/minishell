@@ -6,21 +6,47 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/19 10:07:38 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:04:15 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
+int ft_str_tmp(char *str)
+{
+	char *s2;
+	char *tmp;
+	
+	tmp = ft_strdup((const char *)str);
+	while (*str)
+	{
+		if (*str == '$' && *(str + 1) != ' ')
+		{
+			s2 = malloc(count_words(++str)+1);
+			free(str);
+			ft_strlcpy(s2,(char*)str, count_words(++str) + 1);
+			if(getenv((const char *)s2))
+				
+			
+			
+		}
+			
+			
+	}
+}
 //conta quanti caratteri contengono le virgolette, virgolette comprese
 int	count_mem_quote(char *str, char c)
 {
 	int	mem;
 
 	mem = 1;
-	str++;
+	str++; 
 	while(*str && *str != c)
 	{
+		if (*str == '$' && c == '"' && *(str+1) != ' ')
+		{
+			str 
+		}
 		mem++;
 		str++;
 	}
@@ -107,7 +133,7 @@ size_t	split_mem(char *s, char **str)
 	while (*s)
 	{
 		if ((*s == '>') || (*s == '<') 
-			|| (*s == '|') || (*s == 34) || (*s == 39))
+			|| (*s == '|') || (*s == 34) || (*s == 39) || (*s == '$'))
 		{
 			str[i] = ft_substr(s, 0, count_quot_pipe_redir(s, *s));
 			s += count_quot_pipe_redir(s, *s);

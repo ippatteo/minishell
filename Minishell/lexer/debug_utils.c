@@ -6,16 +6,14 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/19 09:36:43 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/19 10:08:49 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/21 15:34:53 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include "../mini.h"
 
-/*in questo file vorrei mettere quelle funzioni 
-che usiamo per debuggare o per verificare che le cose funzionino*/
-
-//printa una matrice di stringhe
+//in questo file vorrei mettere quelle funzioni che
 void ft_printmap(char **c)
 {
 	int x;
@@ -28,12 +26,13 @@ void ft_printmap(char **c)
 		x++ ;
 	}
 }
-//main per debuggare ft_mini_split
 int main (void)
 {
 	char *i = "1234  '  |1 ' >>>| '   ' 567";
 	//count_mem(i);
 	//printf("countmem = %ld" ,count_mem(i));
-	ft_printmap(ft__mini_split(i));
+	ft_printmap(ft_mini_split(i));
 	return(0);
-} 
+}
+
+*/

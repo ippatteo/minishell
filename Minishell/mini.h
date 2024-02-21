@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/19 10:29:29 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/21 18:41:16 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,12 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <time.h>
-# include "../libft/libft.h"
-# include "../printf/ft_printf.h"
+# include "libft/libft.h"
+# include "printf/ft_printf.h"
+typedef struct s_mini
+{
+	char **commands;
+}	t_mini;
 
 int		count_mem_quote(char *str, char c);
 int		count_quot_pipe_redir(char *str, char c);
@@ -32,8 +36,7 @@ int		count_words(char *str);
 size_t	count_mem(char *s);
 size_t	split_mem(char *s, char **str);
 char	**ft_mini_split(char *s);
-char	**ft_mini_split(char *s);
-int		lexer(char *prompt);
+int	lexer(t_mini *mini, char *prompt);
 
 
 
