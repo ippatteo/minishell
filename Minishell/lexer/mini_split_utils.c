@@ -6,30 +6,52 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/22 08:56:58 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/22 10:39:48 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-/*
+int	count_exp(char *str)
+{
+	int mem;
+
+	mem = 0;
+	while (*str)
+	{
+		if ((*str == '>') || (*str == '<') 
+			|| (*str == '|') || (*str == 34) || (*str == 39) || (*str == ' ') || (*str == '$'))
+				break ;
+		else
+		{
+			str++;
+			mem++;
+		}
+	}
+	return (mem);
+}
 int ft_str_tmp(char *str)
 {
 	char *s2;
 	char *tmp;
 	
-	tmp = ft_strdup((const char *)str);
+	tmp = NULL;
 	while (*str)
 	{
 		if (*str == '$' && *(str + 1) != ' ')
 		{
-			s2 = ft_substr(str, 0, count_words(str + 1))
-			if (getenv((const char *)s2))
-				
-
+			tmp = ft_substr((const char *)str, 1,)
+			if(if (getenv((const char *)ft_substr()))
+			
 		}
-			
-			
+		else 
+		{
+			mem++;
+			str++;
+		}
+		
+			s2 = ft_substr(str, 0, count_words(str + 1))
+			if (getenv((const char *)s2)
 	}
 }
 */
@@ -128,7 +150,7 @@ size_t	split_mem(char *s, char **str)
 	while (*s)
 	{
 		if ((*s == '>') || (*s == '<') 
-			|| (*s == '|') || (*s == 34) || (*s == 39) || (*s == '$'))
+			|| (*s == '|') || (*s == 34) || (*s == 39))
 		{
 			str[i] = ft_substr(s, 0, count_quot_pipe_redir(s, *s));
 			s += count_quot_pipe_redir(s, *s);
