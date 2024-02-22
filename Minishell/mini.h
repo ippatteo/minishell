@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/21 18:41:16 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/22 08:50:39 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 # include "printf/ft_printf.h"
 typedef struct s_mini
 {
+	char *tmp;
 	char **commands;
 }	t_mini;
 
@@ -36,7 +37,7 @@ int		count_words(char *str);
 size_t	count_mem(char *s);
 size_t	split_mem(char *s, char **str);
 char	**ft_mini_split(char *s);
-int	lexer(t_mini *mini, char *prompt);
+int		lexer(t_mini *mini, char *prompt);
 
 
 

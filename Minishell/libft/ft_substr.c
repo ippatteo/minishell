@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/20 11:26:19 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/25 12:50:20 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/21 19:59:04 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	ft_strlcpy(s2, (s + start), len + 1);
 	return (s2);
 }
-/*
+
 
 char	*ft_substr_ok(char const *s, unsigned int start, size_t len)
 {

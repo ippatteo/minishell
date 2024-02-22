@@ -6,12 +6,13 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/21 19:04:15 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/22 08:56:58 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
+/*
 int ft_str_tmp(char *str)
 {
 	char *s2;
@@ -22,18 +23,16 @@ int ft_str_tmp(char *str)
 	{
 		if (*str == '$' && *(str + 1) != ' ')
 		{
-			s2 = malloc(count_words(++str)+1);
-			free(str);
-			ft_strlcpy(s2,(char*)str, count_words(++str) + 1);
-			if(getenv((const char *)s2))
+			s2 = ft_substr(str, 0, count_words(str + 1))
+			if (getenv((const char *)s2))
 				
-			
-			
+
 		}
 			
 			
 	}
 }
+*/
 //conta quanti caratteri contengono le virgolette, virgolette comprese
 int	count_mem_quote(char *str, char c)
 {
@@ -43,10 +42,6 @@ int	count_mem_quote(char *str, char c)
 	str++; 
 	while(*str && *str != c)
 	{
-		if (*str == '$' && c == '"' && *(str+1) != ' ')
-		{
-			str 
-		}
 		mem++;
 		str++;
 	}
