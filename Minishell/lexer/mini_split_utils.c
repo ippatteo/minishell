@@ -6,12 +6,15 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/22 10:39:48 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/22 22:02:43 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
+
+//conta dall'expander quanti caratteri ci sono, serve al substr
+//ma deve esser fatto partire da dopo il $
 int	count_exp(char *str)
 {
 	int mem;
@@ -20,7 +23,8 @@ int	count_exp(char *str)
 	while (*str)
 	{
 		if ((*str == '>') || (*str == '<') 
-			|| (*str == '|') || (*str == 34) || (*str == 39) || (*str == ' ') || (*str == '$'))
+			|| (*str == '|') || (*str == 34) 
+			|| (*str == 39) || (*str == ' ') || (*str == '$'))
 				break ;
 		else
 		{
@@ -28,33 +32,104 @@ int	count_exp(char *str)
 			mem++;
 		}
 	}
+	printf("mem in $ = %d str = %s\n", mem, str);
 	return (mem);
 }
-int ft_str_tmp(char *str)
+
+//conta in una stringa quanta memoria va riallocata per
+//l'expander
+int str_exp_count(char *str)
 {
-	char *s2;
 	char *tmp;
+	int mem;
 	
 	tmp = NULL;
+	mem = 0;
 	while (*str)
 	{
 		if (*str == '$' && *(str + 1) != ' ')
 		{
-			tmp = ft_substr((const char *)str, 1,)
-			if(if (getenv((const char *)ft_substr()))
-			
+			tmp = ft_substr((const char *)str, 1, count_exp(str + 1));
+			if (getenv((const char *)tmp))
+				mem += ft_strlen(getenv((const char *)tmp));
+			str += ft_strlen(tmp) + 1;
+			free(tmp);
 		}
 		else 
 		{
 			mem++;
 			str++;
 		}
-		
-			s2 = ft_substr(str, 0, count_words(str + 1))
-			if (getenv((const char *)s2)
 	}
+	printf("mem = %d str = %s\n", mem, str);
+	return (mem);
 }
-*/
+
+void ft_fill(char *dst, char *src)
+{
+	while (*src)
+		{
+			*dst = *src;
+			++dst;
+			++src;
+		}
+}
+//void str_exp_realloc_init(char *tmp)
+//rialloca la memoria e riempe la stringa levando 
+//$abcde e mettendo getenv se esiste
+void str_exp_realloc(char *str)
+{
+	char *tmp;
+	char *sub;
+	
+	sub = NULL;
+	tmp = ft_strdup(str);
+	free(str);
+	printf("beforemalloc\n");
+	str = malloc(sizeof(char) * str_exp_count(str) + 1);
+	while (*tmp)
+	{
+		if (*tmp == '$' && *(tmp + 1) != ' ')
+		{
+			sub = ft_substr((const char *)tmp, 1, count_exp(tmp + 1));
+			if (getenv((const char *)sub))
+				ft_fill(str, getenv((const char *)sub));
+			str += ft_strlen(getenv((const char *)sub));
+			tmp += ft_strlen(sub) + 1;
+			free(sub);
+		}
+		else
+		{
+			*str = *tmp;
+			str++;
+			tmp++;
+		}
+	}
+	*str = '\n'; //ricordati che poi questo va fuori
+}
+
+int check_expan(char **c)
+{
+	int i;
+
+	i = 0;
+	while (c[i])
+	{
+		//printf("str = %s\n", c[i]);
+		if (ft_strlen(c[i]) != str_exp_count(c[i]) && c[i][0] != 39)
+		{
+			//c = str_exp_count(c[i]);
+			printf("beforerealloc\n");
+			str_exp_realloc(c[i]);
+			i++;
+		}
+		else
+			i++;
+	}
+	printf("n righe %d\n", i);
+	return (i);
+}
+
 //conta quanti caratteri contengono le virgolette, virgolette comprese
 int	count_mem_quote(char *str, char c)
 {

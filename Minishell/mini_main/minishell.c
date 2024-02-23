@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/21 19:09:03 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/22 16:14:38 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main()
 	{
 		cmd = readline("minishell$ ");
 		if (cmd == NULL)
-			return(-1);
+			return(0);
 		lexer(&mini, cmd);
 		add_history(cmd);
 	}
