@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/22 22:02:43 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/23 16:31:12 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ int	count_exp(char *str)
 	mem = 0;
 	while (*str)
 	{
-		if ((*str == '>') || (*str == '<') 
-			|| (*str == '|') || (*str == 34) 
+		if ((*str == '>') || (*str == '<')
+			|| (*str == '|') || (*str == 34)
 			|| (*str == 39) || (*str == ' ') || (*str == '$'))
 				break ;
 		else
@@ -32,7 +32,7 @@ int	count_exp(char *str)
 			mem++;
 		}
 	}
-	printf("mem in $ = %d str = %s\n", mem, str);
+	printf("count exp: mem = %d str = %s\n", mem, str - mem);
 	return (mem);
 }
 
@@ -42,9 +42,11 @@ int str_exp_count(char *str)
 {
 	char *tmp;
 	int mem;
-	
+	char *debug;
+
 	tmp = NULL;
 	mem = 0;
+	debug = ft_strdup(str);
 	while (*str)
 	{
 		if (*str == '$' && *(str + 1) != ' ')
@@ -55,13 +57,14 @@ int str_exp_count(char *str)
 			str += ft_strlen(tmp) + 1;
 			free(tmp);
 		}
-		else 
+		else
 		{
 			mem++;
 			str++;
 		}
 	}
-	printf("mem = %d str = %s\n", mem, str);
+	printf("str exp count: mem = %d str = %s\n", mem, debug);
+	free(debug);
 	return (mem);
 }
 
@@ -75,37 +78,68 @@ void ft_fill(char *dst, char *src)
 		}
 }
 //void str_exp_realloc_init(char *tmp)
-//rialloca la memoria e riempe la stringa levando 
+//rialloca la memoria e riempe la stringa levando
 //$abcde e mettendo getenv se esiste
+char	*ft_substr0(char *s, int len)
+{
+	char	*s2;
+
+	if (!s)
+		return (NULL);
+	s2 = (char *)ft_calloc(len + 1, sizeof(char));
+	if (!s2)
+		return (NULL);
+	ft_strlcpy(s2, (s), len + 1);
+	return (s2);
+}
 void str_exp_realloc(char *str)
 {
 	char *tmp;
 	char *sub;
-	
+	char *orig;
+	int i;
+	int n;
+
 	sub = NULL;
-	tmp = ft_strdup(str);
-	free(str);
+	tmp = NULL;
+	n = 0;
+	//free(str);
 	printf("beforemalloc\n");
-	str = malloc(sizeof(char) * str_exp_count(str) + 1);
-	while (*tmp)
+	orig = malloc(sizeof(char) * str_exp_count(str) + 1);
+	if (!orig)
 	{
-		if (*tmp == '$' && *(tmp + 1) != ' ')
+		free(str);
+		str = NULL;
+		return;
+	}
+	while (str[i])
+	{
+		if (str[i] == '$' && str[i + 1] != ' ')
 		{
-			sub = ft_substr((const char *)tmp, 1, count_exp(tmp + 1));
+			//printf("tmp = %s\n", tm);
+			i++;
+			sub = ft_substr0(str + i, count_exp(str + i));
 			if (getenv((const char *)sub))
-				ft_fill(str, getenv((const char *)sub));
-			str += ft_strlen(getenv((const char *)sub));
-			tmp += ft_strlen(sub) + 1;
+			{
+				//printf("tmp = %s\n", tm);
+				ft_fill(orig, getenv((const char *)sub));
+				n += ft_strlen(getenv((const char *)sub));
+			}
+			i += ft_strlen(sub);
 			free(sub);
 		}
 		else
 		{
-			*str = *tmp;
-			str++;
-			tmp++;
+			orig[n] = str[i];
+			n++;
+			i++;
 		}
 	}
-	*str = '\n'; //ricordati che poi questo va fuori
+	orig[n] = '\n';
+	free(str);
+	str = ft_strdup(orig);
+	printf("orig = %s\n", orig);
+	printf("str = %s\n", str); //ricordati che poi questo va fuori
 }
 
 int check_expan(char **c)
@@ -136,7 +170,7 @@ int	count_mem_quote(char *str, char c)
 	int	mem;
 
 	mem = 1;
-	str++; 
+	str++;
 	while(*str && *str != c)
 	{
 		mem++;
@@ -155,7 +189,7 @@ int count_quot_pipe_redir(char *str, char c)
 		++str;
 		if (*str == c)
 			return (2);
-		else 
+		else
 			return (1);
 	}
 	else if (c == '|')
@@ -165,7 +199,7 @@ int count_quot_pipe_redir(char *str, char c)
 	}
 	else if ((*str == 34) || (*str == 39))
 		return (count_mem_quote(str, c));
-	else 
+	else
 		return (0);
 }
 //conta quanti char ci sono in una parola "normale"
@@ -176,7 +210,7 @@ int	count_words(char *str)
 	mem = 0;
 	while (*str)
 	{
-		if ((*str == '>') || (*str == '<') 
+		if ((*str == '>') || (*str == '<')
 			|| (*str == '|') || (*str == 34) || (*str == 39) || (*str == ' '))
 				break ;
 		else
@@ -197,7 +231,7 @@ size_t	count_mem(char *s)
 	mem = 0;
 	while (*s)
 	{
-		if ((*s == '>') || (*s == '<') 
+		if ((*s == '>') || (*s == '<')
 			|| (*s == '|') || (*s == 34) || (*s == 39))
 		{
 			mem += count_quot_pipe_redir(s, *s) + 1;
@@ -216,15 +250,15 @@ size_t	count_mem(char *s)
 	return (mem);
 }
 
-//una volta allocata la memoria giusta riempe la matrice 
+//una volta allocata la memoria giusta riempe la matrice
 size_t	split_mem(char *s, char **str)
 {
 	int i;
-	
+
 	i = 0;
 	while (*s)
 	{
-		if ((*s == '>') || (*s == '<') 
+		if ((*s == '>') || (*s == '<')
 			|| (*s == '|') || (*s == 34) || (*s == 39))
 		{
 			str[i] = ft_substr(s, 0, count_quot_pipe_redir(s, *s));
