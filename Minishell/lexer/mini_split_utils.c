@@ -6,15 +6,15 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/23 16:31:12 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/23 17:57:52 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-
 //conta dall'expander quanti caratteri ci sono, serve al substr
 //ma deve esser fatto partire da dopo il $
+
 int	count_exp(char *str)
 {
 	int mem;
@@ -22,9 +22,7 @@ int	count_exp(char *str)
 	mem = 0;
 	while (*str)
 	{
-		if ((*str == '>') || (*str == '<')
-			|| (*str == '|') || (*str == 34)
-			|| (*str == 39) || (*str == ' ') || (*str == '$'))
+		if (!(ft_isalnum(*str) || ft_isalpha(*str) || *str == '_'))
 				break ;
 		else
 		{
@@ -36,8 +34,30 @@ int	count_exp(char *str)
 	return (mem);
 }
 
+// e sia un controllo che capisce se e da
+//saltare sia un contrololo che ritorna quanto sia da sltare
+int ft_it_is_exp_valid(char *s)
+{
+	char **tmp;
+
+	tmp = NULL;
+	if (!(*s == '$' && (ft_isalnum(*(s+1)) || ft_isalpha(*(s+1)) || *(s+1) == '_')))
+		return (0);
+	tmp = ft_substr(s, 1, count_exp(s + 1));
+	if (!getenv((const char *)tmp))
+	{
+		free(tmp);
+		return(count_exp(s + 1) + 1);
+	}
+	else
+	{
+		free(tmp);
+		return (0);
+	}
+}
 //conta in una stringa quanta memoria va riallocata per
 //l'expander
+
 int str_exp_count(char *str)
 {
 	char *tmp;
@@ -104,7 +124,7 @@ void str_exp_realloc(char *str)
 	tmp = NULL;
 	n = 0;
 	//free(str);
-	printf("beforemalloc\n");
+	printf("beforealloc\n");
 	orig = malloc(sizeof(char) * str_exp_count(str) + 1);
 	if (!orig)
 	{
@@ -173,8 +193,13 @@ int	count_mem_quote(char *str, char c)
 	str++;
 	while(*str && *str != c)
 	{
-		mem++;
-		str++;
+		//if(ft_it_is_exp_valid(str) && c == '"')
+		//	str += ft_it_is_exp_valid(str);
+		//else
+		//{
+			mem++;
+			str++;
+		//}
 	}
 	if (*str == '\0')
 		return(0);
