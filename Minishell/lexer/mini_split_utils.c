@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/23 17:57:52 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/26 16:05:17 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	count_exp(char *str)
 //saltare sia un contrololo che ritorna quanto sia da sltare
 int ft_it_is_exp_valid(char *s)
 {
-	char **tmp;
+	char *tmp;
 
 	tmp = NULL;
 	if (!(*s == '$' && (ft_isalnum(*(s+1)) || ft_isalpha(*(s+1)) || *(s+1) == '_')))
@@ -112,7 +112,15 @@ char	*ft_substr0(char *s, int len)
 	ft_strlcpy(s2, (s), len + 1);
 	return (s2);
 }
-void str_exp_realloc(char *str)
+
+void swapStrings(char **str1, char **str2)
+{
+	char *temp = *str1;
+
+	*str1 = *str2;
+	*str2 = temp;
+}
+char *str_exp_realloc(char *str)
 {
 	char *tmp;
 	char *sub;
@@ -123,26 +131,32 @@ void str_exp_realloc(char *str)
 	sub = NULL;
 	tmp = NULL;
 	n = 0;
+	i = 0;
 	//free(str);
-	printf("beforealloc\n");
+	printf("sono in strexprealloc\n");
 	orig = malloc(sizeof(char) * str_exp_count(str) + 1);
+	printf("str");
 	if (!orig)
 	{
+		//printf("orig = 0\n");
 		free(str);
 		str = NULL;
-		return;
+		return (NULL);
 	}
 	while (str[i])
 	{
+		//printf("i = %d, str = %c\n", i, str[i]);
 		if (str[i] == '$' && str[i + 1] != ' ')
 		{
-			//printf("tmp = %s\n", tm);
+			//printf("attivato $\n");
 			i++;
 			sub = ft_substr0(str + i, count_exp(str + i));
+				printf("sub = %s\n", sub);
 			if (getenv((const char *)sub))
 			{
-				//printf("tmp = %s\n", tm);
-				ft_fill(orig, getenv((const char *)sub));
+				printf("149 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
+				ft_strlcpy(orig + n, getenv((const char *)sub), ft_strlen(getenv((const char *)sub)));
+				printf("151 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
 				n += ft_strlen(getenv((const char *)sub));
 			}
 			i += ft_strlen(sub);
@@ -156,25 +170,31 @@ void str_exp_realloc(char *str)
 		}
 	}
 	orig[n] = '\n';
-	free(str);
-	str = ft_strdup(orig);
-	printf("orig = %s\n", orig);
-	printf("str = %s\n", str); //ricordati che poi questo va fuori
+	return (orig);
+	//swapStrings(&orig, &str);
+	//free(orig);
+	//printf("orig = %s\n", orig);
+	//printf("str = %s\n", str); //ricordati che poi questo va fuori
 }
 
 int check_expan(char **c)
 {
 	int i;
+	char *tmp;
 
 	i = 0;
+	tmp = NULL;
 	while (c[i])
 	{
 		//printf("str = %s\n", c[i]);
 		if (ft_strlen(c[i]) != str_exp_count(c[i]) && c[i][0] != 39)
 		{
+			tmp = str_exp_realloc(c[i]);
 			//c = str_exp_count(c[i]);
 			printf("beforerealloc\n");
-			str_exp_realloc(c[i]);
+			swapStrings(&c[i], &tmp);
+			free(tmp);
+			printf("str = %s\n", c[i]);
 			i++;
 		}
 		else
@@ -264,8 +284,10 @@ size_t	count_mem(char *s)
 				return (-1);
 			s += count_quot_pipe_redir(s, *s);
 		}
-		else if (*s == ' ' || *s == '	')
+		else if (*s == ' ' || *s == '	' )
 			s++;
+		else if (ft_it_is_exp_valid(s))
+			s += ft_it_is_exp_valid(s);
 		else
 		{
 			mem += count_words(s) + 1;
@@ -292,6 +314,8 @@ size_t	split_mem(char *s, char **str)
 		}
 		else if (*s == ' ' || *s == '	')
 			s++;
+		else if (ft_it_is_exp_valid(s))
+			s += ft_it_is_exp_valid(s);
 		else
 		{
 			str[i] = ft_substr(s, 0, count_words(s));
@@ -302,3 +326,4 @@ size_t	split_mem(char *s, char **str)
 	str[i] = 0;
 	return (i);
 }
+
