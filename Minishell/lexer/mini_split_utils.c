@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/26 16:05:17 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/29 23:03:06 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,19 +83,28 @@ int str_exp_count(char *str)
 			str++;
 		}
 	}
-	printf("str exp count: mem = %d str = %s\n", mem, debug);
+	printf("str exp count 86: mem = %d str = %s\n", mem, debug);
 	free(debug);
 	return (mem);
 }
 
-void ft_fill(char *dst, char *src)
+size_t	ft_strlcpy2(char *dest, const char *source, size_t n)
 {
-	while (*src)
+	size_t	i;
+	size_t	j;
+
+	i = 0;
+	j = ft_strlen(source);
+	if (n > 0)
+	{
+		while (source[i] && i < (n - 1))
 		{
-			*dst = *src;
-			++dst;
-			++src;
+			dest[i] = source[i];
+			i++;
 		}
+		//dest[i] = '\0';
+	}
+	return (j);
 }
 //void str_exp_realloc_init(char *tmp)
 //rialloca la memoria e riempe la stringa levando
@@ -134,15 +143,7 @@ char *str_exp_realloc(char *str)
 	i = 0;
 	//free(str);
 	printf("sono in strexprealloc\n");
-	orig = malloc(sizeof(char) * str_exp_count(str) + 1);
-	printf("str");
-	if (!orig)
-	{
-		//printf("orig = 0\n");
-		free(str);
-		str = NULL;
-		return (NULL);
-	}
+	orig = ft_calloc(sizeof(char), str_exp_count(str) + 1);
 	while (str[i])
 	{
 		//printf("i = %d, str = %c\n", i, str[i]);
@@ -154,16 +155,17 @@ char *str_exp_realloc(char *str)
 				printf("sub = %s\n", sub);
 			if (getenv((const char *)sub))
 			{
-				printf("149 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
+				printf("166 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
 				ft_strlcpy(orig + n, getenv((const char *)sub), ft_strlen(getenv((const char *)sub)));
-				printf("151 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
-				n += ft_strlen(getenv((const char *)sub));
+				printf("168 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
+				n += ft_strlen(getenv((const char *)sub)) - 1;
 			}
 			i += ft_strlen(sub);
 			free(sub);
 		}
 		else
 		{
+			printf("168 str = %d, orig = %d\n", str[i], orig[n]);
 			orig[n] = str[i];
 			n++;
 			i++;

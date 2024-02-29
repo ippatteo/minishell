@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/23 13:20:44 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/02/29 22:36:48 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,19 +87,29 @@ void ft_printmap(t_mini *mini, char **c)
 
 	x = 0;
 	//write(1, "\n", 1);
-	while (x < mini->lines)
+	while (mini->commands[x])
 	{
 		if(ft_putstr(c[x]));
-			write(1, " ", 1);
+			write(1, "\n", 1);
 		x++ ;
 	}
 	write(1, "\n", 1);
 }
+void free_matrix(char **mtr)
+{
+	int i;
 
+	i = 0;
+	while (mtr[i])
+	{
+		free(mtr[i]);
+		i++;
+	}
+}
 int	lexer(t_mini *mini, char *prompt)
 {
 	if (mini->commands != NULL)
-		free(mini->commands);
+		free_matrix(mini->commands);
 	mini->commands = ft_mini_split(prompt);
 	if (mini->commands == NULL)
 		return (0);
