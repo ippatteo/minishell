@@ -6,35 +6,14 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/29 22:36:48 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/01 04:18:16 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
 //conta il numero di char dentro una matrice + i null
-int	count_matrix(char **matrix)
-{
-	int	a;
-	int	b;
-	int n;
 
-	a = 0;
-	b = 0;
-	n = 0;
-	while (matrix[a])
-	{
-		b = 0;
-		while (matrix[a][b])
-		{
-			n++;
-			b++;
-		}
-		n++;
-		a++;
-	}
-	return (n);
-}
 void ft_printmap0(char **c)
 {
 	int x;
@@ -43,7 +22,7 @@ void ft_printmap0(char **c)
 	while (c[x])
 	{
 		if(ft_putstr(c[x]));
-			write(1, " ", 1);
+			write(1, "\n", 1);
 		x++ ;
 	}
 	write(1, "\n", 1);
@@ -75,26 +54,13 @@ void ft_printmap1(t_mini *mini, char **c)
 	while (c[x])
 	{
 		if(ft_putstr(c[x]));
-			write(1, " ", 1);
+			write(1, "\n", 1);
 		x++ ;
 	}
 	mini->lines = x;
 	write(1, "\n", 1);
 }
-void ft_printmap(t_mini *mini, char **c)
-{
-	int x;
 
-	x = 0;
-	//write(1, "\n", 1);
-	while (mini->commands[x])
-	{
-		if(ft_putstr(c[x]));
-			write(1, "\n", 1);
-		x++ ;
-	}
-	write(1, "\n", 1);
-}
 void free_matrix(char **mtr)
 {
 	int i;
@@ -115,6 +81,6 @@ int	lexer(t_mini *mini, char *prompt)
 		return (0);
 	ft_printmap1(mini, mini->commands);
 	mini->lines = check_expan(mini->commands);
-	ft_printmap(mini, mini->commands);
+	ft_printmap1(mini, mini->commands);
 	return(0);
 }

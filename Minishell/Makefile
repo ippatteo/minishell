@@ -6,7 +6,7 @@
 #    By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/02/21 15:45:37 by mcamilli         ###   ########.fr        #
+#    Updated: 2024/03/01 03:19:22 by mcamilli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ LIBFT =	libft
 
 ALL = minishell
 
-SRCS = lexer/*.c mini_main/*.c
+SRCS = lexer/*.c mini_main/*.c tokenizer/*.c
 
 #OBJS = ${SRCS:.c=.o}
 
