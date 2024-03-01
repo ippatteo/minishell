@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/01 02:19:24 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/01 03:10:17 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int str_exp_count(char *str)
 	debug = ft_strdup(str);
 	while (*str)
 	{
-		if (*str == '$' && (ft_isalnum(*str) || ft_isalpha(*str) || *str == '_'))
+		if (*str == '$' && (ft_isalnum(*(str + 1)) || ft_isalpha(*(str + 1)) || *(str + 1) == '_')) //deve rimanere cosi
 		{
 			tmp = ft_substr((const char *)str, 1, count_exp(str + 1));
 			if (getenv((const char *)tmp))
@@ -129,6 +129,9 @@ void swapStrings(char **str1, char **str2)
 	*str1 = *str2;
 	*str2 = temp;
 }
+
+
+/*
 char *str_exp_realloc(char *str)
 {
 	char *tmp;
@@ -141,13 +144,11 @@ char *str_exp_realloc(char *str)
 	tmp = NULL;
 	n = 0;
 	i = 0;
-	//free(str);
-	printf("sono in strexprealloc\n");
 	orig = ft_calloc(sizeof(char), str_exp_count(str) + 1);
 	while (str[i])
 	{
 		//printf("i = %d, str = %c\n", i, str[i]);
-		if (str[i] == '$' && str[i + 1] != ' ')
+		if (str[i] == '$' && (ft_isalnum(str[i + 1]) || ft_isalpha(str[i + 1]) || str[i + 1] == '_'))
 		{
 			//printf("attivato $\n");
 			i++;
@@ -171,8 +172,38 @@ char *str_exp_realloc(char *str)
 			i++;
 		}
 	}
-	orig[n] = '\n';
+	orig[n] = '\0';
 	return (orig);
+}
+*/
+
+char *str_exp_realloc(char *str)
+{
+	char *sub;
+	char *orig;
+	char *tmp;
+
+	sub = NULL;
+	orig = malloc(sizeof(char) * str_exp_count(str) + 1);
+	tmp = orig;
+	while (*str)
+	{
+		if (*str == '$' && (ft_isalnum(*(str + 1)) || ft_isalpha(*(str + 1)) || *(str + 1) == '_'))
+		{
+			sub = ft_substr0(str + 1, count_exp(str + 1));
+			if (getenv((const char *)sub))
+			{
+				ft_strlcpy(orig, getenv((const char *)sub), ft_strlen(getenv((const char *)sub)));
+				orig += ft_strlen(getenv((const char *)sub)) -1;
+			}
+			str += ft_strlen(sub) + 1;
+			free(sub);
+		}
+		else
+			*(orig++) = *(str++);
+	}
+	*orig = '\0';
+	return (tmp);
 }
 
 int check_expan(char **c)
