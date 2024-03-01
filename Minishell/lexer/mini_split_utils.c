@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/29 23:03:06 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/01 02:19:24 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int str_exp_count(char *str)
 	debug = ft_strdup(str);
 	while (*str)
 	{
-		if (*str == '$' && *(str + 1) != ' ')
+		if (*str == '$' && (ft_isalnum(*str) || ft_isalpha(*str) || *str == '_'))
 		{
 			tmp = ft_substr((const char *)str, 1, count_exp(str + 1));
 			if (getenv((const char *)tmp))
@@ -173,10 +173,6 @@ char *str_exp_realloc(char *str)
 	}
 	orig[n] = '\n';
 	return (orig);
-	//swapStrings(&orig, &str);
-	//free(orig);
-	//printf("orig = %s\n", orig);
-	//printf("str = %s\n", str); //ricordati che poi questo va fuori
 }
 
 int check_expan(char **c)
