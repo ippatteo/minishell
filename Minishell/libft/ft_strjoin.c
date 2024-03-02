@@ -3,36 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/20 12:41:14 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/09/13 17:32:41 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/01/26 18:05:03 by lpicciri          #+#    #+#             */
+/*   Updated: 2023/02/17 19:30:48 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strjoin(char *s, char *b)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-	int		i;
-	int		t;
-	char	*str;
+	size_t	i;
+	size_t	y;
+	char	*allocated;
 
-	i = -1;
-	t = 0;
-	if (!s)
-	{
-		s = (char *) malloc(sizeof(char));
-		s[0] = '\0';
-	}
-	str = malloc(ft_strlen(s) + ft_strlen(b) + 1);
-	if (!str)
+	if (!s1 || !s2)
 		return (NULL);
-	while (s[++i])
-		str[i] = s[i];
-	while (b[t])
-		str[i++] = b[t++];
-	str[i] = '\0';
-	free (s);
-	return (str);
+	allocated = malloc(ft_strlen(s1) + ft_strlen(s2) + 1);
+	if (!allocated)
+		return (NULL);
+	i = 0;
+	y = 0;
+	while (s1[i] != '\0')
+	{
+		allocated[i] = s1[i];
+		i++;
+	}
+	while (s2[y] != '\0')
+	{
+		allocated[i] = s2[y];
+		i++;
+		y++;
+	}
+	allocated[i] = '\0';
+	return (allocated);
 }

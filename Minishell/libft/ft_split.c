@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/21 10:51:36 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/25 11:46:37 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/01/26 18:03:34 by lpicciri          #+#    #+#             */
+/*   Updated: 2023/02/19 17:55:16 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	ft_count(char const *s, char c)
+static size_t	ft_counter(const char *s, char c)
 {
 	size_t	count;
 	size_t	i;
@@ -32,21 +32,21 @@ static size_t	ft_count(char const *s, char c)
 		else
 			i++;
 	}
-	return (count);
+	return (count + 1);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**str;
+	char	**matrix;
 	size_t	i;
 	size_t	j;
 
 	if (!s)
-		return (NULL);
-	str = malloc(sizeof (char const *) * (ft_count(s, c) + 1));
+		return (0);
 	i = 0;
-	if (!str)
-		return (NULL);
+	matrix = malloc(sizeof(char *) * (ft_counter(s, c)));
+	if (!matrix)
+		return (0);
 	while (*s)
 	{
 		if (*s != c)
@@ -54,11 +54,11 @@ char	**ft_split(char const *s, char c)
 			j = 0;
 			while (*s && *s != c && ++j)
 				++s;
-			str[i++] = ft_substr(s - j, 0, j);
+			matrix[i++] = ft_substr(s - j, 0, j);
 		}
 		else
 			++s;
 	}
-	str[i] = 0;
-	return (str);
+	matrix[i] = 0;
+	return (matrix);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/23 13:19:05 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:40:01 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ int	main(int argc, char ** argv, char **env)
 	char *cmd;
 	t_mini mini;
 
-	(void)argc;
 	(void)argv;
+	(void)argc;
 	cmd = NULL;
 	mini.tmp = NULL;
 	mini.commands = NULL;

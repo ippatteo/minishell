@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/20 09:23:29 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/20 09:23:53 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/01/26 18:02:00 by lpicciri          #+#    #+#             */
+/*   Updated: 2023/02/17 15:00:15 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,24 @@
 
 int	ft_atoi(const char *str)
 {
-	long			res;
-	long			segn;
-	unsigned int	i;
+	int	res;
+	int	sign;
+	int	i;
 
-	i = 0;
 	res = 0;
-	segn = 1;
-	while ((str[i] >= 9 && str[i] <= 13) || (str[i] == 32))
-		i++;
+	sign = 1;
+	i = 0;
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\f' || str[i] == ' '
+		||str[i] == '\r' || str[i] == '\v')
+	i++;
+	if (str[i] == '-')
+	sign = -1;
 	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			segn = -1;
-		i++;
-	}
+	i++;
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		res = res * 10 + str[i] - '0';
 		i++;
 	}
-	return (res * segn);
+	return (res * sign);
 }

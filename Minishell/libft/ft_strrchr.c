@@ -3,36 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/18 10:00:07 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/20 15:34:11 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/01/26 18:07:45 by lpicciri          #+#    #+#             */
+/*   Updated: 2023/02/19 18:24:27 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strrchr(const char	*str1, int ch)
+char	*ft_strrchr(const char *s, int c)
 {
-	char	c;
-	int		d;
-	char	*str;
+	int			i;
+	const char	*null;
 
-	str = (char *)str1;
-	if ((str[0] == 0) && (ch == 0))
-		return (str);
-	if ((str[0] == 0) && (ch != 0))
-		return (NULL);
-	d = ft_strlen(str) - 1;
-	c = ch;
-	if (ch == 0)
-		return ((str + d + 1));
-	while ((str[d] != c) && (d != 0))
-		d--;
-	if (d != 0)
-		return ((str + d));
-	else if (str[0] == c)
-		return (str);
-	else
-		return (NULL);
+	null = s;
+	i = ft_strlen(s);
+	s = (s + i);
+	while (*s != *null && c != *s)
+		s--;
+	if (c == *s)
+		return ((char *)s);
+	return (0);
 }

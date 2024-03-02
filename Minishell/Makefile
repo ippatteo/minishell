@@ -3,22 +3,24 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+         #
+#    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/01 03:19:22 by mcamilli         ###   ########.fr        #
+#    Updated: 2024/03/02 17:47:20 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-LIBFT =	libft
+MAIN_PATH = main/
+LEXER_PATH = lexer/
+LIBFT_PATH = libft/
+LIBFT = $(LIBFT_PATH)libft.a
 
-ALL = minishell
+SOURCE = $(wildcard $(MAIN_PATH)*.c) \
+		 $(wildcard $(LEXER_PATH)*.c) \
 
-SRCS = lexer/*.c mini_main/*.c tokenizer/*.c
-
-#OBJS = ${SRCS:.c=.o}
+OBJECTS = $(SOURCE:.c=.o)
 
 CC = gcc
 
@@ -26,18 +28,21 @@ RM = rm -f
 
 FLAGS = -Wall -Wextra -Werror
 
+.o:.c
+	$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
 
-all: 
-	make -C $(LIBFT)
-	$(CC) $(CFLAGS) $(SRCS) $(LIBFT)/libft.a -o $(NAME) -lreadline
+$(NAME): $(OBJECTS)
+	make -C $(LIBFT_PATH)
+	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -lreadline -o minishell
+
+all: $(NAME)
 
 clean:
-		${RM} ${OBJS}
-		make clean -C libft
-
+	${RM} ${OBJECTS}
+	rm -f minishell
+		
 fclean: clean
-		${RM} ${NAME}
-		${RM} ${LIBFT}
+	make fclean -C ${LIBFT_PATH}
 
 re: fclean all
 

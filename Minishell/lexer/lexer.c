@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/01 04:18:16 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:52:03 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void ft_printmap0(char **c)
 	x = 0;
 	while (c[x])
 	{
-		if(ft_putstr(c[x]));
+		if(ft_putstr(c[x]))
 			write(1, "\n", 1);
 		x++ ;
 	}
@@ -44,8 +44,6 @@ void copy_env(t_mini *mini, char **e)
 	ft_printmap0(mini->en);
 }
 
-
-
 void ft_printmap1(t_mini *mini, char **c)
 {
 	int x;
@@ -53,7 +51,7 @@ void ft_printmap1(t_mini *mini, char **c)
 	x = 0;
 	while (c[x])
 	{
-		if(ft_putstr(c[x]));
+		if(ft_putstr(c[x]))
 			write(1, "\n", 1);
 		x++ ;
 	}

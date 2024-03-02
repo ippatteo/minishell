@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/01 04:14:46 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/02 15:26:52 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ int check_expan(char **c)
 	while (c[i])
 	{
 		//printf("str = %s\n", c[i]);
-		if (ft_strlen(c[i]) != str_exp_count(c[i]) && c[i][0] != 39)
+		if (ft_strlen(c[i]) != (size_t)str_exp_count(c[i]) && c[i][0] != 39)
 		{
 			tmp = str_exp_realloc(c[i]);
 			//c = str_exp_count(c[i]);

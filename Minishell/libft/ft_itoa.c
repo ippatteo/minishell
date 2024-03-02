@@ -3,57 +3,59 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 11:28:23 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/25 11:45:24 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/01/26 17:39:16 by luca              #+#    #+#             */
+/*   Updated: 2023/01/31 15:37:11 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	len(int n)
+static int	ft_counter(int n)
 {
-	int	p;
-	int	c;
+	int			i;
+	long int	num;
 
-	p = 0;
-	c = 1;
-	if (n < 0)
+	num = n;
+	i = 1;
+	if (num < 0)
 	{
-		p = 1;
-		n = n * -1;
+		num *= -1;
+		i++;
 	}
-	while (n > 9)
+	while (num > 9)
 	{
-		c++;
-		n = n / 10;
+		num /= 10;
+		i++;
 	}
-	return (c + p);
+	return (i);
 }
 
 char	*ft_itoa(int n)
 {
-	int		l;
-	char	*s;
+	char		*string;
+	long int	num;
+	int			len;
+	int			i;
 
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	l = len(n) - 1;
-	s = ft_calloc(l + 2, sizeof(char));
-	if (!s)
+	num = (long int)n;
+	len = ft_counter(n);
+	i = len - 1;
+	string = malloc(sizeof(char) * len + 1);
+	if (!string)
 		return (NULL);
-	s[l + 1] = '\0';
-	if (n < 0)
+	string[len] = '\0';
+	if (num < 0)
 	{
-		n = n * -1;
-		s[0] = 45;
+		string[0] = '-';
+		num *= -1;
 	}
-	while (n != 0 || (n == 0 && l == 0 && s[0] != 45))
+	while (i >= 0 && string[i] != '-')
 	{
-		s[l] = 48 + n % 10;
-		n = n / 10;
-		l--;
+		string[i] = (num % 10) + '0';
+		num /= 10;
+		i--;
 	}
-	return (s);
+	return (string);
 }
