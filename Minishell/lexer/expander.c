@@ -3,15 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/02 15:26:52 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/03 22:33:19 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
+
+
+char *ft_getenv(t_mini *mini, char *s)
+{
+	int i;
+
+	i = 0;
+	char *str;
+	while (mini->en[i])
+	{
+		if (ft_strnstr(mini->en[i], s, ft_strlen(s)))
+		{
+			str = ft_strnstr(mini->en[i], s, ft_strlen(s));
+			return (str + ft_strlen(s) + 1);
+		}
+		else
+			i++;
+	}
+	return (NULL);
+}
 //conta dall'expander quanti caratteri ci sono, serve al substr
 //ma deve esser fatto partire da dopo il $
 
@@ -35,15 +55,17 @@ int	count_exp(char *str)
 
 // e sia un controllo che capisce se e da
 //saltare sia un contrololo che ritorna quanto sia da sltare
-int ft_it_is_exp_valid(char *s)
+int ft_it_is_exp_valid(t_mini *mini, char *s)
 {
 	char *tmp;
 
 	tmp = NULL;
+	if (!(*s == '$' && *(s+1) == '?'))
+		return (0);
 	if (!(*s == '$' && (ft_isalnum(*(s+1)) || ft_isalpha(*(s+1)) || *(s+1) == '_')))
 		return (0);
 	tmp = ft_substr(s, 1, count_exp(s + 1));
-	if (!getenv((const char *)tmp))
+	if (!ft_getenv(mini, tmp))
 	{
 		free(tmp);
 		return(count_exp(s + 1) + 1);
@@ -57,7 +79,7 @@ int ft_it_is_exp_valid(char *s)
 //conta in una stringa quanta memoria va riallocata per
 //l'expander
 
-int str_exp_count(char *str)
+int str_exp_count(t_mini *mini, char *str)
 {
 	char *tmp;
 	int mem;
@@ -69,8 +91,8 @@ int str_exp_count(char *str)
 		if (*str == '$' && (ft_isalnum(*(str + 1)) || ft_isalpha(*(str + 1)) || *(str + 1) == '_')) //deve rimanere cosi
 		{
 			tmp = ft_substr((const char *)str, 1, count_exp(str + 1));
-			if (getenv((const char *)tmp))
-				mem += ft_strlen(getenv((const char *)tmp));
+			if (ft_getenv(mini, tmp))
+				mem += ft_strlen(ft_getenv(mini, tmp));
 			str += ft_strlen(tmp) + 1;
 			free(tmp);
 		}
@@ -110,12 +132,12 @@ char *str_exp_realloc(char *str)
 			i++;
 			sub = ft_substr0(str + i, count_exp(str + i));
 				printf("sub = %s\n", sub);
-			if (getenv((const char *)sub))
+			if (ft_getenv(mini, sub))
 			{
-				printf("166 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
-				ft_strlcpy(orig + n, getenv((const char *)sub), ft_strlen(getenv((const char *)sub)));
-				printf("168 orig + n = %s, pwd = %s, strlen %d\n",orig + n, getenv((const char *)sub), (int)ft_strlen(getenv((const char *)sub)));
-				n += ft_strlen(getenv((const char *)sub)) - 1;
+				printf("166 orig + n = %s, pwd = %s, strlen %d\n",orig + n, ft_getenv(mini, sub), (int)ft_strlen(ft_getenv(mini, sub)));
+				ft_strlcpy(orig + n, ft_getenv(mini, sub), ft_strlen(ft_getenv(mini, sub)));
+				printf("168 orig + n = %s, pwd = %s, strlen %d\n",orig + n, ft_getenv(mini, sub), (int)ft_strlen(ft_getenv(mini, sub)));
+				n += ft_strlen(ft_getenv(mini, sub)) - 1;
 			}
 			i += ft_strlen(sub);
 			free(sub);
@@ -135,24 +157,24 @@ char *str_exp_realloc(char *str)
 questa funziona cancellare dopo
 */
 
-char *str_exp_realloc(char *str)
+char *str_exp_realloc(t_mini *mini, char *str)
 {
 	char *sub;
 	char *orig;
 	char *tmp;
 
 	sub = NULL;
-	orig = malloc(sizeof(char) * str_exp_count(str) + 1);
+	orig = malloc(sizeof(char) * str_exp_count(mini, str) + 1);
 	tmp = orig;
 	while (*str)
 	{
 		if (*str == '$' && (ft_isalnum(*(str + 1)) || ft_isalpha(*(str + 1)) || *(str + 1) == '_'))
 		{
 			sub = ft_substr0(str + 1, count_exp(str + 1));
-			if (getenv((const char *)sub))
+			if (ft_getenv(mini, sub))
 			{
-				ft_strlcpy(orig, getenv((const char *)sub), ft_strlen(getenv((const char *)sub)));
-				orig += ft_strlen(getenv((const char *)sub)) -1;
+				ft_strlcpy(orig, ft_getenv(mini, sub), ft_strlen(ft_getenv(mini, sub)));
+				orig += ft_strlen(ft_getenv(mini, sub)) -1;
 			}
 			str += ft_strlen(sub) + 1;
 			free(sub);
@@ -164,7 +186,7 @@ char *str_exp_realloc(char *str)
 	return (tmp);
 }
 
-int check_expan(char **c)
+int check_expan(t_mini *mini, char **c)
 {
 	int i;
 	char *tmp;
@@ -173,20 +195,16 @@ int check_expan(char **c)
 	tmp = NULL;
 	while (c[i])
 	{
-		//printf("str = %s\n", c[i]);
-		if (ft_strlen(c[i]) != (size_t)str_exp_count(c[i]) && c[i][0] != 39)
+
+		if (ft_strlen(c[i]) != (size_t)str_exp_count(mini, c[i]) && c[i][0] != 39)
 		{
-			tmp = str_exp_realloc(c[i]);
-			//c = str_exp_count(c[i]);
-			printf("beforerealloc\n");
+			tmp = str_exp_realloc(mini, c[i]);
 			swapStrings(&c[i], &tmp);
 			free(tmp);
-			printf("str = %s\n", c[i]);
 			i++;
 		}
 		else
 			i++;
 	}
-	printf("n righe %d\n", i);
 	return (i);
 }

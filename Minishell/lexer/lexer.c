@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/02 15:52:03 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/03 18:52:11 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,11 @@ int	lexer(t_mini *mini, char *prompt)
 {
 	if (mini->commands != NULL)
 		free_matrix(mini->commands);
-	mini->commands = ft_mini_split(prompt);
+	mini->commands = ft_mini_split(mini, prompt);
 	if (mini->commands == NULL)
 		return (0);
 	ft_printmap1(mini, mini->commands);
-	mini->lines = check_expan(mini->commands);
+	mini->lines = check_expan(mini, mini->commands);
 	ft_printmap1(mini, mini->commands);
 	return(0);
 }

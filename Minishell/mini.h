@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/02 19:47:59 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/03 22:33:39 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,24 @@ typedef struct s_mini
 	char	**commands;
 }	t_mini;
 
-int	count_matrix(char **matrix);
-void copy_env(t_mini *mini, char **e);
-char	*str_exp_realloc(char *str);
-int		str_exp_count(char *str);
+char	*ft_getenv(t_mini *mini, char *s);
+int		count_matrix(char **matrix);
+void 	copy_env(t_mini *mini, char **e);
+char	*str_exp_realloc(t_mini *mini, char *str);
+int		str_exp_count(t_mini *mini, char *str);
 int		count_exp(char *str);
-int		ft_it_is_exp_valid(char *s);
+int		ft_it_is_exp_valid(t_mini *mini, char *s);
 char	*ft_substr0(char *s, int len);
 void	swapStrings(char **str1, char **str2);
 void	copy_env(t_mini *mini, char **e);
 void	ft_printmap(t_mini *mini, char **c);
-int		check_expan(char **c);
+int		check_expan(t_mini *mini, char **c);
 int		count_mem_quote(char *str, char c);
 int		count_quot_pipe_redir(char *str, char c);
 int		count_words(char *str);
-size_t	count_mem(char *s);
-size_t	split_mem(char *s, char **str);
-char	**ft_mini_split(char *s);
+size_t	count_mem(t_mini *mini, char *s);
+size_t	split_mem(t_mini *mini, char *s, char **str);
+char	**ft_mini_split(t_mini *mini, char *s);
 int		lexer(t_mini *mini, char *prompt);
 
 

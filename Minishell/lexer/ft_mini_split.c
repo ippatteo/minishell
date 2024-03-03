@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/02/22 21:52:47 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:47:34 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,18 +17,18 @@
 
 
 
-char	**ft_mini_split(char *s)
+char	**ft_mini_split(t_mini *mini, char *s)
 {
 	char	**str;
 	
 	if (!s)
 		return (NULL);
-	if ((int)count_mem(s) == -1)
+	if ((int)count_mem(mini, s) == -1)
 		return (NULL);
-	str = ft_calloc((count_mem(s) + 1), sizeof (char *));
+	str = ft_calloc((count_mem(mini, s) + 1), sizeof (char *));
 	if (!str)
 		return (NULL);
-	split_mem(s, str);
+	split_mem(mini, s, str);
 	return (str);
 }
 

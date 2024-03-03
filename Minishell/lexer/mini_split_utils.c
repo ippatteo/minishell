@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/01 04:21:28 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/03 18:44:14 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	count_words(char *str)
 
 //conta quanta memoria bisogna allocare aggiungendo il +1 del \0 ogni colta
 //restituisce 0 in caso di syntax error
-size_t	count_mem(char *s)
+size_t	count_mem(t_mini *mini, char *s)
 {
 	int mem;
 
@@ -94,8 +94,8 @@ size_t	count_mem(char *s)
 		}
 		else if (*s == ' ' || *s == '	' )
 			s++;
-		else if (ft_it_is_exp_valid(s))
-			s += ft_it_is_exp_valid(s);
+		else if (ft_it_is_exp_valid(mini, s))
+			s += ft_it_is_exp_valid(mini, s);
 		else
 		{
 			mem += count_words(s) + 1;
@@ -106,7 +106,7 @@ size_t	count_mem(char *s)
 }
 
 //una volta allocata la memoria giusta riempe la matrice
-size_t	split_mem(char *s, char **str)
+size_t	split_mem(t_mini *mini, char *s, char **str)
 {
 	int i;
 
@@ -122,8 +122,8 @@ size_t	split_mem(char *s, char **str)
 		}
 		else if (*s == ' ' || *s == '	')
 			s++;
-		else if (ft_it_is_exp_valid(s))
-			s += ft_it_is_exp_valid(s);
+		else if (ft_it_is_exp_valid(mini, s))
+			s += ft_it_is_exp_valid(mini, s);
 		else
 		{
 			str[i] = ft_substr(s, 0, count_words(s));
