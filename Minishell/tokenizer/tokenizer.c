@@ -6,31 +6,51 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/03 22:52:28 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:08:45 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
+/*
+legenda: 
+n = 100 (è una parola, quindi magari un argomento)
+n = 111 (è un file presente nella cartella di lavoro)
+n = 11 (è la builtin echo)
+n = 12 (è la builtin cd)
+n = 13 (è la builtin pwd)
+n = 14 (è la builtin export)
+n = 15 (è la builtin unset)
+n = 16 (è la builtin env)
+n = 17 (è la builtin exit)
+n = 20 (è un command trovato che esiste e si trova in $PATH) 
+n = 1 (è una pipe "|")
+n = 2 (è una redirecion ">")
+n = 3 (è una redirecion "<")
+n = 4 (è una redirecion ">>")
+n = 77 (è un here document "<<")
 
-void ft_tokenizer(t_mini *mini)
+*/
+
+
+
+int ft_is_builtin(char *cmd)
 {
-	int i;
-
-	i= 0;
-	while (i != mini->lines)
-	{
-		
-	}
-}
-
-void ft_isbuiltin()
-{
-	
-}
-
-void ft_isword(t_mini *mini, )
-{
-	
+	if (!ft_strncmp("echo", cmd, 4))
+		return (11);
+	else if(!ft_strncmp("cd", cmd, 2))
+		return (12);
+	else if(!ft_strncmp("pwd", cmd, 3))
+		return (13);
+	else if (!ft_strncmp("export", cmd, 7))
+		return (14);
+	else if (!ft_strncmp("unset", cmd, 6))
+		return (15);
+	else if (!ft_strncmp("env", cmd, 3))
+		return (16);
+	else if (!ft_strncmp("exit", cmd, 4))
+		return (17);
+	else
+		return (0);
 }
 
 char	*ft_strdup_slash(const char *str)
@@ -53,19 +73,16 @@ char	*ft_strdup_slash(const char *str)
 	str_allocated[i] = '\0';
 	return (str_allocated);
 }
-
-
-void ft_iscommand(t_mini *mini, char *cmd)
+char *ft_is_command(char *cmd)
 {
-	char *path;
-	char **folders;
-	char **tmp;
-	int i;
+	char	*path;
+	char	**folders;
+	char	*tmp;
+	int		i;
 	
 	i = 0;
-	path = malloc(ft_strlen(ft_getenv(mini, "PATH") + 1));
-	ft_strlcpy(path, ft_getenv(mini, "PATH"), ft_strlen(ft_getenv(mini, "PATH")));
-	folders = ft_split(ft_getenv(mini, "PATH"), ":");
+	tmp = NULL;
+	folders = ft_split(getenv("PATH"), ':');
 	while (folders[i])
 	{
 		tmp = ft_strdup_slash(folders[i]);
@@ -73,11 +90,76 @@ void ft_iscommand(t_mini *mini, char *cmd)
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if(access(folders[i], R_OK) == 0);
-		{
-			free_m
-			return()
+		{	
+			tmp = ft_strdup(folders[i]);
+			free_matrix(folders);
+			return(tmp);
 		}
 		i++;
 	}
-	while ()
+	free_matrix(folders);
+	return (NULL);
 }
+
+
+int ft_is_pipe_redir_hd(char *cmd)
+{
+	if (!ft_strncmp("|", cmd, 1))
+		return (1);
+	else if(!ft_strncmp(">", cmd, 1))
+		return (2);
+	else if(!ft_strncmp("<", cmd, 1))
+		return (3);
+	else if (!ft_strncmp(">>", cmd, 2))
+		return (4);
+	else if (!ft_strncmp("<<", cmd, 2))
+		return (77);
+	else
+		return (0);
+}
+char *ft_is_file(char *cmd)
+{
+	char	*path;
+	char	*folder;;
+	int		i;
+	
+	if(access(cmd , F_OK) == 0)
+		return (cmd);
+	i = 0;
+	folder = ft_strdup(getenv("PWD"));
+	if(access(folder, F_OK) == 0);
+		return(folder);
+	free(folder);
+	return (NULL);
+}
+
+int assign_number_of_tkn(t_mini *mini, char *cmd)
+{
+	if (ft_is_builtin(cmd))
+		return (ft_is_builtin(cmd));
+	else if (ft_is_command(cmd))
+		return (20);
+	else if (ft_is_pipe_redir_hd(cmd))
+		return(ft_is_pipe_redir_hd(cmd));
+	else if (ft_is_file(cmd))
+		return(111);
+	else
+		return (100);	
+}
+
+void ft_tokenizer(t_mini *mini)
+{
+	int i;
+
+	i= 0;
+	if (mini->tkn[0])
+		free(mini->tkn);
+	mini->tkn = ft_calloc(mini->lines, sizeof(int));
+	while (i != mini->lines)
+	{
+		mini->tkn[i] = assign_number_of_tkn(mini, mini->commands[i]);
+		printf("tkn = %d\n", mini->tkn[i]);
+		i++;
+	}
+}
+

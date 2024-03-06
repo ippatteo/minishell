@@ -1,36 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/06 16:05:16 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/04/26 12:24:22 by mcamilli          #+#    #+#             */
+/*   Updated: 2023/04/26 12:24:23 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../mini.h"
+#include "libft.h"
 
-int	main(int argc, char ** argv, char **env)
+t_list	*ft_lstnew(void *content)
 {
-	char *cmd;
-	t_mini mini;
+	t_list	*new;
 
-	(void)argv;
-	(void)argc;
-	cmd = NULL;
-	mini.tmp = NULL;
-	mini.commands = NULL;
-	copy_env(&mini, env);
-	while(1)
-	{
-		cmd = readline("minishell$ ");
-		if (cmd == NULL)
-			return(0);
-		lexer(&mini, cmd);
-		ft_tokenizer(&mini);
-		add_history(cmd);
-	}
-	return(0);
+	new = (t_list *)malloc(sizeof(t_list));
+	if (!new)
+		return (NULL);
+	new->content = content;
+	new->next = NULL;
+	return (new);
 }

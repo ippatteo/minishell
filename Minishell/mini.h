@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/03 22:33:39 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/06 16:06:55 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,32 @@ typedef struct s_mini
 {
 	char 	**en;
 	int		lines;
-	char	*sub; //serve in ft_exp (forse)
+	int		*tkn;//array di int che rappresenta i tokens
+	char	*sub; 
 	char	*tmp;
 	char	**commands;
 }	t_mini;
 
+typedef struct s_redpipe
+{
+	int r_p; //che red o pipe è
+	void *input;
+	void *output;
+}	t_redpipe;
+
+typedef struct s_cmdorbin
+{
+	int cmd_in; //che comando o builtin è
+	char **cmd_args; 
+	void *input;
+	void *output;
+	
+}	t_cmdorbin;
+
+char *ft_is_file(char *cmd);
+char *ft_is_command(char *cmd);
+void ft_tokenizer(t_mini *mini);
+void free_matrix(char **mtr);
 char	*ft_getenv(t_mini *mini, char *s);
 int		count_matrix(char **matrix);
 void 	copy_env(t_mini *mini, char **e);
