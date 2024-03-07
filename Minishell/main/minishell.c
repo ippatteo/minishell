@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/07 16:10:51 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 22:55:45 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int argc, char ** argv, char **env)
 {
 	char *cmd;
 	t_mini mini;
+	t_node node;
 
 	(void)argv;
 	(void)argc;
@@ -36,9 +37,9 @@ int	main(int argc, char ** argv, char **env)
 			return(0);
 		lexer(&mini, cmd);
 		ft_tokenizer(&mini);
+		exec(&node, &mini);
 		add_history(cmd);
 		printf("exit code = %d\n", g_exit);
-		
 	}
 	return(0);
 }

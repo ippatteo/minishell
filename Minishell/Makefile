@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+         #
+#    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/03 18:56:47 by mcamilli         ###   ########.fr        #
+#    Updated: 2024/03/07 22:42:27 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,12 +15,16 @@ NAME = minishell
 MAIN_PATH = main/
 LEXER_PATH = lexer/
 TOKEN_PATH = tokenizer/
+EXEC_PATH = executor/
+BUILTINS_PATH = builtins/
 LIBFT_PATH = libft/
 LIBFT = $(LIBFT_PATH)libft.a
 
 SOURCE = $(wildcard $(MAIN_PATH)*.c) \
 		 $(wildcard $(LEXER_PATH)*.c) \
 		 $(wildcard $(TOKEN_PATH)*.c) \
+		 $(wildcard $(EXEC_PATH)*.c) \
+		 $(wildcard $(BUILTINS_PATH)*.c) \
 
 OBJECTS = $(SOURCE:.c=.o)
 
@@ -42,7 +46,7 @@ all: $(NAME)
 clean:
 	${RM} ${OBJECTS}
 	rm -f minishell
-		
+
 fclean: clean
 	make fclean -C ${LIBFT_PATH}
 

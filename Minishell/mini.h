@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/07 21:47:29 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 23:10:12 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct s_mini
 	int		lines;
 	int		*tkn;//array di int che rappresenta i tokens
 	int		tknflag;
-	char	*sub; 
+	char	*sub;
 	char	*tmp;
 	char	**commands;
 	//t_node	*node;
@@ -48,7 +48,7 @@ typedef struct s_node
 	char *cmd_path;
 	char **cmd_matrix; //anche la path va qua in pos 0
 	int type;
-	
+
 }	t_node;
 
 int check_expan_2(t_mini *mini, char **c);
@@ -77,6 +77,15 @@ char	**ft_mini_split(t_mini *mini, char *s);
 int		lexer(t_mini *mini, char *prompt);
 
 
+// BUILTINS
 
+void	ft_cd(t_node *node, t_mini *mini);
+void	ft_echo(t_node *node, t_mini *mini);
+void	ft_pwd(t_node *node, t_mini *mini);
+void	ft_env(t_node *node, t_mini *mini);
+
+// EXECUTOR
+
+void	exec(t_node *node, t_mini *mini);
 
 #endif
