@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/07 22:05:53 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 22:09:23 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ char *ft_getenv(t_mini *mini, char *s)
 	{
 		if (ft_strnstr(mini->en[i], s, ft_strlen(s)))
 		{
-			//str = ft_strnstr(mini->en[i], s, ft_strlen(s));
-			return (mini->en[i] + ft_strlen(s) + 1);
+			str = ft_strnstr(mini->en[i], s, ft_strlen(s));
+			return (str + ft_strlen(s) + 1);
 		}
 		else
 			i++;
