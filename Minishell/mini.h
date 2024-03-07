@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/06 16:06:55 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/06 17:10:18 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef struct s_mini
 	char 	**en;
 	int		lines;
 	int		*tkn;//array di int che rappresenta i tokens
+	int		tknflag;
 	char	*sub; 
 	char	*tmp;
 	char	**commands;

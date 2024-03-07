@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/06 16:08:45 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 10:18:11 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,8 @@ char *ft_is_command(char *cmd)
 	int		i;
 	
 	i = 0;
-	tmp = NULL;
+	if(access(cmd , X_OK) == 0)
+		return (cmd);
 	folders = ft_split(getenv("PATH"), ':');
 	while (folders[i])
 	{
@@ -89,7 +90,7 @@ char *ft_is_command(char *cmd)
 		free(folders[i]);
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if(access(folders[i], R_OK) == 0);
+		if(access(folders[i], X_OK) == 0)
 		{	
 			tmp = ft_strdup(folders[i]);
 			free_matrix(folders);
@@ -101,19 +102,18 @@ char *ft_is_command(char *cmd)
 	return (NULL);
 }
 
-
 int ft_is_pipe_redir_hd(char *cmd)
 {
-	if (!ft_strncmp("|", cmd, 1))
+	if (*cmd == '|')
 		return (1);
-	else if(!ft_strncmp(">", cmd, 1))
-		return (2);
-	else if(!ft_strncmp("<", cmd, 1))
-		return (3);
-	else if (!ft_strncmp(">>", cmd, 2))
+	else if (*cmd == '>' && *(cmd+1) == '>')
 		return (4);
-	else if (!ft_strncmp("<<", cmd, 2))
+	else if (*cmd == '<' && *(cmd+1) == '<')
 		return (77);
+	else if(*cmd == '>')
+		return (2);
+	else if(*cmd == '<')
+		return (3);
 	else
 		return (0);
 }
@@ -122,27 +122,36 @@ char *ft_is_file(char *cmd)
 	char	*path;
 	char	*folder;;
 	int		i;
+	char *tmp;
 	
 	if(access(cmd , F_OK) == 0)
 		return (cmd);
+	tmp = ft_strdup_slash(folder);
 	i = 0;
 	folder = ft_strdup(getenv("PWD"));
-	if(access(folder, F_OK) == 0);
+	tmp = ft_strdup_slash(folder);
+	free(folder);
+	folder = ft_strjoin(tmp, cmd);
+	if(access(folder, F_OK) == 0)
 		return(folder);
 	free(folder);
 	return (NULL);
 }
 
+
 int assign_number_of_tkn(t_mini *mini, char *cmd)
 {
 	if (ft_is_builtin(cmd))
 		return (ft_is_builtin(cmd));
-	else if (ft_is_command(cmd))
-		return (20);
 	else if (ft_is_pipe_redir_hd(cmd))
 		return(ft_is_pipe_redir_hd(cmd));
 	else if (ft_is_file(cmd))
+	{
+		printf("%s\n",ft_is_file(cmd));
 		return(111);
+	}
+	else if (ft_is_command(cmd))
+		return (20);
 	else
 		return (100);	
 }
@@ -152,14 +161,16 @@ void ft_tokenizer(t_mini *mini)
 	int i;
 
 	i= 0;
-	if (mini->tkn[0])
+	if (mini->tknflag == 1)
 		free(mini->tkn);
 	mini->tkn = ft_calloc(mini->lines, sizeof(int));
-	while (i != mini->lines)
+	while (mini->commands[i])
 	{
 		mini->tkn[i] = assign_number_of_tkn(mini, mini->commands[i]);
 		printf("tkn = %d\n", mini->tkn[i]);
 		i++;
 	}
+	mini->tknflag = 1;
 }
+
 

@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/03 18:44:14 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:43:42 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,7 +131,7 @@ size_t	split_mem(t_mini *mini, char *s, char **str)
 			i++;
 		}
 	}
-	str[i] = 0;
+	str[i] = NULL;
 	return (i);
 }
 

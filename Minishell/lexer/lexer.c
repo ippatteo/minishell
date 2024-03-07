@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/06 16:01:21 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:44:55 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void ft_printmap1(t_mini *mini, char **c)
 			write(1, "\n", 1);
 		x++ ;
 	}
-	mini->lines = x;
 	write(1, "\n", 1);
 }
 
@@ -78,7 +77,7 @@ int	lexer(t_mini *mini, char *prompt)
 	if (mini->commands == NULL)
 		return (0);
 	//ft_printmap1(mini, mini->commands);
-	mini->lines = check_expan(mini, mini->commands);
+	mini->lines=  check_expan(mini, mini->commands);
 	ft_printmap1(mini, mini->commands);
 	return(0);
 }

@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/03 22:33:19 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/06 21:42:27 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int ft_it_is_exp_valid(t_mini *mini, char *s)
 	char *tmp;
 
 	tmp = NULL;
-	if (!(*s == '$' && *(s+1) == '?'))
+	if (*s == '$' && *(s+1) == '?')
 		return (0);
 	if (!(*s == '$' && (ft_isalnum(*(s+1)) || ft_isalpha(*(s+1)) || *(s+1) == '_')))
 		return (0);
