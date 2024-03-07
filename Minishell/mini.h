@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/06 17:10:18 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 16:09:57 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <time.h>
 # include "libft/libft.h"
 
+extern int g_exit;
 typedef struct s_mini
 {
 	char 	**en;
