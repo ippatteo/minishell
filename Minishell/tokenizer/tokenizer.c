@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/07 10:18:11 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 21:45:35 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 /*
 legenda: 
 n = 100 (è una parola, quindi magari un argomento)
-n = 111 (è un file presente nella cartella di lavoro)
 n = 11 (è la builtin echo)
 n = 12 (è la builtin cd)
 n = 13 (è la builtin pwd)
@@ -73,7 +72,64 @@ char	*ft_strdup_slash(const char *str)
 	str_allocated[i] = '\0';
 	return (str_allocated);
 }
-char *ft_is_command(char *cmd)
+
+int ft_is_command(char *cmd)
+{
+	char	*path;
+	char	**folders;
+	char	*tmp;
+	int		i;
+	
+	i = 0;
+	if(access(cmd , X_OK) == 0)
+		return (1);
+	folders = ft_split(getenv("PATH"), ':');
+	while (folders[i])
+	{
+		tmp = ft_strdup_slash(folders[i]);
+		free(folders[i]);
+		folders[i] = ft_strjoin(tmp, cmd);
+		free(tmp);
+		if(access(folders[i], X_OK) == 0)
+		{	
+			free_matrix(folders);
+			return(1);
+		}
+		i++;
+	}
+	free_matrix(folders);
+	return (0);
+}
+
+int ft_is_pipe_redir_hd(char *cmd)
+{
+	if (*cmd == '|')
+		return (1);
+	else if (*cmd == '>' && *(cmd+1) == '>')
+		return (4);
+	else if (*cmd == '<' && *(cmd+1) == '<')
+		return (77);
+	else if(*cmd == '>')
+		return (2);
+	else if(*cmd == '<')
+		return (3);
+	else
+		return (0);
+}
+
+
+int assign_number_of_tkn(t_mini *mini, char *cmd)
+{
+	if (ft_is_builtin(cmd) != 0)
+		return (BUILTIN);
+	else if (ft_is_pipe_redir_hd(cmd))
+		return(ft_is_pipe_redir_hd(cmd));
+	else if (ft_is_command(cmd))
+		return (20);
+	else
+		return (100);	
+}
+char *ft_command_path(char *cmd)
 {
 	char	*path;
 	char	**folders;
@@ -102,64 +158,12 @@ char *ft_is_command(char *cmd)
 	return (NULL);
 }
 
-int ft_is_pipe_redir_hd(char *cmd)
-{
-	if (*cmd == '|')
-		return (1);
-	else if (*cmd == '>' && *(cmd+1) == '>')
-		return (4);
-	else if (*cmd == '<' && *(cmd+1) == '<')
-		return (77);
-	else if(*cmd == '>')
-		return (2);
-	else if(*cmd == '<')
-		return (3);
-	else
-		return (0);
-}
-char *ft_is_file(char *cmd)
-{
-	char	*path;
-	char	*folder;;
-	int		i;
-	char *tmp;
-	
-	if(access(cmd , F_OK) == 0)
-		return (cmd);
-	tmp = ft_strdup_slash(folder);
-	i = 0;
-	folder = ft_strdup(getenv("PWD"));
-	tmp = ft_strdup_slash(folder);
-	free(folder);
-	folder = ft_strjoin(tmp, cmd);
-	if(access(folder, F_OK) == 0)
-		return(folder);
-	free(folder);
-	return (NULL);
-}
-
-
-int assign_number_of_tkn(t_mini *mini, char *cmd)
-{
-	if (ft_is_builtin(cmd))
-		return (ft_is_builtin(cmd));
-	else if (ft_is_pipe_redir_hd(cmd))
-		return(ft_is_pipe_redir_hd(cmd));
-	else if (ft_is_file(cmd))
-	{
-		printf("%s\n",ft_is_file(cmd));
-		return(111);
-	}
-	else if (ft_is_command(cmd))
-		return (20);
-	else
-		return (100);	
-}
-
 void ft_tokenizer(t_mini *mini)
 {
 	int i;
+	//t_node node;
 
+	//node = malloc(sizeof(t_node));
 	i= 0;
 	if (mini->tknflag == 1)
 		free(mini->tkn);
@@ -171,6 +175,21 @@ void ft_tokenizer(t_mini *mini)
 		i++;
 	}
 	mini->tknflag = 1;
+	//ft_nodes_token(mini->commands, &node)
+}
+/*
+void ft_nodes_token(char **matrix, t_node *node)
+{
+	node->cmd_path = ft_strdup(*matrix);
+	while(*matrix != TOKEN && *matrix != NULL)
+	{
+		*node->cmd_matrix = ft_strdup(*matrix);
+		matrix++;
+		ft_lstnew()
+	}
+	if (matrix)
+		node->next = malloc(sizeof(t_node));
+	ft_nodes_token(matrix, node->next);
 }
 
-
+*/

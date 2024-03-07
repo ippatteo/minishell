@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/07 16:09:57 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 21:47:29 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,11 @@
 # include <time.h>
 # include "libft/libft.h"
 
+#define BUILTIN 11
+#define COMMAND 20
+
 extern int g_exit;
+
 typedef struct s_mini
 {
 	char 	**en;
@@ -35,28 +39,23 @@ typedef struct s_mini
 	char	*sub; 
 	char	*tmp;
 	char	**commands;
+	//t_node	*node;
 }	t_mini;
 
-typedef struct s_redpipe
+typedef struct s_node
 {
-	int r_p; //che red o pipe è
-	void *input;
-	void *output;
-}	t_redpipe;
-
-typedef struct s_cmdorbin
-{
-	int cmd_in; //che comando o builtin è
-	char **cmd_args; 
-	void *input;
-	void *output;
+	struct s_node *next;
+	char *cmd_path;
+	char **cmd_matrix; //anche la path va qua in pos 0
+	int type;
 	
-}	t_cmdorbin;
+}	t_node;
 
-char *ft_is_file(char *cmd);
-char *ft_is_command(char *cmd);
-void ft_tokenizer(t_mini *mini);
-void free_matrix(char **mtr);
+int check_expan_2(t_mini *mini, char **c);
+char	*ft_is_file(char *cmd);
+int		ft_is_command(char *cmd);
+void	ft_tokenizer(t_mini *mini);
+void	free_matrix(char **mtr);
 char	*ft_getenv(t_mini *mini, char *s);
 int		count_matrix(char **matrix);
 void 	copy_env(t_mini *mini, char **e);

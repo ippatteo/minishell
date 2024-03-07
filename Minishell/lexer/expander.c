@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/06 21:42:27 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/07 22:05:53 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ char *ft_getenv(t_mini *mini, char *s)
 	{
 		if (ft_strnstr(mini->en[i], s, ft_strlen(s)))
 		{
-			str = ft_strnstr(mini->en[i], s, ft_strlen(s));
-			return (str + ft_strlen(s) + 1);
+			//str = ft_strnstr(mini->en[i], s, ft_strlen(s));
+			return (mini->en[i] + ft_strlen(s) + 1);
 		}
 		else
 			i++;
@@ -199,6 +199,77 @@ int check_expan(t_mini *mini, char **c)
 		if (ft_strlen(c[i]) != (size_t)str_exp_count(mini, c[i]) && c[i][0] != 39)
 		{
 			tmp = str_exp_realloc(mini, c[i]);
+			swapStrings(&c[i], &tmp);
+			free(tmp);
+			i++;
+		}
+		else
+			i++;
+	}
+	return (i);
+}
+
+
+
+int str_exp_count_2(t_mini *mini, char *str, char *sub)
+{
+	int mem;
+
+	mem = 0;
+	while (*str)
+	{
+		if (*str == '$' && *(str + 1) == '?')
+		{
+			str += 2;
+			mem += ft_strlen(sub);
+		}
+		else
+		{
+			str++;
+			mem++;
+		}
+	}
+	return (mem);
+}
+
+char *str_exp_realloc_2(t_mini *mini, char *str)
+{
+	char *sub;
+	char *orig;
+	char *tmp;
+
+	sub = ft_itoa(g_exit);
+	//printf("sub = %s count = %d ", sub, str_exp_count_2(mini, str, sub));
+	orig = malloc(sizeof(char) * str_exp_count_2(mini, str, sub) + 1);
+	tmp = orig;
+	while (*str)
+	{
+		if (*str == '$' && *(str + 1) == '?')
+		{
+			ft_strlcpy(orig, sub, 8);
+			orig += ft_strlen(sub) -1;
+			str += 2;
+			free(sub);
+		}
+		else
+			*(orig++) = *(str++);
+	}
+	*orig = '\0';
+	return (tmp);
+}
+
+int check_expan_2(t_mini *mini, char **c)
+{
+	int i;
+	char *tmp;
+
+	i = 0;
+	tmp = NULL;
+	while (c[i])
+{
+		if (ft_strnstr(c[i], "$?", ft_strlen(c[i])))
+		{
+			tmp = str_exp_realloc_2(mini, c[i]);
 			swapStrings(&c[i], &tmp);
 			free(tmp);
 			i++;
