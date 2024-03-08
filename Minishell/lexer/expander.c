@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/07 22:09:23 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/08 12:37:32 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,14 +247,17 @@ char *str_exp_realloc_2(t_mini *mini, char *str)
 		if (*str == '$' && *(str + 1) == '?')
 		{
 			ft_strlcpy(orig, sub, 8);
-			orig += ft_strlen(sub) -1;
+			printf("ft_strlcpy = %d\n", (int)ft_strlcpy(orig, sub, 8));
+			printf("ft_strlcpy = %s\n", orig);
+			orig += ft_strlen(sub);
 			str += 2;
-			free(sub);
 		}
 		else
 			*(orig++) = *(str++);
 	}
+	free(sub);
 	*orig = '\0';
+	printf("porcoddio = %s\n", tmp);
 	return (tmp);
 }
 
@@ -266,7 +269,7 @@ int check_expan_2(t_mini *mini, char **c)
 	i = 0;
 	tmp = NULL;
 	while (c[i])
-{
+	{
 		if (ft_strnstr(c[i], "$?", ft_strlen(c[i])))
 		{
 			tmp = str_exp_realloc_2(mini, c[i]);

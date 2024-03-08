@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/07 23:10:12 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/08 14:58:51 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,14 @@
 # include <time.h>
 # include "libft/libft.h"
 
-#define BUILTIN 11
+#define BUILTIN 10
 #define COMMAND 20
+#define PIPE 1
+#define REDIR_MAG 2
+#define REDIR_MAGMAG 4
+#define REDIR_MIN 3
+#define HERE_DOC 77
+#define WORDS 100
 
 extern int g_exit;
 
@@ -47,6 +53,8 @@ typedef struct s_node
 	struct s_node *next;
 	char *cmd_path;
 	char **cmd_matrix; //anche la path va qua in pos 0
+	int left_tkn;
+	int	wright_tkn;
 	int type;
 
 }	t_node;

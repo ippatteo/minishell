@@ -6,14 +6,14 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/07 21:45:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/08 14:51:27 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 /*
 legenda: 
-n = 100 (è una parola, quindi magari un argomento)
+n = 1 (è una parola, quindi magari un argomento)
 n = 11 (è la builtin echo)
 n = 12 (è la builtin cd)
 n = 13 (è la builtin pwd)
@@ -22,11 +22,11 @@ n = 15 (è la builtin unset)
 n = 16 (è la builtin env)
 n = 17 (è la builtin exit)
 n = 20 (è un command trovato che esiste e si trova in $PATH) 
-n = 1 (è una pipe "|")
+n = 7 (è una pipe "|")
 n = 2 (è una redirecion ">")
 n = 3 (è una redirecion "<")
 n = 4 (è una redirecion ">>")
-n = 77 (è un here document "<<")
+n = 9 (è un here document "<<")
 
 */
 
@@ -104,11 +104,11 @@ int ft_is_command(char *cmd)
 int ft_is_pipe_redir_hd(char *cmd)
 {
 	if (*cmd == '|')
-		return (1);
+		return (7);
 	else if (*cmd == '>' && *(cmd+1) == '>')
 		return (4);
 	else if (*cmd == '<' && *(cmd+1) == '<')
-		return (77);
+		return (9);
 	else if(*cmd == '>')
 		return (2);
 	else if(*cmd == '<')
@@ -127,7 +127,7 @@ int assign_number_of_tkn(t_mini *mini, char *cmd)
 	else if (ft_is_command(cmd))
 		return (20);
 	else
-		return (100);	
+		return (1);	
 }
 char *ft_command_path(char *cmd)
 {
@@ -174,10 +174,10 @@ void ft_tokenizer(t_mini *mini)
 		printf("tkn = %d\n", mini->tkn[i]);
 		i++;
 	}
-	mini->tknflag = 1;
+	mini->tknflag = 1; //potrebbe esse provvisorio, ma ora mi permette di freeare
 	//ft_nodes_token(mini->commands, &node)
 }
-/*
+
 void ft_nodes_token(char **matrix, t_node *node)
 {
 	node->cmd_path = ft_strdup(*matrix);
@@ -193,3 +193,33 @@ void ft_nodes_token(char **matrix, t_node *node)
 }
 
 */
+
+void ft_nodes_token(t_mini *mini, t_node *node)
+{
+	int i;
+	int t;
+
+	i = 0;
+	t = 0;
+	//qua potrei analizzare syntax err.
+	while(mini->commands[i])
+	{
+		if (mini->tkn[i] >= 10)
+		{
+			while(!(mini->tkn[i + t] >= 2 && mini->tkn[i + t] <= 7))
+				t++;
+			if (mini->tkn[i] == 10)
+			{
+				
+			}
+				//node->next = malloc(sizeof(t_node));
+			}
+		}
+			
+	}
+}
+
+void ft_syntax(t_mini *mini)
+{
+	//all'inizio puo esssere comando, builtin o redirection
+}
