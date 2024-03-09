@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/08 14:58:51 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/08 20:12:19 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ typedef struct s_node
 	char **cmd_matrix; //anche la path va qua in pos 0
 	int left_tkn;
 	int	wright_tkn;
-	int type;
+	int this_tkn;
 
 }	t_node;
 

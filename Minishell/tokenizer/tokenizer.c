@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/08 14:51:27 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/09 12:54:09 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ void ft_nodes_token(char **matrix, t_node *node)
 	ft_nodes_token(matrix, node->next);
 }
 
-*/
+
 
 void ft_nodes_token(t_mini *mini, t_node *node)
 {
@@ -201,25 +201,40 @@ void ft_nodes_token(t_mini *mini, t_node *node)
 
 	i = 0;
 	t = 0;
-	//qua potrei analizzare syntax err.
 	while(mini->commands[i])
 	{
 		if (mini->tkn[i] >= 10)
 		{
-			while(!(mini->tkn[i + t] >= 2 && mini->tkn[i + t] <= 7))
+			while((!(mini->tkn[i + t] >= 2 && mini->tkn[i + t] <= 7)) || mini->commands[i+t])
 				t++;
-			if (mini->tkn[i] == 10)
-			{
-				
-			}
-				//node->next = malloc(sizeof(t_node));
-			}
+			node->cmd_matrix = malloc(sizeof(char *) * t);
+			node->this_tkn = 20;
+			if (ft_is_builtin(mini->commands[i]) != 0)
+				node->this_tkn = ft_is_builtin(mini->commands[i]);
+			else
+				node->cmd_path = ft_command_path(mini->commands[i]);
+			node->cmd_matrix[0] = ft_command_path(mini->commands[i]);
+		
+			if (node->cmd_matrix[0] == 0)
+				node->cmd_matrix[0] = ft_strdup(mini->commands[i++]);
+			if (i == 1)
+				node->left_tkn = NULL;
+			else	
+				node->left_tkn = mini->tkn[i-1];
+			if (!mini->commands[i+t]) 
+				node->wright_tkn = NULL;
+			else	
+				node->wright_tkn = mini->tkn[i+t];
+			t = 1;
+			while ((!(mini->tkn[i] >= 2 && mini->tkn[i] <= 7)) || mini->commands[i])
+				node->cmd_matrix[t++] = ft_strdup(mini->commands[i++]);
+			if (mini->commands[i])
+				node->next = malloc(sizeof(t_node));
+		}
+		else if (mini->tkn[i] >= 2 && mini->tkn[i] <= 7)
+		{
+			node->cmd_matrix = NULL;
 		}
 			
 	}
-}
-
-void ft_syntax(t_mini *mini)
-{
-	//all'inizio puo esssere comando, builtin o redirection
 }
