@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/08 20:12:19 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/13 16:38:02 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef struct s_mini
 {
 	char 	**en;
 	int		lines;
-	int		*tkn;//array di int che rappresenta i tokens
+	char	*tkn;//array di int che rappresenta i tokens
 	int		tknflag;
 	char	*sub;
 	char	*tmp;
@@ -54,8 +54,9 @@ typedef struct s_node
 	char *cmd_path;
 	char **cmd_matrix; //anche la path va qua in pos 0
 	int left_tkn;
-	int	wright_tkn;
+	int	right_tkn;
 	int this_tkn;
+	char *file;
 
 }	t_node;
 

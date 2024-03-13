@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/09 12:54:09 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/13 20:01:43 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@ n = 15 (è la builtin unset)
 n = 16 (è la builtin env)
 n = 17 (è la builtin exit)
 n = 20 (è un command trovato che esiste e si trova in $PATH) 
-n = 7 (è una pipe "|")
-n = 2 (è una redirecion ">")
+n = 2 (è una pipe "|")
+n = 7 (è una redirecion ">")
 n = 3 (è una redirecion "<")
 n = 4 (è una redirecion ">>")
 n = 9 (è un here document "<<")
@@ -104,13 +104,13 @@ int ft_is_command(char *cmd)
 int ft_is_pipe_redir_hd(char *cmd)
 {
 	if (*cmd == '|')
-		return (7);
+		return (2);
 	else if (*cmd == '>' && *(cmd+1) == '>')
 		return (4);
 	else if (*cmd == '<' && *(cmd+1) == '<')
 		return (9);
 	else if(*cmd == '>')
-		return (2);
+		return (7);
 	else if(*cmd == '<')
 		return (3);
 	else
@@ -121,7 +121,7 @@ int ft_is_pipe_redir_hd(char *cmd)
 int assign_number_of_tkn(t_mini *mini, char *cmd)
 {
 	if (ft_is_builtin(cmd) != 0)
-		return (BUILTIN);
+		return (ft_is_builtin(cmd));
 	else if (ft_is_pipe_redir_hd(cmd))
 		return(ft_is_pipe_redir_hd(cmd));
 	else if (ft_is_command(cmd))
@@ -167,13 +167,14 @@ void ft_tokenizer(t_mini *mini)
 	i= 0;
 	if (mini->tknflag == 1)
 		free(mini->tkn);
-	mini->tkn = ft_calloc(mini->lines, sizeof(int));
+	mini->tkn = ft_calloc(mini->lines, sizeof(char) +1);
 	while (mini->commands[i])
 	{
 		mini->tkn[i] = assign_number_of_tkn(mini, mini->commands[i]);
 		printf("tkn = %d\n", mini->tkn[i]);
 		i++;
 	}
+	mini->tkn[i] = 0;
 	mini->tknflag = 1; //potrebbe esse provvisorio, ma ora mi permette di freeare
 	//ft_nodes_token(mini->commands, &node)
 }
@@ -236,5 +237,178 @@ void ft_nodes_token(t_mini *mini, t_node *node)
 			node->cmd_matrix = NULL;
 		}
 			
+	}
+}
+//stringa di char da mettere in ,atrice argomenti
+char *find_cmd_or_b_in(t_mini *mini, int pos)
+{
+	if (mini->tkn[pos] >= 11 && mini->tkn[pos] <= 17)
+		return(ft_strdup(mini->commands[pos]));
+	else if (mini->tkn[pos] == 20)
+		return(ft_command_path(mini->commands[pos]));
+	else 
+		return (NULL);
+}
+
+
+//conta quanti processi ci sono in una riga, il minimo è 1
+int count_commands_pipes(t_mini *mini)
+{
+	int i;
+	int p;
+
+	i = 0;
+	p = 1;
+	while (mini->commands[i])
+	{
+		if (mini->commands[i++] == '|')
+			p++;
+	}
+	return (p);
+}
+
+// trova la posizione del comando o built in
+int find_pos_cmd(t_mini *mini, int p)
+{
+	int i;
+	int z;
+	
+	i = 1;
+	z = 0;
+	while (z < p)
+	{
+		if (mini->commands[i++] == '|')
+			z++;
+	}
+	if (p == 0)
+	{
+		if (mini->tkn[0] >= 10)
+			return (0);
+	}
+	while (mini->tkn[i])
+	{
+		if	(mini->tkn[i] >= 10 && !(mini->tkn[i-1] <= 9 && mini->tkn[i-1] >= 3))
+			return (i);
+		else
+			i++;
+	}
+	return (-1);
+}
+
+//conta quanti ergomenti ci sono e quindi quanto allocare
+int fill_cmd_count_args(t_mini *mini, int p)
+{
+	int i;
+	int t;
+
+	i = find_pos_cmd(mini, p);
+	t = 1;
+	while (mini->tkn[i + t] && mini->tkn[i+ t] != 2)
+	{
+		if	(!(mini->tkn[i+ t -1] <= 9 && mini->tkn[i+ t -1] >= 3) 
+			&& !(mini->tkn[i+ t] <= 9 && mini->tkn[i+ t] >= 3))
+			t++;
+		else
+			i++;
+	}
+	return (t)
+}
+
+void set_values_as_null(t_node *node)
+{
+	node->cmd_path = NULL;
+	node->cmd_matrix = NULL;
+	node->left_tkn = NULL;
+	node->right_tkn = NULL;
+	node->this_tkn = NULL;
+	node->file = NULL;
+}
+//riempe un nodo di tipo comando con tutti gli argomenti
+int fill_cmd(t_node *node, t_mini *mini, int p)
+{
+	int i;
+	int t;
+	if (ind_pos_cmd(mini, p) != -1)
+		i = find_pos_cmd(mini, p);
+	else
+		return;
+	set_values_as_null(node);
+	node->cmd_matrix = malloc(sizeof(char *) * fill_cmd_count_args(mini, p) + 1);
+	t = 1;
+	node->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
+	node->cmd_path = find_cmd_or_b_in(mini, i);
+	while (mini->tkn[i+t] && mini->tkn[i+t] != 2)
+	{
+		if	(!(mini->tkn[i+ t - 1] <= 9 && mini->tkn[i+ t - 1] >= 3) 
+			&& !(mini->tkn[i+ t] <= 9 && mini->tkn[i+ t] >= 3))
+			node->cmd_matrix[t] = ft_strdup(mini->commands[i + t++]);
+		else
+			i++;
+	}//dopo aggiungere anxhe next, next tkn e altri cazzi
+	node->cmd_matrix[t] = NULL;
+	
+}
+
+void fill_redir0(t_node *node, t_mini *mini, int i)
+{
+	set_values_as_null(node);
+	node->this_tkn = mini->tkn[i];
+	node->right_tkn = mini->tkn[i + 1];
+	if (mini->commands[i-1])
+		node->left_tkn = mini->tkn[i - 1];
+	node->file = ft_strdup(mini->commands[i+1]);
+}
+void fill_redir(t_node *node, t_mini *mini, int p)
+{
+	int i;
+	int z;
+	
+	i = 0;
+	z = 0;
+	while (z < p)
+	{
+		if (mini->commands[i++] == '|')
+			z++;
+	}
+	while (mini->tkn[i] && mini->tkn[i] != 2)
+	{
+		if	(mini->tkn[i] <= 9 && mini->tkn[i] >= 3)
+		{
+			fill_redir0(node, mini, i);
+			if (find_pos_cmd(mini, p) != -1)
+			{
+				node->next = malloc(sizeof(t_node));
+				node = node->next;
+			}
+			else
+				node->next = NULL;
+		}
+		i++;
+	}
+}
+
+
+//porcodeddio la funzione finale
+void fill_nodes(t_node *node, t_mini *mini)
+{
+	int i;
+	int p;
+
+	p = 0;
+	while (p != count_commands_pipes(mini))
+	{	
+		fill_redir(node, mini, p);
+		fill_cmd(node, mini, p);
+		p++;
+		if (p == count_commands_pipes(mini))
+		{
+			node->next = NULL;
+			return;
+		}
+		else
+		{
+			node->next = malloc(sizeof(t_node));
+			node = node->next;
+		}
 	}
 }
