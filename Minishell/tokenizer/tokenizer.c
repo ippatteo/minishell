@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/13 20:01:43 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/14 13:25:00 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -322,7 +322,9 @@ void set_values_as_null(t_node *node)
 	node->right_tkn = NULL;
 	node->this_tkn = NULL;
 	node->file = NULL;
+	node->next = NULL;
 }
+
 //riempe un nodo di tipo comando con tutti gli argomenti
 int fill_cmd(t_node *node, t_mini *mini, int p)
 {
@@ -358,30 +360,43 @@ void fill_redir0(t_node *node, t_mini *mini, int i)
 		node->left_tkn = mini->tkn[i - 1];
 	node->file = ft_strdup(mini->commands[i+1]);
 }
-void fill_redir(t_node *node, t_mini *mini, int p)
+
+//scorre int tanto quanto serve in base alla pipe
+int go_int(t_mini *mini, int p)
 {
 	int i;
 	int z;
 	
 	i = 0;
 	z = 0;
-	while (z < p)
+	while (z < p && mini->commands[i])
 	{
 		if (mini->commands[i++] == '|')
 			z++;
 	}
+	return (i);
+}
+
+//mette le redirection sempre
+void fill_redir(t_node *tmp, t_mini *mini, int p)
+{
+	int i;
+	int z;
+
+	i = go_int(mini, p);
+	z = 0;
 	while (mini->tkn[i] && mini->tkn[i] != 2)
 	{
 		if	(mini->tkn[i] <= 9 && mini->tkn[i] >= 3)
 		{
-			fill_redir0(node, mini, i);
+			fill_redir0(tmp, mini, i);
 			if (find_pos_cmd(mini, p) != -1)
 			{
-				node->next = malloc(sizeof(t_node));
-				node = node->next;
+				tmp->next = malloc(sizeof(t_node));
+				tmp = tmp->next;
 			}
 			else
-				node->next = NULL;
+				tmp->next = NULL;
 		}
 		i++;
 	}
@@ -393,19 +408,16 @@ void fill_nodes(t_node *node, t_mini *mini)
 {
 	int i;
 	int p;
-
+	t_node **cmd_lines;
+	
+	cmd_lines = malloc(sizeof(t_node *) * count_commands_pipes(mini));
 	p = 0;
 	while (p != count_commands_pipes(mini))
 	{	
-		fill_redir(node, mini, p);
-		fill_cmd(node, mini, p);
+		fill_redir(cmd_lines[p], mini, p);
+		fill_cmd(cmd_lines[p], mini, p);
 		p++;
-		if (p == count_commands_pipes(mini))
-		{
-			node->next = NULL;
-			return;
-		}
-		else
+		if (p != count_commands_pipes(mini))
 		{
 			node->next = malloc(sizeof(t_node));
 			node = node->next;
