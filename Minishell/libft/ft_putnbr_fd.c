@@ -1,28 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/24 14:42:24 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/15 18:48:52 by lpicciri         ###   ########.fr       */
+/*   Created: 2023/01/26 17:55:14 by luca              #+#    #+#             */
+/*   Updated: 2023/01/26 18:03:26 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef	MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdio.h>
-# include <stdlib.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdbool.h>
-# include <unistd.h>
-
-# define QUOTE 39
-# define D_QUOTE 34
-
-int	lexer(char *prompt);
-
-#endif
+void	ft_putnbr_fd(int nb, int fd)
+{
+	if (nb == -2147483648)
+	{
+		ft_putchar_fd('-', fd);
+		ft_putchar_fd('2', fd);
+		nb = 147483648;
+	}
+	else if (nb < 0)
+	{
+		ft_putchar_fd('-', fd);
+		nb *= -1;
+	}
+	if (nb < 10)
+	{
+		ft_putchar_fd(nb + 48, fd);
+		return ;
+	}
+	else
+		ft_putnbr_fd(nb / 10, fd);
+	ft_putnbr_fd(nb % 10, fd);
+}

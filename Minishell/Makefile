@@ -1,24 +1,32 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    MAKEFILE                                           :+:      :+:    :+:    #
+#    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+         #
+#    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/01/24 15:54:17 by lpicciri         ###   ########.fr        #
+#    Updated: 2024/03/14 20:47:57 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-LIBFT =	./libft/libft.a
+MAIN_PATH = main/
+LEXER_PATH = lexer/
+TOKEN_PATH = tokenizer/
+EXEC_PATH = executor/
+BUILTINS_PATH = builtins/
+LIBFT_PATH = libft/
+LIBFT = $(LIBFT_PATH)libft.a
 
-ALL = minishell
+SOURCE = $(wildcard $(MAIN_PATH)*.c) \
+		 $(wildcard $(LEXER_PATH)*.c) \
+		 $(wildcard $(TOKEN_PATH)*.c) \
+		 $(wildcard $(EXEC_PATH)*.c) \
+		 $(wildcard $(BUILTINS_PATH)*.c) \
 
-SRCS = lexer.c minishell.c
-
-OBJS = ${SRCS:.c=.o}
+OBJECTS = $(SOURCE:.c=.o)
 
 CC = gcc
 
@@ -26,21 +34,21 @@ RM = rm -f
 
 FLAGS = -Wall -Wextra -Werror
 
-$(NAME): $(LIBFT) ${OBJS}
-		${CC} ${FLAGS} -o ${NAME} $(LIBFT) ${OBJS} -lreadline
+.o:.c
+	$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
 
-all: ${NAME}
+$(NAME): $(OBJECTS)
+	make -C $(LIBFT_PATH)
+	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -lreadline -o minishell
 
-$(LIBFT):
-		make -C ./libft
+all: $(NAME)
 
 clean:
-		${RM} ${OBJS}
-		make clean -C ./libft
+	${RM} ${OBJECTS}
+	rm -f minishell
 
 fclean: clean
-		${RM} ${NAME}
-		${RM} ${LIBFT}
+	make fclean -C ${LIBFT_PATH}
 
 re: fclean all
 

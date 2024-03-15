@@ -1,29 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/02/15 19:32:00 by lpicciri         ###   ########.fr       */
+/*   Created: 2023/01/26 18:02:00 by lpicciri          #+#    #+#             */
+/*   Updated: 2023/02/17 15:00:15 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int	main()
+int	ft_atoi(const char *str)
 {
-	char *cmd;
+	int	res;
+	int	sign;
+	int	i;
 
-	cmd = NULL;
-	while(1)
+	res = 0;
+	sign = 1;
+	i = 0;
+	while (str[i] == '\t' || str[i] == '\n' || str[i] == '\f' || str[i] == ' '
+		||str[i] == '\r' || str[i] == '\v')
+	i++;
+	if (str[i] == '-')
+	sign = -1;
+	if (str[i] == '-' || str[i] == '+')
+	i++;
+	while (str[i] >= '0' && str[i] <= '9')
 	{
-		cmd = readline("minishell$ ");
-		if (cmd == NULL)
-			return(-1);
-		lexer(cmd);
-		add_history(cmd);
+		res = res * 10 + str[i] - '0';
+		i++;
 	}
-	return(0);
+	return (res * sign);
 }
