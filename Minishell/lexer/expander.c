@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/08 12:37:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/17 12:44:03 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,17 @@
 
 
 
-char *ft_getenv(t_mini *mini, char *s)
+char *ft_getenv(char **en, char *s)
 {
 	int i;
 
 	i = 0;
 	char *str;
-	while (mini->en[i])
+	while (en[i])
 	{
-		if (ft_strnstr(mini->en[i], s, ft_strlen(s)))
+		if (ft_strnstr(en[i], s, ft_strlen(s)))
 		{
-			str = ft_strnstr(mini->en[i], s, ft_strlen(s));
+			str = ft_strnstr(en[i], s, ft_strlen(s));
 			return (str + ft_strlen(s) + 1);
 		}
 		else
@@ -65,7 +65,7 @@ int ft_it_is_exp_valid(t_mini *mini, char *s)
 	if (!(*s == '$' && (ft_isalnum(*(s+1)) || ft_isalpha(*(s+1)) || *(s+1) == '_')))
 		return (0);
 	tmp = ft_substr(s, 1, count_exp(s + 1));
-	if (!ft_getenv(mini, tmp))
+	if (!ft_getenv(mini->en, tmp))
 	{
 		free(tmp);
 		return(count_exp(s + 1) + 1);
@@ -91,8 +91,8 @@ int str_exp_count(t_mini *mini, char *str)
 		if (*str == '$' && (ft_isalnum(*(str + 1)) || ft_isalpha(*(str + 1)) || *(str + 1) == '_')) //deve rimanere cosi
 		{
 			tmp = ft_substr((const char *)str, 1, count_exp(str + 1));
-			if (ft_getenv(mini, tmp))
-				mem += ft_strlen(ft_getenv(mini, tmp));
+			if (ft_getenv(mini->en, tmp))
+				mem += ft_strlen(ft_getenv(mini->en, tmp));
 			str += ft_strlen(tmp) + 1;
 			free(tmp);
 		}
@@ -171,10 +171,10 @@ char *str_exp_realloc(t_mini *mini, char *str)
 		if (*str == '$' && (ft_isalnum(*(str + 1)) || ft_isalpha(*(str + 1)) || *(str + 1) == '_'))
 		{
 			sub = ft_substr0(str + 1, count_exp(str + 1));
-			if (ft_getenv(mini, sub))
+			if (ft_getenv(mini->en, sub))
 			{
-				ft_strlcpy(orig, ft_getenv(mini, sub), ft_strlen(ft_getenv(mini, sub)));
-				orig += ft_strlen(ft_getenv(mini, sub)) -1;
+				ft_strlcpy(orig, ft_getenv(mini->en, sub), ft_strlen(ft_getenv(mini->en, sub)));
+				orig += ft_strlen(ft_getenv(mini->en, sub)) -1;
 			}
 			str += ft_strlen(sub) + 1;
 			free(sub);

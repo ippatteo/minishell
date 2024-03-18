@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/07 16:11:41 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/18 16:03:32 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ int	count_mem_quote(char *str, char c)
 	}
 	if (*str == '\0')
 	{
-		g_exit = 127;
 		return (mem);
 	}
 	mem++;

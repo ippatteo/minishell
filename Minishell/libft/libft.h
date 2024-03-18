@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:08:42 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/06 11:17:29 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/15 17:23:26 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,6 @@ char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 char				**ft_split(char const *s, char c);
 void				ft_striteri(char *s, void (*f)(unsigned int, char*));
 int					ft_putstr(char *s);
-typedef struct s_list
-{
-	void			*content;
-	struct s_list	*next;
-}	t_list;
-t_list	*ft_lstnew(void *content);
-void	ft_lstadd_front(t_list **lst, t_list *new);
-int		ft_lstsize(t_list *lst);
-t_list	*ft_lstlast(t_list *lst);
-void	ft_lstadd_back(t_list **lst, t_list *new);
+
 
 #endif

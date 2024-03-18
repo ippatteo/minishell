@@ -1,30 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   ceck_quot.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 12:24:30 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/26 12:25:43 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
+/*   Updated: 2024/03/18 16:16:27 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../mini.h"
 
-int	ft_lstsize(t_list *lst)
+void realloc_quotes(t_mini *mini)
 {
-	t_list	*p;
-	int		i;
+	int i;
+	char *tmp;
 
 	i = 0;
-	p = lst;
-	if (!lst)
-		return (0);
-	while (p != NULL)
+	tmp = NULL;
+	while (mini->commands[i])
 	{
-		p = p -> next;
+		if (mini->commands[i][0] == D_QUOT || mini->commands[i][0] == QUOT)
+		{
+			tmp = ft_strdup(mini->commands[i]);
+			free(mini->commands[i]);
+			mini->commands[i] = malloc(ft_strlen(mini->commands[i]) - 1);
+			ft_strlcpy(mini->commands[i], (tmp + 1), ft_strlen(tmp) - 2);
+			free(tmp);
+		}
 		i++;
 	}
-	return (i);
 }

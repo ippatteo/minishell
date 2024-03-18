@@ -6,14 +6,15 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/14 13:25:00 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/18 22:26:37 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 /*
 legenda: 
-n = 1 (è una parola, quindi magari un argomento)
+n = 1 (è file)
+n = 111	(è argomento)
 n = 11 (è la builtin echo)
 n = 12 (è la builtin cd)
 n = 13 (è la builtin pwd)
@@ -35,19 +36,19 @@ n = 9 (è un here document "<<")
 int ft_is_builtin(char *cmd)
 {
 	if (!ft_strncmp("echo", cmd, 4))
-		return (11);
+		return (ECHO);
 	else if(!ft_strncmp("cd", cmd, 2))
-		return (12);
+		return (CD);
 	else if(!ft_strncmp("pwd", cmd, 3))
-		return (13);
+		return (PWD);
 	else if (!ft_strncmp("export", cmd, 7))
-		return (14);
+		return (EXPORT);
 	else if (!ft_strncmp("unset", cmd, 6))
-		return (15);
+		return (UNSET);
 	else if (!ft_strncmp("env", cmd, 3))
-		return (16);
+		return (ENV);
 	else if (!ft_strncmp("exit", cmd, 4))
-		return (17);
+		return (EXIT);
 	else
 		return (0);
 }
@@ -73,6 +74,21 @@ char	*ft_strdup_slash(const char *str)
 	return (str_allocated);
 }
 
+int ft_is_pipe_redir_hd(char *cmd)
+{
+	if (*cmd == '|')
+		return (PIPE);
+	else if (*cmd == '>' && *(cmd+1) == '>')
+		return (REDIR_MAGMAG);
+	else if (*cmd == '<' && *(cmd+1) == '<')
+		return (HERE_DOC);
+	else if(*cmd == '>')
+		return (REDIR_MAG);
+	else if(*cmd == '<')
+		return (REDIR_MIN);
+	else
+		return (0);
+}
 int ft_is_command(char *cmd)
 {
 	char	*path;
@@ -100,23 +116,6 @@ int ft_is_command(char *cmd)
 	free_matrix(folders);
 	return (0);
 }
-
-int ft_is_pipe_redir_hd(char *cmd)
-{
-	if (*cmd == '|')
-		return (2);
-	else if (*cmd == '>' && *(cmd+1) == '>')
-		return (4);
-	else if (*cmd == '<' && *(cmd+1) == '<')
-		return (9);
-	else if(*cmd == '>')
-		return (7);
-	else if(*cmd == '<')
-		return (3);
-	else
-		return (0);
-}
-
 
 int assign_number_of_tkn(t_mini *mini, char *cmd)
 {
@@ -158,12 +157,10 @@ char *ft_command_path(char *cmd)
 	return (NULL);
 }
 
-void ft_tokenizer(t_mini *mini)
+int ft_tokenizer(t_mini *mini)
 {
 	int i;
-	//t_node node;
-
-	//node = malloc(sizeof(t_node));
+	
 	i= 0;
 	if (mini->tknflag == 1)
 		free(mini->tkn);
@@ -171,30 +168,28 @@ void ft_tokenizer(t_mini *mini)
 	while (mini->commands[i])
 	{
 		mini->tkn[i] = assign_number_of_tkn(mini, mini->commands[i]);
-		printf("tkn = %d\n", mini->tkn[i]);
+		printf("tkn[%d] = %d\n",i , mini->tkn[i]);
 		i++;
 	}
-	mini->tkn[i] = 0;
-	mini->tknflag = 1; //potrebbe esse provvisorio, ma ora mi permette di freeare
-	//ft_nodes_token(mini->commands, &node)
-}
-
-void ft_nodes_token(char **matrix, t_node *node)
-{
-	node->cmd_path = ft_strdup(*matrix);
-	while(*matrix != TOKEN && *matrix != NULL)
+	mini->tkn[i] = '\0';
+	mini->tknflag = 1;//potrebbe esse provvisorio, ma ora mi permette di freeare
+	if (!check_errors(mini))
+		return (0);
+	realloc_quotes(mini);
+	// da eliminare
+	i = 0;
+	while (mini->commands[i])
 	{
-		*node->cmd_matrix = ft_strdup(*matrix);
-		matrix++;
-		ft_lstnew()
+		printf("tkn[%d] = %d\n",i , mini->tkn[i]);
+		i++;
 	}
-	if (matrix)
-		node->next = malloc(sizeof(t_node));
-	ft_nodes_token(matrix, node->next);
+	// da eliminare
+	return (1);
+	
 }
 
 
-
+/*
 void ft_nodes_token(t_mini *mini, t_node *node)
 {
 	int i;
@@ -223,7 +218,9 @@ void ft_nodes_token(t_mini *mini, t_node *node)
 			else	
 				node->left_tkn = mini->tkn[i-1];
 			if (!mini->commands[i+t]) 
-				node->wright_tkn = NULL;
+				node->w
+				
+				right_tkn = NULL;
 			else	
 				node->wright_tkn = mini->tkn[i+t];
 			t = 1;
@@ -239,7 +236,9 @@ void ft_nodes_token(t_mini *mini, t_node *node)
 			
 	}
 }
-//stringa di char da mettere in ,atrice argomenti
+*/
+
+//stringa di char da mettere in matrice argomenti
 char *find_cmd_or_b_in(t_mini *mini, int pos)
 {
 	if (mini->tkn[pos] >= 11 && mini->tkn[pos] <= 17)
@@ -261,8 +260,9 @@ int count_commands_pipes(t_mini *mini)
 	p = 1;
 	while (mini->commands[i])
 	{
-		if (mini->commands[i++] == '|')
+		if (mini->tkn[i] == PIPE)
 			p++;
+		i++;
 	}
 	return (p);
 }
@@ -277,17 +277,17 @@ int find_pos_cmd(t_mini *mini, int p)
 	z = 0;
 	while (z < p)
 	{
-		if (mini->commands[i++] == '|')
+		if (mini->tkn[i++] == PIPE)
 			z++;
 	}
 	if (p == 0)
 	{
-		if (mini->tkn[0] >= 10)
+		if (mini->tkn[0] >= BUILTIN && mini->tkn[0] <= COMMAND)
 			return (0);
 	}
-	while (mini->tkn[i])
+	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
-		if	(mini->tkn[i] >= 10 && !(mini->tkn[i-1] <= 9 && mini->tkn[i-1] >= 3))
+		if	(mini->tkn[i] >= BUILTIN && mini->tkn[i] <= COMMAND)
 			return (i);
 		else
 			i++;
@@ -302,63 +302,63 @@ int fill_cmd_count_args(t_mini *mini, int p)
 	int t;
 
 	i = find_pos_cmd(mini, p);
-	t = 1;
-	while (mini->tkn[i + t] && mini->tkn[i+ t] != 2)
+	t = 0;
+	while (mini->tkn[i + t] && mini->tkn[i + t] != PIPE)
 	{
-		if	(!(mini->tkn[i+ t -1] <= 9 && mini->tkn[i+ t -1] >= 3) 
-			&& !(mini->tkn[i+ t] <= 9 && mini->tkn[i+ t] >= 3))
+		if	(mini->tkn[i + t] == ARGS)
 			t++;
 		else
 			i++;
 	}
-	return (t)
+	return (t);
 }
 
 void set_values_as_null(t_node *node)
 {
 	node->cmd_path = NULL;
 	node->cmd_matrix = NULL;
-	node->left_tkn = NULL;
-	node->right_tkn = NULL;
-	node->this_tkn = NULL;
+	node->left_tkn = 0;
+	node->right_tkn = 0;
+	node->this_tkn = 0;
 	node->file = NULL;
 	node->next = NULL;
 }
 
 //riempe un nodo di tipo comando con tutti gli argomenti
-int fill_cmd(t_node *node, t_mini *mini, int p)
+void fill_cmd(t_node **node, t_mini *mini, int p)
 {
 	int i;
 	int t;
-	if (ind_pos_cmd(mini, p) != -1)
+	t_node *new;
+	
+	if (find_pos_cmd(mini, p) != -1)
 		i = find_pos_cmd(mini, p);
 	else
 		return;
-	set_values_as_null(node);
-	node->cmd_matrix = malloc(sizeof(char *) * fill_cmd_count_args(mini, p) + 1);
+	new = (t_node *)malloc(sizeof(t_node));
+	set_values_as_null(new);
+	new->cmd_matrix = malloc(sizeof(char *) * fill_cmd_count_args(mini, p) + 2);
 	t = 1;
-	node->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
-	node->cmd_path = find_cmd_or_b_in(mini, i);
-	while (mini->tkn[i+t] && mini->tkn[i+t] != 2)
+	new->this_tkn = mini->tkn[i];
+	new->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
+	new->cmd_path = find_cmd_or_b_in(mini, i);
+	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
-		if	(!(mini->tkn[i+ t - 1] <= 9 && mini->tkn[i+ t - 1] >= 3) 
-			&& !(mini->tkn[i+ t] <= 9 && mini->tkn[i+ t] >= 3))
-			node->cmd_matrix[t] = ft_strdup(mini->commands[i + t++]);
-		else
-			i++;
-	}//dopo aggiungere anxhe next, next tkn e altri cazzi
-	node->cmd_matrix[t] = NULL;
-	
+		if	(mini->tkn[i] == ARGS)
+			new->cmd_matrix[t++] = ft_strdup(mini->commands[i]);
+		i++;
+	}
+	new->cmd_matrix[t] = NULL;
+	ft_lstadd_back(node, new);
 }
 
-void fill_redir0(t_node *node, t_mini *mini, int i)
+void fill_redir0(t_node *new, t_mini *mini, int i)
 {
-	set_values_as_null(node);
-	node->this_tkn = mini->tkn[i];
-	node->right_tkn = mini->tkn[i + 1];
-	if (mini->commands[i-1])
-		node->left_tkn = mini->tkn[i - 1];
-	node->file = ft_strdup(mini->commands[i+1]);
+	
+	set_values_as_null(new);
+	new->this_tkn = mini->tkn[i];
+	new->right_tkn = mini->tkn[i + 1];
+	new->file = ft_strdup(mini->commands[i+1]);
 }
 
 //scorre int tanto quanto serve in base alla pipe
@@ -371,56 +371,117 @@ int go_int(t_mini *mini, int p)
 	z = 0;
 	while (z < p && mini->commands[i])
 	{
-		if (mini->commands[i++] == '|')
+		if (mini->tkn[i] == 2)
 			z++;
+		i++;
 	}
 	return (i);
 }
 
 //mette le redirection sempre
-void fill_redir(t_node *tmp, t_mini *mini, int p)
+void fill_redir(t_node **node, t_mini *mini, int p)
 {
 	int i;
 	int z;
+	t_node *new;
 
 	i = go_int(mini, p);
 	z = 0;
-	while (mini->tkn[i] && mini->tkn[i] != 2)
+	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
-		if	(mini->tkn[i] <= 9 && mini->tkn[i] >= 3)
+		if	(mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
 		{
-			fill_redir0(tmp, mini, i);
-			if (find_pos_cmd(mini, p) != -1)
-			{
-				tmp->next = malloc(sizeof(t_node));
-				tmp = tmp->next;
-			}
-			else
-				tmp->next = NULL;
+			new = (t_node *)malloc(sizeof(t_node));
+			fill_redir0(new, mini, i);
+			ft_lstadd_back(node, new);
 		}
 		i++;
 	}
 }
 
+void fill_pipes(t_node **node, t_mini *mini, int p)
+{
+	int i;
+	t_node	*new;
 
+	i = 0;
+	new = (t_node *)malloc(sizeof(t_node));
+	set_values_as_null(new);
+	i = go_int(mini, p) - 1;
+	new->this_tkn = mini->tkn[i];
+	new->left_tkn = mini->tkn[i-1];
+	new->right_tkn = mini->tkn[i+1];
+	ft_lstadd_back(node, new);
+	
+}
 //porcodeddio la funzione finale
-void fill_nodes(t_node *node, t_mini *mini)
+
+void ft_free_tnodes(t_node *node)
+{
+	t_node* temp;
+	
+	while (node != NULL)
+	{
+		temp = node;
+		node = node->next;
+		if (temp->cmd_matrix != NULL)
+			free_matrix(temp->cmd_matrix);
+		if (temp->cmd_path != NULL)
+			free(temp->cmd_path);
+		if (temp->file != NULL)
+			free(temp->file);
+		free(temp);
+	}
+}
+int fill_nodes(t_node **node, t_mini *mini)
 {
 	int i;
 	int p;
-	t_node **cmd_lines;
 	
-	cmd_lines = malloc(sizeof(t_node *) * count_commands_pipes(mini));
 	p = 0;
-	while (p != count_commands_pipes(mini))
-	{	
-		fill_redir(cmd_lines[p], mini, p);
-		fill_cmd(cmd_lines[p], mini, p);
+	if (!ft_tokenizer(mini))
+		return (0);
+	
+	if (*node != NULL)
+	{
+		ft_free_tnodes(*node);
+		*node = NULL;
+	}
+	while (p < count_commands_pipes(mini))
+	{
+		fill_redir(node, mini, p);
+		fill_cmd(node, mini, p);
+		if (p + 1 < count_commands_pipes(mini))
+			fill_pipes(node, mini, p);
 		p++;
-		if (p != count_commands_pipes(mini))
-		{
-			node->next = malloc(sizeof(t_node));
-			node = node->next;
-		}
+	}
+	printf("sonoqua\n");
+	ft_printnode(*node);
+	return(1);
+}
+
+void ft_printnode(t_node *node)
+{    
+	t_node *tmp;
+	int i;
+	
+	tmp = node;
+	if (!node)
+		return;
+	i = 0;
+	while (tmp != NULL)
+	{
+		printf("node path = %s\n", tmp->cmd_path);
+		printf("node matrix = \n"); 
+		printf("%s\n", tmp->cmd_matrix[0]);
+		printf("node left_tkn = %d\n", tmp->left_tkn);
+		printf("node right_tkn = %d\n", tmp->right_tkn);
+		printf("node this_tkn = %d\n", tmp->this_tkn);
+		printf("node file= %s\n", tmp->file);
+		if (tmp->next == NULL)
+			printf("temp->next =null\n");
+		else
+			printf("tmp->next non è null");
+		tmp = tmp->next;
 	}
 }

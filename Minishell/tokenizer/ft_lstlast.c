@@ -1,25 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstnew.c                                        :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 12:24:22 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/26 12:24:23 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/04/26 12:22:01 by mcamilli          #+#    #+#             */
+/*   Updated: 2024/03/15 17:23:46 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../mini.h"
 
-t_list	*ft_lstnew(void *content)
+t_node	*ft_lstlast(t_node *lst)
 {
-	t_list	*new;
-
-	new = (t_list *)malloc(sizeof(t_list));
-	if (!new)
+	if (!lst)
 		return (NULL);
-	new->content = content;
-	new->next = NULL;
-	return (new);
+	while (lst -> next != NULL)
+	{
+		lst = lst -> next;
+	}
+	return (lst);
 }

@@ -1,24 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstlast.c                                       :+:      :+:    :+:   */
+/*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 12:22:01 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/26 13:03:58 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
+/*   Updated: 2024/03/18 18:54:47 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
-
-t_list	*ft_lstlast(t_list *lst)
+#include "../mini.h"
+/*
+int ft_count_matrix(char **c)
 {
-	if (!lst)
-		return (NULL);
-	while (lst -> next != NULL)
-	{
-		lst = lst -> next;
-	}
-	return (lst);
+	int x;
+
+	x = 0;
+	while (c[x])
+		x++ ;
 }
+void ft_unset(char ***en, char *s)
+{
+	int i;
+	char **newenv;
+
+	i = 0;
+	newenv = NULL;
+	if (!ft_getenv(*en, s))
+		return (0);
+	newenv = malloc(sizeof(char *) * ft_count_matrix(*en) + 1);
+	
+}
+*/
