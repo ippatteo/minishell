@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/01 04:18:26 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 06:34:57 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,11 @@ void swapStrings(char **str1, char **str2)
 int	count_matrix(char **matrix)
 {
 	int	a;
-	int	b;
-	int n;
 
 	a = 0;
-	b = 0;
-	n = 0;
 	while (matrix[a])
 	{
-		b = 0;
-		while (matrix[a][b])
-		{
-			n++;
-			b++;
-		}
-		n++;
 		a++;
 	}
-	return (n);
+	return (a);
 }

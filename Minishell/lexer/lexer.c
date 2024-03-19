@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/18 22:04:41 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 07:34:30 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,14 +34,16 @@ void copy_env(t_mini *mini, char **e)
 	int i;
 
 	i = 0;
-	mini->en = ft_calloc((count_matrix(e) + 1), sizeof (char *));
+	mini->en = ft_calloc((count_matrix(e) + 1), sizeof(char *));
+	if (!mini->en)
+		return ;
 	while(e[i])
 	{
 		mini->en[i] = ft_strdup(e[i]);
 		i++;
 	}
-	mini->en[i] = 0;
-	ft_printmap0(mini->en);
+	mini->en[i] = NULL;
+	//ft_printmap0(mini->en);
 }
 
 void ft_printmap1(char **c)
@@ -64,13 +66,18 @@ void free_matrix(char **mtr)
 	int i;
 
 	i = 0;
-	while (mtr[i])
+	while (mtr[i] != NULL)
 	{
-		printf("sto freeando %s\n", mtr[i]);
+		//printf("sto freeando %s\n", mtr[i]);
 		free(mtr[i]);
 		i++;
 	}
+	free(mtr);
+	mtr = NULL;
 }
+
+
+
 int	lexer(t_mini *mini, char *prompt)
 {
 	if (mini->commands != NULL)

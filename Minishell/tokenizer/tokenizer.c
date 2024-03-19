@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/18 22:26:37 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 07:34:14 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -441,7 +441,6 @@ int fill_nodes(t_node **node, t_mini *mini)
 	p = 0;
 	if (!ft_tokenizer(mini))
 		return (0);
-	
 	if (*node != NULL)
 	{
 		ft_free_tnodes(*node);
@@ -463,7 +462,7 @@ int fill_nodes(t_node **node, t_mini *mini)
 void ft_printnode(t_node *node)
 {    
 	t_node *tmp;
-	int i;
+	static int i;
 	
 	tmp = node;
 	if (!node)
@@ -473,7 +472,7 @@ void ft_printnode(t_node *node)
 	{
 		printf("node path = %s\n", tmp->cmd_path);
 		printf("node matrix = \n"); 
-		printf("%s\n", tmp->cmd_matrix[0]);
+		//printf("%s\n", tmp->cmd_matrix[0]);
 		printf("node left_tkn = %d\n", tmp->left_tkn);
 		printf("node right_tkn = %d\n", tmp->right_tkn);
 		printf("node this_tkn = %d\n", tmp->this_tkn);

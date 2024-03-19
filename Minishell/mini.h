@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/18 20:53:34 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 07:31:48 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ typedef struct s_node
 	char *file;
 }	t_node;
 
+void ft_free_tnodes(t_node *node);
 void ft_printmap0(char **c);
 void realloc_quotes(t_mini *mini);
 int check_errors(t_mini *mini);
