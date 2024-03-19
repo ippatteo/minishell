@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/17 12:44:03 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 14:50:52 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ char *str_exp_realloc(t_mini *mini, char *str)
 	char *tmp;
 
 	sub = NULL;
-	orig = malloc(sizeof(char) * str_exp_count(mini, str) + 1);
+	orig = ft_calloc(sizeof(char), str_exp_count(mini, str) + 1);
 	tmp = orig;
 	while (*str)
 	{
@@ -240,7 +240,7 @@ char *str_exp_realloc_2(t_mini *mini, char *str)
 
 	sub = ft_itoa(g_exit);
 	//printf("sub = %s count = %d ", sub, str_exp_count_2(mini, str, sub));
-	orig = malloc(sizeof(char) * str_exp_count_2(mini, str, sub) + 1);
+	orig = ft_calloc(sizeof(char), str_exp_count_2(mini, str, sub) + 1);
 	tmp = orig;
 	while (*str)
 	{

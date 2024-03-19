@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/19 07:34:14 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:07:44 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	*ft_strdup_slash(const char *str)
 
 	i = 0;
 	len = ft_strlen(str);
-	str_allocated = malloc(len + 2);
+	str_allocated = ft_calloc(1, len + 2);
 	if (!str_allocated)
 		return (NULL);
 	while (str[i] != '\0')
@@ -164,7 +164,7 @@ int ft_tokenizer(t_mini *mini)
 	i= 0;
 	if (mini->tknflag == 1)
 		free(mini->tkn);
-	mini->tkn = ft_calloc(mini->lines, sizeof(char) +1);
+	mini->tkn = ft_calloc(count_matrix(mini->commands) + 1, sizeof(char));
 	while (mini->commands[i])
 	{
 		mini->tkn[i] = assign_number_of_tkn(mini, mini->commands[i]);
@@ -187,7 +187,21 @@ int ft_tokenizer(t_mini *mini)
 	return (1);
 	
 }
-
+int go_int(t_mini *mini, int p)
+{
+	int i;
+	int z;
+	
+	i = 0;
+	z = 0;
+	while (z < p && mini->commands[i])
+	{
+		if (mini->tkn[i] == PIPE)
+			z++;
+		i++;
+	}
+	return (i);
+}
 
 /*
 void ft_nodes_token(t_mini *mini, t_node *node)
@@ -273,24 +287,13 @@ int find_pos_cmd(t_mini *mini, int p)
 	int i;
 	int z;
 	
-	i = 1;
+	i = go_int(mini, p);
 	z = 0;
-	while (z < p)
-	{
-		if (mini->tkn[i++] == PIPE)
-			z++;
-	}
-	if (p == 0)
-	{
-		if (mini->tkn[0] >= BUILTIN && mini->tkn[0] <= COMMAND)
-			return (0);
-	}
 	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
 		if	(mini->tkn[i] >= BUILTIN && mini->tkn[i] <= COMMAND)
 			return (i);
-		else
-			i++;
+		i++;
 	}
 	return (-1);
 }
@@ -303,13 +306,13 @@ int fill_cmd_count_args(t_mini *mini, int p)
 
 	i = find_pos_cmd(mini, p);
 	t = 0;
-	while (mini->tkn[i + t] && mini->tkn[i + t] != PIPE)
+	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
-		if	(mini->tkn[i + t] == ARGS)
+		if	(mini->tkn[i] == ARGS)
 			t++;
-		else
-			i++;
+		i++;
 	}
+	printf("n args = %d\n", t);
 	return (t);
 }
 
@@ -335,9 +338,9 @@ void fill_cmd(t_node **node, t_mini *mini, int p)
 		i = find_pos_cmd(mini, p);
 	else
 		return;
-	new = (t_node *)malloc(sizeof(t_node));
+	new = (t_node *)ft_calloc(sizeof(t_node), 1);
 	set_values_as_null(new);
-	new->cmd_matrix = malloc(sizeof(char *) * fill_cmd_count_args(mini, p) + 2);
+	new->cmd_matrix = ft_calloc(sizeof(char *), fill_cmd_count_args(mini, p) + 2);
 	t = 1;
 	new->this_tkn = mini->tkn[i];
 	new->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
@@ -362,21 +365,7 @@ void fill_redir0(t_node *new, t_mini *mini, int i)
 }
 
 //scorre int tanto quanto serve in base alla pipe
-int go_int(t_mini *mini, int p)
-{
-	int i;
-	int z;
-	
-	i = 0;
-	z = 0;
-	while (z < p && mini->commands[i])
-	{
-		if (mini->tkn[i] == 2)
-			z++;
-		i++;
-	}
-	return (i);
-}
+
 
 //mette le redirection sempre
 void fill_redir(t_node **node, t_mini *mini, int p)
@@ -391,7 +380,7 @@ void fill_redir(t_node **node, t_mini *mini, int p)
 	{
 		if	(mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
 		{
-			new = (t_node *)malloc(sizeof(t_node));
+			new = (t_node *)ft_calloc(sizeof(t_node), 1);
 			fill_redir0(new, mini, i);
 			ft_lstadd_back(node, new);
 		}
@@ -405,7 +394,7 @@ void fill_pipes(t_node **node, t_mini *mini, int p)
 	t_node	*new;
 
 	i = 0;
-	new = (t_node *)malloc(sizeof(t_node));
+	new = (t_node *)ft_calloc(sizeof(t_node), 1);
 	set_values_as_null(new);
 	i = go_int(mini, p) - 1;
 	new->this_tkn = mini->tkn[i];

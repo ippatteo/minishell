@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/18 16:16:27 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:55:14 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,7 @@ void realloc_quotes(t_mini *mini)
 		{
 			tmp = ft_strdup(mini->commands[i]);
 			free(mini->commands[i]);
-			mini->commands[i] = malloc(ft_strlen(mini->commands[i]) - 1);
-			ft_strlcpy(mini->commands[i], (tmp + 1), ft_strlen(tmp) - 2);
+			mini->commands[i] = ft_substr(tmp, 1, ft_strlen(tmp) - 2 );
 			free(tmp);
 		}
 		i++;

@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/19 11:15:04 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 13:50:39 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,16 @@ void free_matrix(char **mtr)
 	int i;
 
 	i = 0;
-	while (mtr[i] != NULL)
+	if (mtr != NULL)
 	{
-		//printf("sto freeando %s\n", mtr[i]);
-		free(mtr[i]);
-		i++;
+		while (mtr[i] != NULL)
+		{
+			//printf("sto freeando %s\n", mtr[i]);
+			free(mtr[i]);
+			i++;
+		}
+		free(mtr);
 	}
-	free(mtr);
 	mtr = NULL;
 }
 

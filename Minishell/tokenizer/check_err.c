@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/18 20:42:39 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/19 15:27:20 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,12 +137,12 @@ int err_quote(t_mini *mini)
 	{
 		if (mini->commands[i][0] == D_QUOT || mini->commands[i][0] == QUOT)
 		{
-			if (mini->commands[i][0] == D_QUOT)
+			if (mini->commands[i][0] == D_QUOT && (ft_strlen(mini->commands[i])-1))
 			{
 				if(mini->commands[i][ft_strlen(mini->commands[i])-1] != D_QUOT)
 					return(0);
 			}
-			else if(mini->commands[i][0] == QUOT)
+			else if(mini->commands[i][0] == QUOT && (ft_strlen(mini->commands[i])-1))
 			{
 				if (mini->commands[i][ft_strlen(mini->commands[i])-1] != QUOT)
 					return(0);
