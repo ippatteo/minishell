@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/19 15:07:44 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 00:02:18 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 /*
-legenda: 
+legenda:
 n = 1 (è file)
 n = 111	(è argomento)
 n = 11 (è la builtin echo)
@@ -22,7 +22,7 @@ n = 14 (è la builtin export)
 n = 15 (è la builtin unset)
 n = 16 (è la builtin env)
 n = 17 (è la builtin exit)
-n = 20 (è un command trovato che esiste e si trova in $PATH) 
+n = 20 (è un command trovato che esiste e si trova in $PATH)
 n = 2 (è una pipe "|")
 n = 7 (è una redirecion ">")
 n = 3 (è una redirecion "<")
@@ -95,7 +95,7 @@ int ft_is_command(char *cmd)
 	char	**folders;
 	char	*tmp;
 	int		i;
-	
+
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (1);
@@ -107,7 +107,7 @@ int ft_is_command(char *cmd)
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if(access(folders[i], X_OK) == 0)
-		{	
+		{
 			free_matrix(folders);
 			return(1);
 		}
@@ -126,7 +126,7 @@ int assign_number_of_tkn(t_mini *mini, char *cmd)
 	else if (ft_is_command(cmd))
 		return (20);
 	else
-		return (1);	
+		return (1);
 }
 char *ft_command_path(char *cmd)
 {
@@ -134,7 +134,7 @@ char *ft_command_path(char *cmd)
 	char	**folders;
 	char	*tmp;
 	int		i;
-	
+
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (cmd);
@@ -146,7 +146,7 @@ char *ft_command_path(char *cmd)
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
 		if(access(folders[i], X_OK) == 0)
-		{	
+		{
 			tmp = ft_strdup(folders[i]);
 			free_matrix(folders);
 			return(tmp);
@@ -160,7 +160,7 @@ char *ft_command_path(char *cmd)
 int ft_tokenizer(t_mini *mini)
 {
 	int i;
-	
+
 	i= 0;
 	if (mini->tknflag == 1)
 		free(mini->tkn);
@@ -185,13 +185,13 @@ int ft_tokenizer(t_mini *mini)
 	}
 	// da eliminare
 	return (1);
-	
+
 }
 int go_int(t_mini *mini, int p)
 {
 	int i;
 	int z;
-	
+
 	i = 0;
 	z = 0;
 	while (z < p && mini->commands[i])
@@ -224,18 +224,18 @@ void ft_nodes_token(t_mini *mini, t_node *node)
 			else
 				node->cmd_path = ft_command_path(mini->commands[i]);
 			node->cmd_matrix[0] = ft_command_path(mini->commands[i]);
-		
+
 			if (node->cmd_matrix[0] == 0)
 				node->cmd_matrix[0] = ft_strdup(mini->commands[i++]);
 			if (i == 1)
 				node->left_tkn = NULL;
-			else	
+			else
 				node->left_tkn = mini->tkn[i-1];
-			if (!mini->commands[i+t]) 
+			if (!mini->commands[i+t])
 				node->w
-				
+
 				right_tkn = NULL;
-			else	
+			else
 				node->wright_tkn = mini->tkn[i+t];
 			t = 1;
 			while ((!(mini->tkn[i] >= 2 && mini->tkn[i] <= 7)) || mini->commands[i])
@@ -247,7 +247,7 @@ void ft_nodes_token(t_mini *mini, t_node *node)
 		{
 			node->cmd_matrix = NULL;
 		}
-			
+
 	}
 }
 */
@@ -259,7 +259,7 @@ char *find_cmd_or_b_in(t_mini *mini, int pos)
 		return(ft_strdup(mini->commands[pos]));
 	else if (mini->tkn[pos] == 20)
 		return(ft_command_path(mini->commands[pos]));
-	else 
+	else
 		return (NULL);
 }
 
@@ -286,7 +286,7 @@ int find_pos_cmd(t_mini *mini, int p)
 {
 	int i;
 	int z;
-	
+
 	i = go_int(mini, p);
 	z = 0;
 	while (mini->tkn[i] && mini->tkn[i] != PIPE)
@@ -333,7 +333,7 @@ void fill_cmd(t_node **node, t_mini *mini, int p)
 	int i;
 	int t;
 	t_node *new;
-	
+
 	if (find_pos_cmd(mini, p) != -1)
 		i = find_pos_cmd(mini, p);
 	else
@@ -357,7 +357,7 @@ void fill_cmd(t_node **node, t_mini *mini, int p)
 
 void fill_redir0(t_node *new, t_mini *mini, int i)
 {
-	
+
 	set_values_as_null(new);
 	new->this_tkn = mini->tkn[i];
 	new->right_tkn = mini->tkn[i + 1];
@@ -401,14 +401,14 @@ void fill_pipes(t_node **node, t_mini *mini, int p)
 	new->left_tkn = mini->tkn[i-1];
 	new->right_tkn = mini->tkn[i+1];
 	ft_lstadd_back(node, new);
-	
+
 }
 //porcodeddio la funzione finale
 
 void ft_free_tnodes(t_node *node)
 {
 	t_node* temp;
-	
+
 	while (node != NULL)
 	{
 		temp = node;
@@ -426,7 +426,7 @@ int fill_nodes(t_node **node, t_mini *mini)
 {
 	int i;
 	int p;
-	
+
 	p = 0;
 	if (!ft_tokenizer(mini))
 		return (0);
@@ -443,16 +443,15 @@ int fill_nodes(t_node **node, t_mini *mini)
 			fill_pipes(node, mini, p);
 		p++;
 	}
-	printf("sonoqua\n");
 	ft_printnode(*node);
 	return(1);
 }
 
 void ft_printnode(t_node *node)
-{    
+{
 	t_node *tmp;
 	static int i;
-	
+
 	tmp = node;
 	if (!node)
 		return;
@@ -460,7 +459,7 @@ void ft_printnode(t_node *node)
 	while (tmp != NULL)
 	{
 		printf("node path = %s\n", tmp->cmd_path);
-		printf("node matrix = \n"); 
+		printf("node matrix = \n");
 		//printf("%s\n", tmp->cmd_matrix[0]);
 		printf("node left_tkn = %d\n", tmp->left_tkn);
 		printf("node right_tkn = %d\n", tmp->right_tkn);
