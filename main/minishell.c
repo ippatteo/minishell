@@ -3,15 +3,35 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/20 16:59:59 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/03/20 22:32:26 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
+void	sig_handle(int signum)
+{
+	if(signum == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if(signum == SIGTERM)
+		exit(1);
+
+}
+
+void	signal_handler()
+{
+	signal(SIGINT,  sig_handle);
+	signal(SIGTERM, sig_handle);
+	signal(SIGQUIT, SIG_IGN);
+}
 
 int g_exit;
 void free_env(t_mini *mini) {
@@ -54,6 +74,7 @@ int	main(int argc, char ** argv, char **env)
 	mini.fd_stdin = dup(STDIN_FILENO);
 	mini.fd_stdout = dup(STDOUT_FILENO);
 	mini.tknflag = 0;
+	signal_handler();
 	g_exit = 0;
 	copy_env(&mini, env);
 	while(1)
@@ -62,7 +83,6 @@ int	main(int argc, char ** argv, char **env)
 		if (cmd == NULL)
 			return(0);
 		lexer(&mini, cmd);
-		//ft_tokenizer(&mini);
 		fill_nodes(&node, &mini);
 		exec(node, &mini);
 		add_history(cmd);

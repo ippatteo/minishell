@@ -6,7 +6,7 @@
 #    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/07 22:42:27 by luca             ###   ########.fr        #
+#    Updated: 2024/03/20 20:16:41 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,7 +38,7 @@ FLAGS = -Wall -Wextra -Werror
 	$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
 
 $(NAME): $(OBJECTS)
-	make -C $(LIBFT_PATH)
+	make -s -C $(LIBFT_PATH)
 	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -lreadline -o minishell
 
 all: $(NAME)
@@ -48,7 +48,7 @@ clean:
 	rm -f minishell
 
 fclean: clean
-	make fclean -C ${LIBFT_PATH}
+	make -s fclean -C ${LIBFT_PATH}
 
 re: fclean all
 

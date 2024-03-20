@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/20 18:01:30 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/03/20 21:10:41 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	here_doc(t_node *node, t_mini *mini)
 	int	i;
 
 	i = 0;
-	pipe(fd);
+	if(pipe(fd) == -1)
+		ft_putendl_fd(strerror(errno), 2);
 	while(1)
 	{
 		matrix[i] = readline("> ");
+		printf("ciao");
 		if (ft_strcmp(matrix[i], node->file) == 0)
 		{
 			matrix[i] = NULL;
@@ -31,9 +33,11 @@ void	here_doc(t_node *node, t_mini *mini)
 		}
 		i++;
 	}
-	dup2(fd[0], STDOUT_FILENO);
+	if(dup2(fd[0], STDOUT_FILENO) == -1)
+		ft_putendl_fd(strerror(errno), 2);
 	ft_printmap0(matrix);
-	dup2(fd[1], STDIN_FILENO);
+	if(dup2(fd[1], STDIN_FILENO) == -1)
+		ft_putendl_fd(strerror(errno), 2);
 	close(fd[0]);
 	close(fd[1]);
 }
