@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/08 18:31:31 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/19 13:50:39 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,24 @@ void copy_env(t_mini *mini, char **e)
 	int i;
 
 	i = 0;
-	mini->en = ft_calloc((count_matrix(e) + 1), sizeof (char *));
+	mini->en = ft_calloc((count_matrix(e) + 1), sizeof(char *));
+	if (!mini->en)
+		return ;
 	while(e[i])
 	{
 		mini->en[i] = ft_strdup(e[i]);
 		i++;
 	}
-	mini->en[i] = 0;
+	mini->en[i] = NULL;
 	//ft_printmap0(mini->en);
 }
 
-void ft_printmap1(t_mini *mini, char **c)
+void ft_printmap1(char **c)
 {
 	int x;
 
-	x = 0;
+	x = 1;
+	printf("%s\n", c[0]);
 	while (c[x])
 	{
 		if(ft_putstr(c[x]))
@@ -63,12 +66,21 @@ void free_matrix(char **mtr)
 	int i;
 
 	i = 0;
-	while (mtr[i])
+	if (mtr != NULL)
 	{
-		free(mtr[i]);
-		i++;
+		while (mtr[i] != NULL)
+		{
+			//printf("sto freeando %s\n", mtr[i]);
+			free(mtr[i]);
+			i++;
+		}
+		free(mtr);
 	}
+	mtr = NULL;
 }
+
+
+
 int	lexer(t_mini *mini, char *prompt)
 {
 	if (mini->commands != NULL)
@@ -77,8 +89,8 @@ int	lexer(t_mini *mini, char *prompt)
 	if (mini->commands == NULL)
 		return (0);
 	//ft_printmap1(mini, mini->commands);
-	mini->lines=  check_expan(mini, mini->commands);
+	mini->lines = check_expan(mini, mini->commands);
 	check_expan_2(mini, mini->commands);
-	//ft_printmap1(mini, mini->commands);
+	ft_printmap1(mini->commands);
 	return(0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/12 13:49:06 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/20 17:24:28 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,28 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <time.h>
-# include <sys/types.h>
-# include <sys/wait.h>
 # include "libft/libft.h"
 
+#define END_PIPE -1
+#define BUILTIN 10
+#define ECHO 11
+#define CD 12
+#define PWD 13
+#define EXPORT 14
+#define UNSET 15
+#define ENV 16
+#define EXIT 17
 #define BUILTIN 10
 #define COMMAND 20
-#define PIPE 1
-#define END_PIPE -1
-#define REDIR_MAG 2
+#define PIPE 2
+#define REDIR_MAG 7
 #define REDIR_MAGMAG 4
 #define REDIR_MIN 3
-#define HERE_DOC 77
-#define WORDS 100
+#define HERE_DOC 9
+#define FILE 1
+#define ARGS 111
+#define D_QUOT 34
+#define QUOT 39
 
 extern int g_exit;
 
@@ -43,11 +52,13 @@ typedef struct s_mini
 {
 	char 	**en;
 	int		lines;
-	int		*tkn;//array di int che rappresenta i tokens
-	int		tknflag;
+	char	*tkn;//array di int che rappresenta i tokens
+	int		tknflag;//capisce se la memoria per tkn è stat mai allocata
 	char	*sub;
 	char	*tmp;
 	char	**commands;
+	int		fd_stdin;
+	int		fd_stdout;
 	//t_node	*node;
 }	t_mini;
 
@@ -56,18 +67,37 @@ typedef struct s_node
 	struct s_node *next;
 	char *cmd_path;
 	char **cmd_matrix; //anche la path va qua in pos 0
-	int	left_tkn;
+	int left_tkn;
 	int	right_tkn;
-	int type;
-
+	int this_tkn;
+	char *file;
 }	t_node;
 
+typedef struct s_pipes
+{
+	int	*fd[2];
+	int	index;
+	int	pid;
+}	t_pipes;
+
+
+void ft_free_tnodes(t_node *node);
+void ft_printmap0(char **c);
+void realloc_quotes(t_mini *mini);
+int check_errors(t_mini *mini);
+int	ft_lstsize(t_node *lst);
+void	ft_lstadd_back(t_node **lst, t_node *new);
+void	ft_lstadd_front(t_node **lst, t_node *new);
+t_node	*ft_lstlast(t_node *lst);
+void	ft_lstadd_back(t_node **lst, t_node *new);
+int		fill_nodes(t_node **node, t_mini *mini);
+void ft_printnode(t_node *node);
 int check_expan_2(t_mini *mini, char **c);
 char	*ft_is_file(char *cmd);
-int		ft_is_command(char *cmd);
-void	ft_tokenizer(t_mini *mini);
+int	ft_is_command(char *cmd);
+int		ft_tokenizer(t_mini *mini);
 void	free_matrix(char **mtr);
-char	*ft_getenv(t_mini *mini, char *s);
+char	*ft_getenv(char **en, char *s);
 int		count_matrix(char **matrix);
 void 	copy_env(t_mini *mini, char **e);
 char	*str_exp_realloc(t_mini *mini, char *str);
@@ -82,6 +112,7 @@ int		check_expan(t_mini *mini, char **c);
 int		count_mem_quote(char *str, char c);
 int		count_quot_pipe_redir(char *str, char c);
 int		count_words(char *str);
+void ft_printmap1(char **c);
 size_t	count_mem(t_mini *mini, char *s);
 size_t	split_mem(t_mini *mini, char *s, char **str);
 char	**ft_mini_split(t_mini *mini, char *s);
@@ -94,13 +125,14 @@ void	ft_cd(t_node *node, t_mini *mini);
 void	ft_echo(t_node *node, t_mini *mini);
 void	ft_pwd(t_node *node, t_mini *mini);
 void	ft_env(t_node *node, t_mini *mini);
+void	ft_export(t_node *node, t_mini *mini);
+int		ft_isspace(int c);
+int	check_exist(char *str, t_mini *mini);
 
 // EXECUTOR
 
 void	exec(t_node *node, t_mini *mini);
-int		pipex(t_node *node);
-void	first_pipe(int *fd, t_node *node);
-void	right_pipe(int *fd, t_node *node);
-
+int	pipex(t_node *node, t_mini *mini);
+void	here_doc(t_node *node, t_mini *mini);
 
 #endif

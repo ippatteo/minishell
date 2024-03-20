@@ -1,30 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsize.c                                       :+:      :+:    :+:   */
+/*   ft_lstadd_front.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 12:24:30 by mcamilli          #+#    #+#             */
-/*   Updated: 2023/04/26 12:25:43 by mcamilli         ###   ########.fr       */
+/*   Created: 2023/04/26 12:21:24 by mcamilli          #+#    #+#             */
+/*   Updated: 2024/03/15 17:24:50 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../mini.h"
 
-int	ft_lstsize(t_list *lst)
+void	ft_lstadd_front(t_node **lst, t_node *new)
 {
-	t_list	*p;
-	int		i;
-
-	i = 0;
-	p = lst;
-	if (!lst)
-		return (0);
-	while (p != NULL)
-	{
-		p = p -> next;
-		i++;
-	}
-	return (i);
+	if (!lst || !new)
+		return ;
+	new -> next = *lst;
+	*lst = new;
 }
