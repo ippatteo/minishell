@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/19 07:31:48 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 02:31:47 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,10 @@
 # include <stdbool.h>
 # include <time.h>
 # include "libft/libft.h"
+# include <signal.h>
+# include <sys/wait.h>
 
+#define END_PIPE -1
 #define BUILTIN 10
 #define ECHO 11
 #define CD 12
@@ -47,7 +50,14 @@
 
 extern int g_exit;
 
+typedef struct s_pipes
+{
+	int	*fd[2];
+	int	index;
+	int	pid;
+}	t_pipes;
 typedef struct s_mini
+
 {
 	char 	**en;
 	int		lines;
@@ -56,6 +66,8 @@ typedef struct s_mini
 	char	*sub;
 	char	*tmp;
 	char	**commands;
+	int		fd_stdin;
+	int		fd_stdout;
 	//t_node	*node;
 }	t_mini;
 
@@ -114,9 +126,16 @@ void	ft_cd(t_node *node, t_mini *mini);
 void	ft_echo(t_node *node, t_mini *mini);
 void	ft_pwd(t_node *node, t_mini *mini);
 void	ft_env(t_node *node, t_mini *mini);
+void	ft_export(t_node *node, t_mini *mini);
+int		ft_isspace(int c);
+int	check_exist(char *str, t_mini *mini);
+void	ft_unset(t_mini *mini, char **mtr);
+
 
 // EXECUTOR
 
 void	exec(t_node *node, t_mini *mini);
+int		pipex(t_node *node, t_mini *mini);
+void	here_doc(t_node *node, t_mini *mini);
 
 #endif

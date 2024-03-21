@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/19 13:50:39 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 03:00:53 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ void free_matrix(char **mtr)
 
 int	lexer(t_mini *mini, char *prompt)
 {
+	// (!prompt[0]);
+	//	return(0);
 	if (mini->commands != NULL)
 		free_matrix(mini->commands);
 	mini->commands = ft_mini_split(mini, prompt);
@@ -92,5 +94,5 @@ int	lexer(t_mini *mini, char *prompt)
 	mini->lines = check_expan(mini, mini->commands);
 	check_expan_2(mini, mini->commands);
 	ft_printmap1(mini->commands);
-	return(0);
+	return(1);
 }
