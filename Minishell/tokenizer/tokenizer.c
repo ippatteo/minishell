@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 17:35:00 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 18:22:28 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ int assign_number_of_tkn(t_mini *mini, char *cmd)
 	else
 		return (1);	
 }
-char *ft_command_path(char *cmd)
+char *ft_command_path(t_mini *mini, char *cmd)
 {
 	char	*path;
 	char	**folders;
@@ -138,7 +138,7 @@ char *ft_command_path(char *cmd)
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (cmd);
-	folders = ft_split(getenv("PATH"), ':');
+	folders = ft_split(ft_getenv(mini, "PATH"), ':');
 	while (folders[i])
 	{
 		tmp = ft_strdup_slash(folders[i]);
@@ -258,7 +258,7 @@ char *find_cmd_or_b_in(t_mini *mini, int pos)
 	if (mini->tkn[pos] >= 11 && mini->tkn[pos] <= 17)
 		return(ft_strdup(mini->commands[pos]));
 	else if (mini->tkn[pos] == 20)
-		return(ft_command_path(mini->commands[pos]));
+		return(ft_command_path(mini, mini->commands[pos]));
 	else 
 		return (NULL);
 }

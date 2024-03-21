@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 16:49:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:58:33 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,7 +216,7 @@ void	exec(t_node *node, t_mini *mini)
 			redirection_init(node, mini);
 		node = node->next;
 	}
-	dup2(mini->fd_stdout, 1);
+	dup2(mini->curr_output, mini->fd_stdout);
 	dup2(mini->fd_stdin, 0);
 	return ;
 }
