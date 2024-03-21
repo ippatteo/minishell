@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 02:00:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 04:31:49 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	redir_mag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	fd = open(node->file, O_CREAT | O_RDONLY | O_WRONLY);
+	fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	//dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -55,7 +55,7 @@ void	redir_magmag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	fd = open(node->file, O_CREAT | O_APPEND | O_RDONLY | O_WRONLY);
+	fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	//dup2(fd, STDOUT_FILENO);
 	close(fd);
 }
@@ -73,7 +73,7 @@ void	redir_min(t_node *node, t_mini *mini)
 		g_exit = 2;
 		ft_putendl_fd("no such file or directory", 2);
 	}
-	fd = open(node->file, O_CREAT | O_RDWR, 0644);
+	fd = open(node->file, O_RDONLY);
 	//dup2(fd, STDIN_FILENO);
 	close(fd);
 }
@@ -103,10 +103,12 @@ void execommand(t_node *node, t_mini *mini, bool in_pipeline)
 	}
 	else if (in_pipeline == false)
 	{
+
 		while (waitpid(-1, NULL, 0) != -1)
 		{
 		}
 	}
+	
 }
 void	exec(t_node *node, t_mini *mini)
 {
@@ -115,7 +117,7 @@ void	exec(t_node *node, t_mini *mini)
 		if (node->this_tkn < 10 && node->this_tkn > 2)
 			redirection_init(node, mini);
 		if (node->this_tkn == 20)
-			execommand(node, mini, true);
+			execommand(node, mini, false);
 		node = node->next;
 	}
 	//dup2(mini->fd_stdout, STDOUT_FILENO);
