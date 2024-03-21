@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/20 21:31:58 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/21 14:21:06 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ typedef struct s_mini
 	char	**commands;
 	int		fd_stdin;
 	int		fd_stdout;
+	int		curr_input;
+	int		curr_output;
 	//t_node	*node;
 }	t_mini;
 
@@ -128,7 +130,6 @@ void	ft_pwd(t_node *node, t_mini *mini);
 void	ft_env(t_node *node, t_mini *mini);
 void	ft_export(t_node *node, t_mini *mini);
 int		ft_isspace(int c);
-int	check_exist(char *str, t_mini *mini);
 
 // EXECUTOR
 

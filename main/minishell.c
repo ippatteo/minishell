@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 00:12:45 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/21 14:22:56 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,8 @@ int	main(int argc, char ** argv, char **env)
 	mini.tkn = NULL;
 	mini.fd_stdin = dup(STDIN_FILENO);
 	mini.fd_stdout = dup(STDOUT_FILENO);
+	mini.curr_input = 0;
+	mini.curr_output = 1;
 	mini.tknflag = 0;
 	signal_handler();
 	g_exit = 0;
