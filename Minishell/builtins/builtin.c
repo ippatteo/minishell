@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 00:12:19 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/21 17:43:50 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,4 +139,31 @@ void	ft_export(t_node *node, t_mini *mini)
 		i++;
 	}
 
+}
+
+void ft_unset(t_mini *mini, char **mtr)
+{
+	int i;
+	int j;
+
+	i = 1;
+	while(mtr[i])
+	{
+		j = 0;
+		while(mini->en[j])
+		{
+			if(!ft_strncmp(mini->en[j], mtr[i], ft_strlen(mtr[i])))
+			{
+				free(mini->en[j]);
+				while (mini->en[j])
+				{
+					mini->en[j] = mini->en[j + 1];
+					j++;
+				}
+				break;
+			}
+			j++;
+		}
+		i++;
+	}
 }

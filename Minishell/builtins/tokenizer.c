@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 16:23:09 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 17:35:00 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -421,6 +421,11 @@ void ft_free_tnodes(t_node *node)
 			free(temp->file);
 		free(temp);
 	}
+}
+
+void print_and_handle_errors()
+{
+	
 }
 int fill_nodes(t_node **node, t_mini *mini)
 {

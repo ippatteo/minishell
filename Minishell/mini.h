@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/21 16:22:57 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:51:18 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ typedef struct s_mini
 	char	**commands;
 	int		fd_stdin;
 	int		fd_stdout;
+	int		curr_input;
+	int		curr_output;
 	//t_node	*node;
 }	t_mini;
 
