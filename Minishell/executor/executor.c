@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 04:31:49 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 15:26:29 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,7 @@ void	exec(t_node *node, t_mini *mini)
 			redirection_init(node, mini);
 		if (node->this_tkn == 20)
 			execommand(node, mini, false);
+		if (node->this_tkn)
 		node = node->next;
 	}
 	//dup2(mini->fd_stdout, STDOUT_FILENO);

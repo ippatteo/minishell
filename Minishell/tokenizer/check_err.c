@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/19 15:27:20 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:26:33 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,14 @@ int check_redir_errors(t_mini *mini)
 		if (mini->tkn[i] <= 9 && mini->tkn[i] >= 3)
 		{
 			if (mini->tkn[i + 1] && mini->tkn[i + 1] != PIPE)
+			{
 				mini->tkn[i + 1] = 1;
+				
+			}
 			else
 			{
 				g_exit = 2; //unexpected token
-				return (0);
+				return (1);
 			}
 		}
 		i++;
@@ -165,7 +168,7 @@ int check_errors(t_mini *mini)
 	if (!check_pipe_errors(mini))
 		return (0);
 	if (!check_cmds(mini))
-		return (1);
+		return (0);
 	return (1);
 }
 

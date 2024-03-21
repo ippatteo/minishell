@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/21 02:31:47 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:22:57 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int		fill_nodes(t_node **node, t_mini *mini);
 void ft_printnode(t_node *node);
 int check_expan_2(t_mini *mini, char **c);
 char	*ft_is_file(char *cmd);
-int	ft_is_command(char *cmd);
+int	ft_is_command(t_mini *mini, char *cmd);
 int		ft_tokenizer(t_mini *mini);
 void	free_matrix(char **mtr);
 char	*ft_getenv(char **en, char *s);

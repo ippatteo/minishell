@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/19 15:07:44 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 16:23:09 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int ft_is_pipe_redir_hd(char *cmd)
 	else
 		return (0);
 }
-int ft_is_command(char *cmd)
+int ft_is_command(t_mini *mini, char *cmd)
 {
 	char	*path;
 	char	**folders;
@@ -99,7 +99,7 @@ int ft_is_command(char *cmd)
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (1);
-	folders = ft_split(getenv("PATH"), ':');
+	folders = ft_split(ft_getenv(mini->en, "PATH"), ':');
 	while (folders[i])
 	{
 		tmp = ft_strdup_slash(folders[i]);
@@ -123,7 +123,7 @@ int assign_number_of_tkn(t_mini *mini, char *cmd)
 		return (ft_is_builtin(cmd));
 	else if (ft_is_pipe_redir_hd(cmd))
 		return(ft_is_pipe_redir_hd(cmd));
-	else if (ft_is_command(cmd))
+	else if (ft_is_command(mini, cmd))
 		return (20);
 	else
 		return (1);	
@@ -429,7 +429,10 @@ int fill_nodes(t_node **node, t_mini *mini)
 	
 	p = 0;
 	if (!ft_tokenizer(mini))
+	{
+		//print_and_handle_errors()
 		return (0);
+	}
 	if (*node != NULL)
 	{
 		ft_free_tnodes(*node);
