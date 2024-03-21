@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 00:02:18 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/21 18:32:06 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int ft_is_pipe_redir_hd(char *cmd)
 	else
 		return (0);
 }
-int ft_is_command(char *cmd)
+int ft_is_command(t_mini *mini, char *cmd)
 {
 	char	*path;
 	char	**folders;
@@ -99,7 +99,9 @@ int ft_is_command(char *cmd)
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (1);
-	folders = ft_split(getenv("PATH"), ':');
+	if (ft_getenv(mini->en, "PATH") == NULL)
+		return (0);
+	folders = ft_split(ft_getenv(mini->en, "PATH"), ':');
 	while (folders[i])
 	{
 		tmp = ft_strdup_slash(folders[i]);
@@ -123,12 +125,12 @@ int assign_number_of_tkn(t_mini *mini, char *cmd)
 		return (ft_is_builtin(cmd));
 	else if (ft_is_pipe_redir_hd(cmd))
 		return(ft_is_pipe_redir_hd(cmd));
-	else if (ft_is_command(cmd))
+	else if (ft_is_command(mini, cmd))
 		return (20);
 	else
 		return (1);
 }
-char *ft_command_path(char *cmd)
+char *ft_command_path(t_mini *mini, char *cmd)
 {
 	char	*path;
 	char	**folders;
@@ -138,7 +140,7 @@ char *ft_command_path(char *cmd)
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (cmd);
-	folders = ft_split(getenv("PATH"), ':');
+	folders = ft_split(ft_getenv(mini->en, "PATH"), ':');
 	while (folders[i])
 	{
 		tmp = ft_strdup_slash(folders[i]);
@@ -168,7 +170,6 @@ int ft_tokenizer(t_mini *mini)
 	while (mini->commands[i])
 	{
 		mini->tkn[i] = assign_number_of_tkn(mini, mini->commands[i]);
-		printf("tkn[%d] = %d\n",i , mini->tkn[i]);
 		i++;
 	}
 	mini->tkn[i] = '\0';
@@ -176,14 +177,6 @@ int ft_tokenizer(t_mini *mini)
 	if (!check_errors(mini))
 		return (0);
 	realloc_quotes(mini);
-	// da eliminare
-	i = 0;
-	while (mini->commands[i])
-	{
-		printf("tkn[%d] = %d\n",i , mini->tkn[i]);
-		i++;
-	}
-	// da eliminare
 	return (1);
 
 }
@@ -258,7 +251,7 @@ char *find_cmd_or_b_in(t_mini *mini, int pos)
 	if (mini->tkn[pos] >= 11 && mini->tkn[pos] <= 17)
 		return(ft_strdup(mini->commands[pos]));
 	else if (mini->tkn[pos] == 20)
-		return(ft_command_path(mini->commands[pos]));
+		return(ft_command_path(mini, mini->commands[pos]));
 	else
 		return (NULL);
 }
@@ -312,7 +305,6 @@ int fill_cmd_count_args(t_mini *mini, int p)
 			t++;
 		i++;
 	}
-	printf("n args = %d\n", t);
 	return (t);
 }
 
@@ -408,7 +400,8 @@ void fill_pipes(t_node **node, t_mini *mini, int p)
 void ft_free_tnodes(t_node *node)
 {
 	t_node* temp;
-
+	if (node == NULL)
+		return ;
 	while (node != NULL)
 	{
 		temp = node;
@@ -422,6 +415,11 @@ void ft_free_tnodes(t_node *node)
 		free(temp);
 	}
 }
+
+void print_and_handle_errors()
+{
+
+}
 int fill_nodes(t_node **node, t_mini *mini)
 {
 	int i;
@@ -429,7 +427,10 @@ int fill_nodes(t_node **node, t_mini *mini)
 
 	p = 0;
 	if (!ft_tokenizer(mini))
+	{
+		//print_and_handle_errors()
 		return (0);
+	}
 	if (*node != NULL)
 	{
 		ft_free_tnodes(*node);
@@ -443,32 +444,5 @@ int fill_nodes(t_node **node, t_mini *mini)
 			fill_pipes(node, mini, p);
 		p++;
 	}
-	ft_printnode(*node);
 	return(1);
-}
-
-void ft_printnode(t_node *node)
-{
-	t_node *tmp;
-	static int i;
-
-	tmp = node;
-	if (!node)
-		return;
-	i = 0;
-	while (tmp != NULL)
-	{
-		printf("node path = %s\n", tmp->cmd_path);
-		printf("node matrix = \n");
-		//printf("%s\n", tmp->cmd_matrix[0]);
-		printf("node left_tkn = %d\n", tmp->left_tkn);
-		printf("node right_tkn = %d\n", tmp->right_tkn);
-		printf("node this_tkn = %d\n", tmp->this_tkn);
-		printf("node file= %s\n", tmp->file);
-		if (tmp->next == NULL)
-			printf("temp->next =null\n");
-		else
-			printf("tmp->next non è null");
-		tmp = tmp->next;
-	}
 }

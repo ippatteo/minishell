@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/21 14:21:06 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/21 17:14:26 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 # include <readline/history.h>
 # include <stdbool.h>
 # include <time.h>
+# include <sys/wait.h>
 # include "libft/libft.h"
 # include <signal.h>
 
@@ -97,7 +98,7 @@ int		fill_nodes(t_node **node, t_mini *mini);
 void ft_printnode(t_node *node);
 int check_expan_2(t_mini *mini, char **c);
 char	*ft_is_file(char *cmd);
-int	ft_is_command(char *cmd);
+int ft_is_command(t_mini *mini, char *cmd);
 int		ft_tokenizer(t_mini *mini);
 void	free_matrix(char **mtr);
 char	*ft_getenv(char **en, char *s);
@@ -120,6 +121,9 @@ size_t	count_mem(t_mini *mini, char *s);
 size_t	split_mem(t_mini *mini, char *s, char **str);
 char	**ft_mini_split(t_mini *mini, char *s);
 int		lexer(t_mini *mini, char *prompt);
+void ft_exit_all(t_node *node, t_mini *mini);
+void ft_free_tnodes(t_node *node);
+
 
 
 // BUILTINS
@@ -129,7 +133,9 @@ void	ft_echo(t_node *node, t_mini *mini);
 void	ft_pwd(t_node *node, t_mini *mini);
 void	ft_env(t_node *node, t_mini *mini);
 void	ft_export(t_node *node, t_mini *mini);
+void ft_unset(t_mini *mini, char **mtr);
 int		ft_isspace(int c);
+void	ft_exit(t_node *node, t_mini *mini);
 
 // EXECUTOR
 

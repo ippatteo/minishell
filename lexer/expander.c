@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/19 14:50:52 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 18:19:35 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,8 +173,8 @@ char *str_exp_realloc(t_mini *mini, char *str)
 			sub = ft_substr0(str + 1, count_exp(str + 1));
 			if (ft_getenv(mini->en, sub))
 			{
-				ft_strlcpy(orig, ft_getenv(mini->en, sub), ft_strlen(ft_getenv(mini->en, sub)));
-				orig += ft_strlen(ft_getenv(mini->en, sub)) -1;
+				ft_strlcpy(orig, ft_getenv(mini->en, sub), ft_strlen(ft_getenv(mini->en, sub)) + 1);
+				orig += ft_strlen(ft_getenv(mini->en, sub));
 			}
 			str += ft_strlen(sub) + 1;
 			free(sub);
@@ -247,8 +247,6 @@ char *str_exp_realloc_2(t_mini *mini, char *str)
 		if (*str == '$' && *(str + 1) == '?')
 		{
 			ft_strlcpy(orig, sub, 8);
-			printf("ft_strlcpy = %d\n", (int)ft_strlcpy(orig, sub, 8));
-			printf("ft_strlcpy = %s\n", orig);
 			orig += ft_strlen(sub);
 			str += 2;
 		}
@@ -257,7 +255,6 @@ char *str_exp_realloc_2(t_mini *mini, char *str)
 	}
 	free(sub);
 	*orig = '\0';
-	printf("porcoddio = %s\n", tmp);
 	return (tmp);
 }
 

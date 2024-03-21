@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 00:12:19 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/21 17:56:49 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,11 @@ void	ft_echo(t_node *node, t_mini *mini)
 
 	space = 0;
 	i = 1;
+	if (node->cmd_matrix[1] == NULL)
+	{
+		printf("\n");
+		return ;
+	}
 	if (ft_strncmp(node->cmd_matrix[1], "-n" , 2) == 0)
 	{
 		space = -1;
@@ -111,7 +116,6 @@ void	create_variable(char *str, t_mini *mini)
 	if (ft_getenv(mini->en, temp) == NULL)
 	{
 		i = 0;
-		printf("\n\n\n\n---------------------------------------------------------------\n");
 		while(mini->en[i])
 			i++;
 		mini->en[i] = ft_strdup(temp);
