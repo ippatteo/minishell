@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/21 17:14:26 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/26 18:24:39 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,9 @@
 #define D_QUOT 34
 #define QUOT 39
 
+#define CRED "\e[0;31m"
+#define RESET "\001\e[0m\002"
+
 extern int g_exit;
 
 typedef struct s_mini
@@ -59,8 +62,6 @@ typedef struct s_mini
 	char	*sub;
 	char	*tmp;
 	char	**commands;
-	int		fd_stdin;
-	int		fd_stdout;
 	int		curr_input;
 	int		curr_output;
 	//t_node	*node;
@@ -76,13 +77,6 @@ typedef struct s_node
 	int this_tkn;
 	char *file;
 }	t_node;
-
-typedef struct s_pipes
-{
-	int	*fd[2];
-	int	index;
-	int	pid;
-}	t_pipes;
 
 
 void ft_free_tnodes(t_node *node);
@@ -124,7 +118,7 @@ int		lexer(t_mini *mini, char *prompt);
 void ft_exit_all(t_node *node, t_mini *mini);
 void ft_free_tnodes(t_node *node);
 
-
+void	signal_handler();
 
 // BUILTINS
 

@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 18:32:06 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/25 20:48:58 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,25 @@ n = 9 (è un here document "<<")
 
 */
 
+void ft_printnode(t_node *node)
+{
+	t_node *tmp;
+	static int i;
 
+	tmp = node;
+	if (!node)
+		return;
+	i = 0;
+	while (tmp != NULL)
+	{
+		printf("node path = %s\n", tmp->cmd_path);
+		printf("node left_tkn = %d\n", tmp->left_tkn);
+		printf("node right_tkn = %d\n", tmp->right_tkn);
+		printf("node this_tkn = %d\n", tmp->this_tkn);
+		printf("node file= %s\n", tmp->file);
+		tmp = tmp->next;
+	}
+}
 
 int ft_is_builtin(char *cmd)
 {
@@ -392,6 +410,7 @@ void fill_pipes(t_node **node, t_mini *mini, int p)
 	new->this_tkn = mini->tkn[i];
 	new->left_tkn = mini->tkn[i-1];
 	new->right_tkn = mini->tkn[i+1];
+	i = 0;
 	ft_lstadd_back(node, new);
 
 }
@@ -427,10 +446,7 @@ int fill_nodes(t_node **node, t_mini *mini)
 
 	p = 0;
 	if (!ft_tokenizer(mini))
-	{
-		//print_and_handle_errors()
 		return (0);
-	}
 	if (*node != NULL)
 	{
 		ft_free_tnodes(*node);

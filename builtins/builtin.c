@@ -6,11 +6,31 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 17:56:49 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/22 14:54:07 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
+
+void	change_cwd(t_mini *mini, char *old_pwd)
+{
+	int	i;
+
+	i = 0;
+	if (ft_getenv(mini->en, "PWD") != NULL)
+	{
+		while(ft_strnstr(mini->en[i], "PWD", 3) == NULL)
+			i++;
+		mini->en[i] = ft_strjoin("PWD=", getcwd(NULL, 0));
+	}
+	i = 0;
+	if (ft_getenv(mini->en, "OLDPWD") != NULL)
+	{
+		while(ft_strnstr(mini->en[i], "OLDPWD", 6) == NULL)
+			i++;
+		mini->en[i] = ft_strjoin("OLDPWD=", old_pwd);
+	}
+}
 
 void	ft_cd(t_node *node, t_mini *mini)
 {
@@ -18,22 +38,13 @@ void	ft_cd(t_node *node, t_mini *mini)
 	char *old_pwd;
 
 	i = 0;
-	old_pwd = getcwd(NULL, 0);
 	if (chdir(node->cmd_matrix[1]) == -1)
 	{
 		printf("cd: %s: No such file or directory\n", node->cmd_matrix[1]);
 		return ;
 	}
 	else
-	{
-		while(ft_strnstr(mini->en[i], "PWD", 3) == NULL)
-			i++;
-		mini->en[i] = ft_strjoin("PWD=", getcwd(NULL, 0));
-		i = 0;
-		while(ft_strnstr(mini->en[i], "OLDPWD", 6) == NULL)
-			i++;
-		mini->en[i] = ft_strjoin("OLDPWD=", old_pwd);
-	}
+		change_cwd(mini, old_pwd);
 	return ;
 }
 

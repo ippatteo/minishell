@@ -5,66 +5,66 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/08 18:32:45 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 15:58:44 by luca             ###   ########.fr       */
+/*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
+/*   Updated: 2024/03/26 19:00:59 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-void	close_pipe(t_node *node,t_pipes *pipes,int index)
+void	close_pipe(int fd[2], t_node *node)
 {
-	int	i;
-
-	i = 0;
-	while(i < index)
-	{
-		close(pipes->fd[i][0]);
-		close(pipes->fd[i][1]);
-	}
+	if (node->next && node->this_tkn == PIPE)
+		return ;
+	if (node->this_tkn == PIPE)
+		close(fd[1]);
+	if (node->this_tkn == 0)
+		close(fd[0]);
 }
 
-void	exec_pipe(t_node *node, t_pipes *pipes)
+void	pipeline_exec(int fd[2], t_node *node, t_mini *mini, bool first)
 {
 	int	pid;
 
-	pipes->index = 0;
-	while(node)
+	pid = fork();
+	if (pid == 0)
 	{
-		pipes->pid = fork();
-		if (pipes->pid == 0)
+		if (first != true)
 		{
-			if (node->left_tkn != 0)
-				dup2(pipes->fd[0][0], STDIN_FILENO);
-			if (node->right_tkn != END_PIPE)
-				dup2(pipes->fd[0][1], STDOUT_FILENO);
-			execve(node->cmd_path, node->cmd_matrix, NULL);
+			if (dup2(fd[0], STDIN_FILENO) == -1)
+				ft_putendl_fd(strerror(errno), 2);
 		}
-		node = node->next;
+		if (node->next != NULL)
+		{
+			if (dup2(fd[1], STDOUT_FILENO) == -1)
+				ft_putendl_fd(strerror(errno), 2);
+		}
+		close_pipe(fd, node);
+		execve(node->cmd_path, node->cmd_matrix, NULL);
+		ft_putendl_fd(strerror(errno), 2); //debug
 	}
 }
-
-void	create_pipes(t_node *node, t_pipes *pipes)
-{
-	int	i;
-
-	while(i < 2)
-	{
-		if (pipe(pipes->fd[i]) != 0)
-			ft_putendl_fd(strerror(errno), 2);
-		i++;
-	}
-}
-
 
 int	pipex(t_node *node, t_mini *mini)
 {
-	int	i;
-	int pid;
-	t_pipes *pipes;
-	i = 0;
+	int	fd[2];
+	int	pid;
+	bool	first;
+	t_node *temp;
 
-	create_pipes(node, pipes);
-	exec_pipe(node, pipes);
-	return(0);
+	temp = node;
+	first = true;
+	pipe(fd);
+	while(temp)
+	{
+		if (temp->cmd_path != NULL)
+			pipeline_exec(fd, temp, mini, first);
+		if (temp->next == NULL)
+			break ;
+		first = false;
+		temp = temp->next;
+	}
+	close(fd[0]);
+	close(fd[1]);
+	waitpid(-1, NULL, 0);
 }
