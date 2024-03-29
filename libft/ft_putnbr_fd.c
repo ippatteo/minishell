@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 17:55:14 by luca              #+#    #+#             */
-/*   Updated: 2023/01/26 18:03:26 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/03/25 18:13:46 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,5 @@ void	ft_putnbr_fd(int nb, int fd)
 	else
 		ft_putnbr_fd(nb / 10, fd);
 	ft_putnbr_fd(nb % 10, fd);
+	ft_putchar_fd('\n', fd);
 }

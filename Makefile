@@ -6,7 +6,7 @@
 #    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/20 20:16:41 by luca             ###   ########.fr        #
+#    Updated: 2024/03/24 22:25:01 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,14 +32,14 @@ CC = gcc
 
 RM = rm -f
 
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 
 .o:.c
 	$(CC) $(FLAGS) -c $< -o $(<:.c=.o)
 
 $(NAME): $(OBJECTS)
 	make -s -C $(LIBFT_PATH)
-	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -lreadline -o minishell
+	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -g -lreadline -o minishell
 
 all: $(NAME)
 

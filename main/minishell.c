@@ -3,14 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 18:30:47 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 14:21:21 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
+
+int g_exit;
 
 void ft_exit_all(t_node *node, t_mini *mini)
 {
@@ -49,7 +51,6 @@ void	signal_handler()
 	signal(SIGQUIT, SIG_IGN);
 }
 
-int g_exit;
 void free_env(t_mini *mini) {
     int i = 0;
 
@@ -81,19 +82,11 @@ int	main(int argc, char ** argv, char **env)
 	mini.tkn = NULL;
 	mini.tknflag = 0;
 	g_exit = 0;
-	char **matrix;
-
-	matrix = malloc(sizeof(char *) * 4);
-	matrix[0] = "export";
-	matrix[1] = "pipo=ao";
-	matrix[2] = "PIPPOBAUDO=aooooooooo";
-	matrix[3] = NULL;
-
 	copy_env(&mini, env);
+	signal_handler();
 	while(1)
 	{
-		signal_handler();
-		cmd = readline("minishell$ ");
+		cmd = readline(CRED "minishell$ " RESET);
 		if (cmd == NULL)
 		{
 			ft_exit_all(node, &mini);
@@ -102,12 +95,12 @@ int	main(int argc, char ** argv, char **env)
 		if (*cmd != 0)
 		{
 		lexer(&mini, cmd);
-		//ft_tokenizer(&mini);
 		fill_nodes(&node, &mini);
-		exec(node, &mini);
+		ft_printnode(node);
+		//exec(node, &mini);
+		//ft_free_tnodes(node);
 		add_history(cmd);
 		}
 	}
-	ft_exit_all(node, &mini);
 	return(0);
 }

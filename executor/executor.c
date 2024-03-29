@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 18:27:35 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/28 18:28:49 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,9 @@ void	redir_mag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	fd = open(node->file , O_CREAT | O_WRONLY | O_RDONLY);
-	dup2(fd, mini->curr_output);
+	fd = open(node->file , O_CREAT , 0777);
+	if (dup2(fd, mini->curr_output) == -1)
+		ft_putendl_fd(strerror(errno), 2);
 	mini->curr_output = fd;
 }
 
@@ -55,9 +56,12 @@ void	redir_magmag(t_node *node, t_mini *mini)
 	int	fd;
 
 	fd = open(node->file, O_CREAT | O_APPEND, 0777);
-	dup2(fd, mini->curr_output);
+	ft_putendl_fd("ciao", mini->curr_output);
+	if (dup2(fd, mini->curr_output) == -1)
+		ft_putendl_fd(strerror(errno), 2);
 	mini->curr_output = fd;
-	close(fd);
+		ft_putendl_fd("ciao", mini->curr_output);
+	ft_putendl_fd("ciao", mini->curr_output);
 }
 
 void	redir_min(t_node *node, t_mini *mini)
@@ -73,10 +77,9 @@ void	redir_min(t_node *node, t_mini *mini)
 		g_exit = 2;
 		ft_putendl_fd("no such file or directory", 2);
 	}
-	fd = open(node->file, O_RDWR);
+	fd = open(node->file, 0777);
 	dup2(fd, mini->curr_input);
 	mini->curr_input = fd;
-	close(fd);
 }
 
 
@@ -116,7 +119,7 @@ void	exec_command(t_node *node,t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 		execve(node->cmd_path, node->cmd_matrix, NULL);
-	waitpid(-1, NULL, 0);
+	waitpid(pid, NULL, 0);
 }
 
 void	exec_single(t_node *node, t_mini *mini)
@@ -129,15 +132,18 @@ void	exec_single(t_node *node, t_mini *mini)
 
 void	exec(t_node *node, t_mini *mini)
 {
-	while(node)
-	{
-		if (node->this_tkn < 10 && node->this_tkn > 2)
-			redirection_init(node, mini);
-		if (node->next == NULL)
-			exec_single(node, mini);
-		node = node->next;
-	}
-	dup2(mini->fd_stdout, 1);
-	dup2(mini->fd_stdin, 0);
+	t_node *temp;
+
+	temp = node;
+	// while(temp != NULL)
+	// {
+	// 	if (temp->this_tkn < 10 && temp->this_tkn > 2)
+	// 		redirection_init(temp, mini);
+	// 	if (temp->left_tkn != PIPE && temp->right_tkn != PIPE)
+	// 		exec_single(node, mini);
+	// 	if (temp->right_tkn == PIPE)
+	// 	temp = temp->next;
+	// }
+	pipex(temp, mini);
 	return ;
 }
