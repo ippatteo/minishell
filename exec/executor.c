@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/28 18:28:49 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 15:49:01 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ void	redir_mag(t_node *node, t_mini *mini)
 	int	fd;
 
 	fd = open(node->file , O_CREAT , 0777);
-	if (dup2(fd, mini->curr_output) == -1)
-		ft_putendl_fd(strerror(errno), 2);
 	mini->curr_output = fd;
 }
 
@@ -56,12 +54,7 @@ void	redir_magmag(t_node *node, t_mini *mini)
 	int	fd;
 
 	fd = open(node->file, O_CREAT | O_APPEND, 0777);
-	ft_putendl_fd("ciao", mini->curr_output);
-	if (dup2(fd, mini->curr_output) == -1)
-		ft_putendl_fd(strerror(errno), 2);
 	mini->curr_output = fd;
-		ft_putendl_fd("ciao", mini->curr_output);
-	ft_putendl_fd("ciao", mini->curr_output);
 }
 
 void	redir_min(t_node *node, t_mini *mini)
@@ -78,7 +71,6 @@ void	redir_min(t_node *node, t_mini *mini)
 		ft_putendl_fd("no such file or directory", 2);
 	}
 	fd = open(node->file, 0777);
-	dup2(fd, mini->curr_input);
 	mini->curr_input = fd;
 }
 
