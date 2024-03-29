@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:47:32 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 18:06:26 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ int	main(int argc, char ** argv, char **env)
 	mini.tmp = NULL;
 	mini.commands = NULL;
 	mini.tkn = NULL;
-	mini.curr_input = dup(STDIN_FILENO);
-	mini.curr_output = dup(STDOUT_FILENO);
+	mini.temp_in = dup(0);
+	mini.temp_out = dup(1);
 	mini.tknflag = 0;
 	g_exit = 0;
 	copy_env(&mini, env);

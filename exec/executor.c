@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/29 15:54:38 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 17:47:59 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	exec_command(t_node *node,t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 		execve(node->cmd_path, node->cmd_matrix, NULL);
-	waitpid(pid, NULL, 0);
+	while(waitpid(pid, NULL, 0)>0);
 }
 
 void	exec_single(t_node *node, t_mini *mini)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/03/29 15:35:53 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 18:48:25 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,14 @@ void	close_pipe(int fd[2], t_node *node)
 		close(fd[0]);
 }
 
-void	pipeline_exec(int fd[2], t_node *node, t_mini *mini, bool first)
+void	pipeline_exec(int fd[2], t_node *node, t_mini *mini)
 {
 	int	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		if (first != true)
+		if (node->left_tkn != START_P)
 		{
 			if (dup2(fd[0], STDIN_FILENO) == -1)
 				ft_putendl_fd(strerror(errno), 2);
@@ -39,7 +39,11 @@ void	pipeline_exec(int fd[2], t_node *node, t_mini *mini, bool first)
 			if (dup2(fd[1], STDOUT_FILENO) == -1)
 				ft_putendl_fd(strerror(errno), 2);
 		}
-		close_pipe(fd, node);
+		//close_pipe(fd, node)
+		close(fd[1]);
+		close(fd[0]);
+		close(mini->temp_in);
+		close(mini->temp_out);
 		execve(node->cmd_path, node->cmd_matrix, NULL);
 		ft_putendl_fd(strerror(errno), 2); //debug
 	}
@@ -49,22 +53,19 @@ int	pipex(t_node *node, t_mini *mini)
 {
 	int	fd[2];
 	int	pid;
-	bool	first;
 	t_node *temp;
 
 	temp = node;
-	first = true;
 	pipe(fd);
 	while(temp)
 	{
 		if (temp->cmd_path != NULL)
-			pipeline_exec(fd, temp, mini, first);
-		if (temp->next == NULL)
-			break ;
-		first = false;
+			pipeline_exec(fd, temp, mini);
 		temp = temp->next;
 	}
+	dup2(0, mini->temp_in);
+	dup2(1, mini->temp_out);
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(-1, NULL, 0);
+	while(waitpid(-1, NULL, 0) > 0);
 }
