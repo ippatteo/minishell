@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/29 15:34:18 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 18:58:20 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ typedef struct s_node
 	char *file;
 	int	n_pipe;
 }	t_node;
+
 
 int check_pipe_errors(t_mini *mini);
 int err_quote(t_mini *mini);
