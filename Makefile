@@ -3,19 +3,19 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
+#    By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/24 22:25:01 by luca             ###   ########.fr        #
+#    Updated: 2024/03/29 15:44:47 by mcamilli         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = minishell
 
-MAIN_PATH = main/
+MAIN_PATH = mini/
 LEXER_PATH = lexer/
 TOKEN_PATH = tokenizer/
-EXEC_PATH = executor/
+EXEC_PATH = exec/
 BUILTINS_PATH = builtins/
 LIBFT_PATH = libft/
 LIBFT = $(LIBFT_PATH)libft.a
