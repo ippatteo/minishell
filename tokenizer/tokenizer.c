@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:36:58 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 15:52:05 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,7 @@ int ft_tokenizer(t_mini *mini)
 	if (!err_quote(mini))
 	{
 		g_exit = 127;
-		write(2, "ahi ahi ahi signora longari, lei non ha letto bene il subject", 62);
+		ft_putendl_fd("d_quote col cazzo che lo implemento", 2);
 		return (0);
 	}
 	realloc_quotes(mini);
@@ -220,55 +220,6 @@ int go_int(t_mini *mini, int p)
 	}
 	return (i);
 }
-
-/*
-void ft_nodes_token(t_mini *mini, t_node *node)
-{
-	int i;
-	int t;
-
-	i = 0;
-	t = 0;
-	while(mini->commands[i])
-	{
-		if (mini->tkn[i] >= 10)
-		{
-			while((!(mini->tkn[i + t] >= 2 && mini->tkn[i + t] <= 7)) || mini->commands[i+t])
-				t++;
-			node->cmd_matrix = malloc(sizeof(char *) * t);
-			node->this_tkn = 20;
-			if (ft_is_builtin(mini->commands[i]) != 0)
-				node->this_tkn = ft_is_builtin(mini->commands[i]);
-			else
-				node->cmd_path = ft_command_path(mini->commands[i]);
-			node->cmd_matrix[0] = ft_command_path(mini->commands[i]);
-
-			if (node->cmd_matrix[0] == 0)
-				node->cmd_matrix[0] = ft_strdup(mini->commands[i++]);
-			if (i == 1)
-				node->left_tkn = NULL;
-			else
-				node->left_tkn = mini->tkn[i-1];
-			if (!mini->commands[i+t])
-				node->w
-
-				right_tkn = NULL;
-			else
-				node->wright_tkn = mini->tkn[i+t];
-			t = 1;
-			while ((!(mini->tkn[i] >= 2 && mini->tkn[i] <= 7)) || mini->commands[i])
-				node->cmd_matrix[t++] = ft_strdup(mini->commands[i++]);
-			if (mini->commands[i])
-				node->next = malloc(sizeof(t_node));
-		}
-		else if (mini->tkn[i] >= 2 && mini->tkn[i] <= 7)
-		{
-			node->cmd_matrix = NULL;
-		}
-
-	}
-}
-*/
 
 //stringa di char da mettere in matrice argomenti
 char *find_cmd_or_b_in(t_mini *mini, int pos)
@@ -383,9 +334,8 @@ int there_is_pipe(t_mini *mini, int i)
 			return (PIPE);
 		i++;
 	}
-	return(END_P);
+	return(END_PIPE);
 }
-//riempe un nodo di tipo comando con tutti gli argomenti
 void fill_cmd(t_node **node, t_mini *mini, int p)
 {
 	int i;
@@ -411,7 +361,7 @@ void fill_cmd(t_node **node, t_mini *mini, int p)
 	ft_lstadd_back(node, new);
 }
 
-//filla e controlla se c'è il file, se c'è ben altrimenti sull'errore mette 2, 
+//filla e controlla se c'è il file, se c'è ben altrimenti sull'errore mette 2,
 //l'unico morivo per cui mette 2 qua è unexpected token
 void fill_redir0(t_node *new, t_mini *mini, int i, int p)
 {
@@ -429,9 +379,6 @@ void fill_redir0(t_node *new, t_mini *mini, int i, int p)
 	new->file = ft_strdup(mini->commands[i+1]);
 }
 
-//scorre int tanto quanto serve in base alla pipe
-
-
 //mette le redirection sempre
 void fill_redir(t_node **node, t_mini *mini, int p)
 {
@@ -441,12 +388,12 @@ void fill_redir(t_node **node, t_mini *mini, int p)
 
 	i = go_int(mini, p);
 	z = 0;
-	
+
 	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
 		if	(mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
 		{
-			
+
 			new = (t_node *)ft_calloc(sizeof(t_node), 1);
 			fill_redir0(new, mini, i, p);
 			ft_lstadd_back(node, new);

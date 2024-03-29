@@ -3,35 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   check_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:36:17 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 15:50:33 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-/*
-legenda: 
-n = 1 (è file)
-n = 2	(è argomento)
-n = 11 (è la builtin echo)
-n = 12 (è la builtin cd)
-n = 13 (è la builtin pwd)
-n = 14 (è la builtin export)
-n = 15 (è la builtin unset)
-n = 16 (è la builtin env)
-n = 17 (è la builtin exit)
-n = 20 (è un command trovato che esiste e si trova in $PATH) 
-n = 2 (è una pipe "|")
-n = 7 (è una redirecion ">")
-n = 3 (è una redirecion "<")
-n = 4 (è una redirecion ">>")
-n = 9 (è un here document "<<")
 
-*/
-
-//controlla se la pipe ha qulcosa a destra, le pipe non contano
 int check_redir_errors(t_mini *mini)
 {
 	int i;
@@ -44,7 +24,7 @@ int check_redir_errors(t_mini *mini)
 			if (mini->tkn[i + 1] && mini->tkn[i + 1] != PIPE)
 			{
 				mini->tkn[i + 1] = 1;
-				
+
 			}
 			else
 			{
@@ -88,7 +68,7 @@ int check_cmds_2(t_mini *mini,int i, int flag_found_cmd)
 {
 	while (mini->tkn[i])
 	{
-		if ((mini->tkn[i] <= COMMAND && mini->tkn[i] >= BUILTIN || mini->tkn[i] == 1) 
+		if ((mini->tkn[i] <= COMMAND && mini->tkn[i] >= BUILTIN || mini->tkn[i] == 1)
 			&& !(mini->tkn[i-1] <= 9 && mini->tkn[i-1] >= 3))
 		{
 			if (mini->tkn[i] == 1 && flag_found_cmd == 0)
@@ -134,7 +114,7 @@ int check_cmds(t_mini *mini)
 int err_quote(t_mini *mini)
 {
 	int i;
-	
+
 	i = 0;
 	while (mini->commands[i])
 	{
@@ -158,7 +138,7 @@ int err_quote(t_mini *mini)
 
 int check_errors(t_mini *mini)
 {
-	
+
 	if (!check_redir_errors(mini))
 		return (0);
 	if (!check_cmds(mini))

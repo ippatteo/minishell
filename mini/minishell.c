@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:36:06 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 15:47:32 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,17 +37,12 @@ void	sig_handle(int signum)
 		rl_on_new_line();
 		rl_redisplay();
 	}
-	else if(signum == SIGTERM)
-	{
-		exit(1);
-	}
 
 }
 
 void	signal_handler()
 {
 	signal(SIGINT,  sig_handle);
-	signal(SIGTERM, sig_handle);
 	signal(SIGQUIT, SIG_IGN);
 }
 
@@ -80,6 +75,8 @@ int	main(int argc, char ** argv, char **env)
 	mini.tmp = NULL;
 	mini.commands = NULL;
 	mini.tkn = NULL;
+	mini.curr_input = dup(STDIN_FILENO);
+	mini.curr_output = dup(STDOUT_FILENO);
 	mini.tknflag = 0;
 	g_exit = 0;
 	copy_env(&mini, env);
@@ -96,8 +93,7 @@ int	main(int argc, char ** argv, char **env)
 		{
 		lexer(&mini, cmd);
 		fill_nodes(&node, &mini);
-		ft_printnode(node);
-		//exec(node, &mini);
+		exec(node, &mini);
 		//ft_free_tnodes(node);
 		add_history(cmd);
 		}

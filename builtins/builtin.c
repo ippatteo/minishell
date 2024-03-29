@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/03/22 14:54:07 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 15:56:40 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	ft_echo(t_node *node, t_mini *mini)
 
 	space = 0;
 	i = 1;
-	if (node->cmd_matrix[1] == NULL)
+	if (node->cmd_matrix == NULL)
 	{
 		printf("\n");
 		return ;
@@ -68,6 +68,7 @@ void	ft_echo(t_node *node, t_mini *mini)
 	while(node->cmd_matrix[i] != NULL)
 	{
 		printf("%s", node->cmd_matrix[i]);
+		printf(" ");
 		i++;
 	}
 	if (space == 0)
