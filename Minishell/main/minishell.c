@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 17:30:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 19:26:25 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,15 +17,18 @@ void ft_exit_all(t_node *node, t_mini *mini)
 	//free_env(mini);
 	free_matrix(mini->en);
 		//mini->en = NULL;
-	if (mini->tkn)	
-		free (mini->tkn);
+		write(1,"1wert\n", 6);
+	if (mini->tkn == NULL)	
+		free(mini->tkn);
+	write(1,"2wert\n", 6);
 	if (mini->commands != NULL)
 	{
 		free_matrix(mini->commands);
-		mini->commands = NULL;
 	}
+	write(1,"3wert\n", 6);
 	if (node != NULL)
 		ft_free_tnodes(node);
+	write(1,"4wert\n", 6);
 }
 void	sig_handle(int signum)
 {

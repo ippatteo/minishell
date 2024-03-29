@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 16:26:33 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 18:39:34 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int err_quote(t_mini *mini)
 	}
 	return (1);
 }
-
+//2 = err quote
 int check_errors(t_mini *mini)
 {
 	if (!err_quote(mini))

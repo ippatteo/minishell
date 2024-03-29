@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 03:00:53 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 14:59:53 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void free_matrix(char **mtr)
 	int i;
 
 	i = 0;
+	if (mtr == NULL)
+		retgiurn ;
 	if (mtr != NULL)
 	{
 		while (mtr[i] != NULL)
@@ -76,7 +78,7 @@ void free_matrix(char **mtr)
 		}
 		free(mtr);
 	}
-	mtr = NULL;
+	//mtr = NULL;
 }
 
 

@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 18:22:28 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/21 19:23:50 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,7 +138,9 @@ char *ft_command_path(t_mini *mini, char *cmd)
 	i = 0;
 	if(access(cmd , X_OK) == 0)
 		return (cmd);
-	folders = ft_split(ft_getenv(mini, "PATH"), ':');
+	if (!ft_getenv(mini->en, "PATH"))
+		return (0);
+	folders = ft_split(ft_getenv(mini->en, "PATH"), ':');
 	while (folders[i])
 	{
 		tmp = ft_strdup_slash(folders[i]);
@@ -409,6 +411,8 @@ void ft_free_tnodes(t_node *node)
 {
 	t_node* temp;
 	
+	if (!node)
+		return ; 
 	while (node != NULL)
 	{
 		temp = node;
