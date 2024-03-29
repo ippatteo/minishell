@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/03/29 15:35:40 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 17:47:59 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,21 +62,25 @@ void	redir_min(t_node *node, t_mini *mini)
 	char *path;
 	int	fd;
 
-	path = getcwd(NULL, 0);
-	path = ft_strjoin(path, "/");
-	path = ft_strjoin(path, node->file);
-	if(access(path, R_OK) == -1)
+	fd = open(node->file, 0777);
+	if(fd == -1)
 	{
 		g_exit = 2;
 		ft_putendl_fd("no such file or directory", 2);
+		return ;
 	}
-	fd = open(node->file, 0777);
 	mini->curr_input = fd;
 }
 
 
 void	redirection_init(t_node *node, t_mini *mini)
 {
+	if (node->file == NULL)
+	{
+		g_exit = 2;
+		ft_putendl_fd("unexpected token", 2);
+		return ;
+	}
 	if (node->this_tkn == REDIR_MAG)
 		redir_mag(node, mini);
 	if (node->this_tkn == REDIR_MAGMAG)
@@ -111,7 +115,7 @@ void	exec_command(t_node *node,t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 		execve(node->cmd_path, node->cmd_matrix, NULL);
-	waitpid(pid, NULL, 0);
+	while(waitpid(pid, NULL, 0)>0);
 }
 
 void	exec_single(t_node *node, t_mini *mini)
@@ -127,15 +131,16 @@ void	exec(t_node *node, t_mini *mini)
 	t_node *temp;
 
 	temp = node;
-	// while(temp != NULL)
-	// {
-	// 	if (temp->this_tkn < 10 && temp->this_tkn > 2)
-	// 		redirection_init(temp, mini);
-	// 	if (temp->left_tkn != PIPE && temp->right_tkn != PIPE)
-	// 		exec_single(node, mini);
-	// 	if (temp->right_tkn == PIPE)
-	// 	temp = temp->next;
-	// }
-	pipex(temp, mini);
+	if (temp == NULL)
+		return ;
+	while(temp->this_tkn > 2 && temp->this_tkn < 10 && temp->next->right_tkn != PIPE)
+	{
+		redirection_init(temp, mini);
+		temp = temp->next;
+	}
+	if (temp->left_tkn == -2 && temp->right_tkn == END_PIPE)
+		exec_single(temp, mini);
+	if (temp->left_tkn == -2 && temp->right_tkn == PIPE)
+		pipex(temp, mini);
 	return ;
 }

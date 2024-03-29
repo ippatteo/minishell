@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/29 18:58:20 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/29 23:47:46 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include "libft/libft.h"
 # include <signal.h>
 
-#define END_PIPE -1
 #define BUILTIN 10
 #define ECHO 11
 #define CD 12
@@ -47,8 +46,8 @@
 #define ARGS 111
 #define D_QUOT 34
 #define QUOT 39
-#define END_P 222
-#define START_P -2 
+#define END_PIPE 222
+#define START_P -2
 
 #define CRED "\e[0;31m"
 #define RESET "\001\e[0m\002"
@@ -66,6 +65,8 @@ typedef struct s_mini
 	char	**commands;
 	int		curr_input;
 	int		curr_output;
+	int		temp_in;
+	int		temp_out;
 	//t_node	*node;
 }	t_mini;
 
