@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/26 18:24:39 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 14:17:01 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,8 @@
 #define ARGS 111
 #define D_QUOT 34
 #define QUOT 39
+#define END_P 222
+#define START_P -2 
 
 #define CRED "\e[0;31m"
 #define RESET "\001\e[0m\002"
@@ -74,11 +76,14 @@ typedef struct s_node
 	char **cmd_matrix; //anche la path va qua in pos 0
 	int left_tkn;
 	int	right_tkn;
+	int	error;
 	int this_tkn;
 	char *file;
+	int	n_pipe;
 }	t_node;
 
-
+int check_pipe_errors(t_mini *mini);
+int err_quote(t_mini *mini);
 void ft_free_tnodes(t_node *node);
 void ft_printmap0(char **c);
 void realloc_quotes(t_mini *mini);

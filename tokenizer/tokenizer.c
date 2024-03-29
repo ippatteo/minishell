@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/25 20:48:58 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 14:25:59 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void ft_printnode(t_node *node)
 		printf("node right_tkn = %d\n", tmp->right_tkn);
 		printf("node this_tkn = %d\n", tmp->this_tkn);
 		printf("node file= %s\n", tmp->file);
+		printf("\n--------------------\n");
 		tmp = tmp->next;
 	}
 }
@@ -146,7 +147,7 @@ int assign_number_of_tkn(t_mini *mini, char *cmd)
 	else if (ft_is_command(mini, cmd))
 		return (20);
 	else
-		return (1);
+		return (111);
 }
 char *ft_command_path(t_mini *mini, char *cmd)
 {
@@ -192,9 +193,15 @@ int ft_tokenizer(t_mini *mini)
 	}
 	mini->tkn[i] = '\0';
 	mini->tknflag = 1;//potrebbe esse provvisorio, ma ora mi permette di freeare
-	if (!check_errors(mini))
+	if (!err_quote(mini))
+	{
+		g_exit = 127;
+		write(2, "ahi ahi ahi signora longari, lei non ha letto bene il subject", 62);
 		return (0);
+	}
 	realloc_quotes(mini);
+	if (!check_pipe_errors(mini))
+		return (0);
 	return (1);
 
 }
@@ -302,7 +309,7 @@ int find_pos_cmd(t_mini *mini, int p)
 	z = 0;
 	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
-		if	(mini->tkn[i] >= BUILTIN && mini->tkn[i] <= COMMAND)
+		if	(mini->tkn[i] >= BUILTIN && mini->tkn[i] <= COMMAND || mini->tkn[i] == ARGS)
 			return (i);
 		i++;
 	}
@@ -335,8 +342,49 @@ void set_values_as_null(t_node *node)
 	node->this_tkn = 0;
 	node->file = NULL;
 	node->next = NULL;
+	node->error = 0;
+	node->n_pipe = -1;
 }
 
+int set_fill_error(t_node *new, t_mini *mini, int p, int i)
+{
+	int t;
+
+	t = 1;
+	new->n_pipe = p;
+	if (mini->tkn[i] == ARGS)
+	{
+		new->error = 127;
+		new->cmd_path = ft_strdup(mini->commands[i]);
+		return (1);
+	}
+	else
+	{
+		new->cmd_matrix = ft_calloc(sizeof(char *), fill_cmd_count_args(mini, p) + 2);
+		t = 1;
+		new->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
+		new->cmd_path = find_cmd_or_b_in(mini, i);
+		while (mini->tkn[i] && mini->tkn[i] != PIPE)
+		{
+			if	(mini->tkn[i] == ARGS)
+				new->cmd_matrix[t++] = ft_strdup(mini->commands[i]);
+			i++;
+		}
+		new->cmd_matrix[t] = NULL;
+		return (0);
+	}
+}
+
+int there_is_pipe(t_mini *mini, int i)
+{
+	while (mini->tkn[i])
+	{
+		if (mini->tkn[i] == PIPE)
+			return (PIPE);
+		i++;
+	}
+	return(END_P);
+}
 //riempe un nodo di tipo comando con tutti gli argomenti
 void fill_cmd(t_node **node, t_mini *mini, int p)
 {
@@ -344,33 +392,40 @@ void fill_cmd(t_node **node, t_mini *mini, int p)
 	int t;
 	t_node *new;
 
-	if (find_pos_cmd(mini, p) != -1)
-		i = find_pos_cmd(mini, p);
-	else
+	if (find_pos_cmd(mini, p) == -1)
 		return;
+	i = find_pos_cmd(mini, p);
 	new = (t_node *)ft_calloc(sizeof(t_node), 1);
 	set_values_as_null(new);
-	new->cmd_matrix = ft_calloc(sizeof(char *), fill_cmd_count_args(mini, p) + 2);
-	t = 1;
 	new->this_tkn = mini->tkn[i];
-	new->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
-	new->cmd_path = find_cmd_or_b_in(mini, i);
-	while (mini->tkn[i] && mini->tkn[i] != PIPE)
+	new->right_tkn =  there_is_pipe(mini, i);
+	if (p)
+		new->left_tkn = PIPE;
+	else
+		new->left_tkn = START_P;
+	if (set_fill_error(new, mini, p, i))
 	{
-		if	(mini->tkn[i] == ARGS)
-			new->cmd_matrix[t++] = ft_strdup(mini->commands[i]);
-		i++;
+		ft_lstadd_back(node, new);
+		return;
 	}
-	new->cmd_matrix[t] = NULL;
 	ft_lstadd_back(node, new);
 }
 
-void fill_redir0(t_node *new, t_mini *mini, int i)
+//filla e controlla se c'è il file, se c'è ben altrimenti sull'errore mette 2, 
+//l'unico morivo per cui mette 2 qua è unexpected token
+void fill_redir0(t_node *new, t_mini *mini, int i, int p)
 {
-
 	set_values_as_null(new);
 	new->this_tkn = mini->tkn[i];
+	if (mini->tkn[i + 1] && mini->tkn[i + 1] != PIPE)
+		mini->tkn[i + 1] = 1;
+	else
+	{
+		new->error = 2;//unexpected token
+		return ;
+	}
 	new->right_tkn = mini->tkn[i + 1];
+	new->n_pipe = p;
 	new->file = ft_strdup(mini->commands[i+1]);
 }
 
@@ -386,34 +441,21 @@ void fill_redir(t_node **node, t_mini *mini, int p)
 
 	i = go_int(mini, p);
 	z = 0;
+	
 	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
 		if	(mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
 		{
+			
 			new = (t_node *)ft_calloc(sizeof(t_node), 1);
-			fill_redir0(new, mini, i);
+			fill_redir0(new, mini, i, p);
 			ft_lstadd_back(node, new);
 		}
 		i++;
 	}
 }
 
-void fill_pipes(t_node **node, t_mini *mini, int p)
-{
-	int i;
-	t_node	*new;
 
-	i = 0;
-	new = (t_node *)ft_calloc(sizeof(t_node), 1);
-	set_values_as_null(new);
-	i = go_int(mini, p) - 1;
-	new->this_tkn = mini->tkn[i];
-	new->left_tkn = mini->tkn[i-1];
-	new->right_tkn = mini->tkn[i+1];
-	i = 0;
-	ft_lstadd_back(node, new);
-
-}
 //porcodeddio la funzione finale
 
 void ft_free_tnodes(t_node *node)
@@ -435,10 +477,8 @@ void ft_free_tnodes(t_node *node)
 	}
 }
 
-void print_and_handle_errors()
-{
 
-}
+
 int fill_nodes(t_node **node, t_mini *mini)
 {
 	int i;
@@ -446,9 +486,10 @@ int fill_nodes(t_node **node, t_mini *mini)
 
 	p = 0;
 	if (!ft_tokenizer(mini))
-		return (0);
+		return(0);
 	if (*node != NULL)
 	{
+		ft_putendl_fd("\nsto per freeare\n",2);
 		ft_free_tnodes(*node);
 		*node = NULL;
 	}
@@ -456,8 +497,6 @@ int fill_nodes(t_node **node, t_mini *mini)
 	{
 		fill_redir(node, mini, p);
 		fill_cmd(node, mini, p);
-		if (p + 1 < count_commands_pipes(mini))
-			fill_pipes(node, mini, p);
 		p++;
 	}
 	return(1);

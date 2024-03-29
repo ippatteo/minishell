@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/21 16:26:33 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/28 20:48:10 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,14 +158,8 @@ int err_quote(t_mini *mini)
 
 int check_errors(t_mini *mini)
 {
-	if (!err_quote(mini))
-	{
-		g_exit = 127;
-		return (0);
-	}
+	
 	if (!check_redir_errors(mini))
-		return (0);
-	if (!check_pipe_errors(mini))
 		return (0);
 	if (!check_cmds(mini))
 		return (0);
