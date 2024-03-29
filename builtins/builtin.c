@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/03/22 14:54:07 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/29 18:08:50 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,8 @@ void	ft_env(t_node *node, t_mini *mini)
 	i = 0;
 	while(mini->en[i] != NULL)
 	{
-		printf("%s\n", mini->en[i]);
+		if (ft_strchr(mini->en[i], '='))
+			printf("%s\n", mini->en[i]);
 		i++;
 	}
 }
@@ -144,7 +145,17 @@ void	create_variable(char *str, t_mini *mini)
 void	ft_export(t_node *node, t_mini *mini)
 {
 	int	i;
-
+	
+	if (node->cmd_matrix[2] == NULL)
+	{
+		i = 0;
+		while(mini->en[i] != NULL)
+		{
+			printf("%s\n", mini->en[i]);
+			i++;
+		}
+		return ;
+	}
 	i = 1;
 	while(node->cmd_matrix[i])
 	{
