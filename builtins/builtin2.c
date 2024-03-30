@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 17:08:29 by luca             ###   ########.fr       */
+/*   Updated: 2024/03/30 09:34:29 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ void ft_unset(t_mini *mini, char **mtr)
 			if(!ft_strncmp(mini->en[j], mtr[i], ft_strlen(mtr[i])))
 			{
 				free(mini->en[j]);
-				while (mini->en[j])
+				 while (mini->en[j + 1])
 				{
 					mini->en[j] = mini->en[j + 1];
 					j++;
 				}
+				mini->en[j] = NULL;
 				break;
 			}
 			j++;

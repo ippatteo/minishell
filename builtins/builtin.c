@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/03/29 23:48:01 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/03/30 10:13:17 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,6 +117,34 @@ int	check_space(char *str)
 		return (-1);
 	return(0);
 }
+
+
+char **copy_matrix_extend(char **original, const char *new_str) {
+    int length = 0;
+    while (original[length] != NULL) length++; // Conta gli elementi
+
+    // +2 per la nuova stringa e il terminatore NULL
+    char **copy = malloc(sizeof(char *) * (length + 2));
+    for (int i = 0; i < length; i++) {
+        copy[i] = strdup(original[i]); // Copia ogni stringa
+    }
+
+    // Aggiunge la nuova stringa
+    copy[length] = strdup(new_str);
+    copy[length + 1] = NULL; // Imposta il terminatore NULL
+
+    return copy;
+}
+
+void add_string_and_reallocate(char ***matrix, const char *new_str) {
+    char **new_matrix = copy_matrix_extend(*matrix, new_str);
+
+    free_matrix(*matrix); // Libera l'originale
+
+    *matrix = new_matrix; // Aggiorna il puntatore all'originale
+}
+
+
 void	create_variable(char *str, t_mini *mini)
 {
 	int	i;
@@ -131,28 +159,29 @@ void	create_variable(char *str, t_mini *mini)
 		i = 0;
 		while(mini->en[i])
 			i++;
-		mini->en[i] = ft_strdup(temp);
-		mini->en[i + 1] = NULL;
+		add_string_and_reallocate(&mini->en, str);
 	}
 	else
 	{
 		i = 0;
 		while(ft_strnstr(mini->en[i], temp, ft_strlen(temp)) == NULL)
 			i++;
+		free(mini->en[i]);
 		mini->en[i] = ft_strdup(str);
 	}
+	free(temp);
 }
 
 void	ft_export(t_node *node, t_mini *mini)
 {
 	int	i;
 	
-	if (node->cmd_matrix[2] == NULL)
+	if (node->cmd_matrix[1] == NULL)
 	{
 		i = 0;
 		while(mini->en[i] != NULL)
 		{
-			printf("%s\n", mini->en[i]);
+			printf("x - %s\n", mini->en[i]);
 			i++;
 		}
 		return ;
