@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:50:33 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/01 23:00:19 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int check_pipe_errors(t_mini *mini)
 	}
 	return (1);
 }
+
 int check_cmds_2(t_mini *mini,int i, int flag_found_cmd)
 {
 	while (mini->tkn[i])

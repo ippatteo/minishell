@@ -6,12 +6,13 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/03/29 23:48:09 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/01 23:48:25 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
+/**/
 void	close_pipe(int fd[2], t_node *node)
 {
 	if (node->next && node->this_tkn == PIPE)
@@ -69,3 +70,4 @@ int	pipex(t_node *node, t_mini *mini)
 	close(fd[1]);
 	while(waitpid(-1, NULL, 0) > 0);
 }
+
