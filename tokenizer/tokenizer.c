@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/02 02:47:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 08:22:48 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -426,7 +426,6 @@ void fill_redir(t_node **node, t_mini *mini, int p)
 	{
 		if	(mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
 		{
-			printf("in fillredir\n");
 			new = (t_node *)ft_calloc(sizeof(t_node), 1);
 			fill_redir0(new, mini, i, p);
 			ft_lstadd_back(node, new);
@@ -469,7 +468,6 @@ int fill_nodes(t_node **node, t_mini *mini)
 		return(0);
 	if (*node != NULL)
 	{
-		ft_putendl_fd("\nsto per freeare\n",2);
 		ft_free_tnodes(*node);
 		*node = NULL;
 	}
@@ -480,8 +478,5 @@ int fill_nodes(t_node **node, t_mini *mini)
 		p++;
 	}
 	i = 0;
-	while (mini->tkn[i])
-		printf(" token=%d ", mini->tkn[i++]);
-	printf("\n");
 	return(1);
 }

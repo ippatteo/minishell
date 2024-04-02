@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/02 03:22:18 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 05:18:40 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ int	main(int argc, char ** argv, char **env)
 		{
 		lexer(&mini, cmd);
 		fill_nodes(&node, &mini);
-		ft_printnode(node);
+		//ft_printnode(node);
 		exec(node, &mini);
 		//ft_free_tnodes(node);
 		add_history(cmd);
