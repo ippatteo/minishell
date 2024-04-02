@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   tokenizer copy 2.c                                 :+:      :+:    :+:   */
+/*   tokenizer5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/04/02 16:57:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 22:05:57 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ int fill_nodes(t_node **node, t_mini *mini)
 	int p;
 
 	p = 0;
+	if (mini->commands[0] == NULL)
+		return (0);
 	if (!ft_tokenizer(mini))
 		return(0);
 	if (*node != NULL)
