@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/29 17:17:52 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/02 12:44:32 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,8 @@ typedef struct s_mini
 	char	*sub;
 	char	*tmp;
 	char	**commands;
-	int		curr_input;
-	int		curr_output;
+	int		fdin;
+	int		fdout;
 	int		temp_in;
 	int		temp_out;
 	//t_node	*node;
