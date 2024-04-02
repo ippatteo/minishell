@@ -6,15 +6,15 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 08:21:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 11:58:46 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-
+/*
 void	here_doc(t_node *node, t_mini *mini)
 {
-	char **matrix;
+	char *str;
 	char **cmd;
 	int	fd[2];
 	int	i;
@@ -24,27 +24,31 @@ void	here_doc(t_node *node, t_mini *mini)
 		ft_putendl_fd(strerror(errno), 2);
 	while(1)
 	{
-		ft_putendl_fd("###ciao", 2);
-		matrix[i] = readline("> ");
-		if (ft_strcmp(matrix[i], node->file) == 0)
-		{
-			matrix[i] = NULL;
+		//ft_putendl_fd("###ciao", 2);
+		str = readline("> ");
+		if (ft_strcmp(str, node->file) == 0)
 			break ;
-		}
+		write(fd[1], str, ft_strlen(str));
+		free(str);
+		write(fd[1], "\n", 1);
 		i++;
 	}
-	if(dup2(fd[0], mini->curr_input) == -1)
-		ft_putendl_fd(strerror(errno), 2);
-	if(dup2(fd[1], mini->curr_output) == -1)
-		ft_putendl_fd(strerror(errno), 2);
-	close(fd[0]);
+	mini->curr_input = fd[0];
 	close(fd[1]);
+	//if(dup2(fd[0], mini->curr_input) == -1)
+	//	ft_putendl_fd(strerror(errno), 2);
+	//if(dup2(fd[1], mini->curr_output) == -1)
+	//	ft_putendl_fd(strerror(errno), 2);
+	//close(fd[0]);
+	//close(fd[1]);
 }
 
 void	redir_mag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
+	if (mini->curr_output != 1)
+		close(mini->curr_output);
 	fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	mini->curr_output = fd;
 }
@@ -53,6 +57,8 @@ void	redir_magmag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
+	if (mini->curr_output != 1)
+		close(mini->curr_output);
 	fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	mini->curr_output = fd;
 }
@@ -89,6 +95,20 @@ void	redirection_init(t_node *node, t_mini *mini)
 		redir_min(node, mini);
 	if (node->this_tkn == HERE_DOC)
 		here_doc(node, mini);
+}
+
+int is_there_redir(t_mini *mini)
+{
+	int i;
+	
+	i = 0;
+	while (mini->tkn[i])
+	{
+		if (mini->tkn[i] == 1)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 void	exec_builtin(t_node *node, t_mini *mini)
 {
@@ -121,10 +141,10 @@ void	exec_command(t_node *node,t_mini *mini)
 void	exec_single(t_node *node, t_mini *mini)
 {
 	int original_stdin = dup(STDIN_FILENO);
-    int original_stdout = dup(STDOUT_FILENO);
-	if (mini->curr_input != STDIN_FILENO) 
+	int original_stdout = dup(STDOUT_FILENO);
+	if (mini->curr_input != STDIN_FILENO)
 		dup2(mini->curr_input, STDIN_FILENO);
-	if (mini->curr_output != STDOUT_FILENO) 
+	if (mini->curr_output != STDOUT_FILENO)
 		dup2(mini->curr_output, STDOUT_FILENO);
 	if (node->this_tkn > 10 && node->this_tkn < 20)
 		exec_builtin(node, mini);
@@ -137,17 +157,7 @@ void	exec_single(t_node *node, t_mini *mini)
 	dup2(original_stdin, STDIN_FILENO);
 	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
-	close(original_stdout);	
-	if (mini->curr_input != STDIN_FILENO)
-	{
-		close(mini->curr_input);
-		mini->curr_input = STDIN_FILENO; // Reset
-	}
-	if (mini->curr_output != STDOUT_FILENO)
-	{
-		close(mini->curr_output);
-		mini->curr_output = STDOUT_FILENO; // Reset
-	}
+	close(original_stdout);
 }
 
 void	exec(t_node *node, t_mini *mini)
@@ -164,15 +174,24 @@ void	exec(t_node *node, t_mini *mini)
 	}
 	if (!(temp->this_tkn > 2 && temp->this_tkn < 10))
 		exec_single(temp, mini);
-	//if (temp->left_tkn == -2 && temp->right_tkn == PIPE)
-		//pipex(temp, mini);
+	if (mini->curr_input != STDIN_FILENO)
+	{
+		close(mini->curr_input);
+		mini->curr_input = STDIN_FILENO;
+	}
+	if (mini->curr_output != STDOUT_FILENO)
+	{
+		close(mini->curr_output);
+		mini->curr_output = STDOUT_FILENO;
+	}
 	return ;
 }
 
-/*
+*/
+
 void	here_doc(t_node *node, t_mini *mini)
 {
-	char **matrix;
+	char *str;
 	char **cmd;
 	int	fd[2];
 	int	i;
@@ -182,27 +201,31 @@ void	here_doc(t_node *node, t_mini *mini)
 		ft_putendl_fd(strerror(errno), 2);
 	while(1)
 	{
-		ft_putendl_fd("###ciao", 2);
-		matrix[i] = readline("> ");
-		if (ft_strcmp(matrix[i], node->file) == 0)
-		{
-			matrix[i] = NULL;
+		//ft_putendl_fd("###ciao", 2);
+		str = readline("> ");
+		if (ft_strcmp(str, node->file) == 0)
 			break ;
-		}
+		write(fd[1], str, ft_strlen(str));
+		free(str);
+		write(fd[1], "\n", 1);
 		i++;
 	}
-	if(dup2(fd[0], mini->curr_input) == -1)
-		ft_putendl_fd(strerror(errno), 2);
-	if(dup2(fd[1], mini->curr_output) == -1)
-		ft_putendl_fd(strerror(errno), 2);
-	close(fd[0]);
+	mini->curr_input = fd[0];
 	close(fd[1]);
+	//if(dup2(fd[0], mini->curr_input) == -1)
+	//	ft_putendl_fd(strerror(errno), 2);
+	//if(dup2(fd[1], mini->curr_output) == -1)
+	//	ft_putendl_fd(strerror(errno), 2);
+	//close(fd[0]);
+	//close(fd[1]);
 }
 
 void	redir_mag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
+	if (mini->curr_output != 1)
+		close(mini->curr_output);
 	fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	mini->curr_output = fd;
 }
@@ -211,6 +234,8 @@ void	redir_magmag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
+	if (mini->curr_output != 1)
+		close(mini->curr_output);
 	fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	mini->curr_output = fd;
 }
@@ -248,6 +273,20 @@ void	redirection_init(t_node *node, t_mini *mini)
 	if (node->this_tkn == HERE_DOC)
 		here_doc(node, mini);
 }
+
+int is_there_redir(t_mini *mini)
+{
+	int i;
+	
+	i = 0;
+	while (mini->tkn[i])
+	{
+		if (mini->tkn[i] == 1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 void	exec_builtin(t_node *node, t_mini *mini)
 {
 	if (node->this_tkn == CD)
@@ -273,90 +312,54 @@ void	exec_command(t_node *node,t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 		execve(node->cmd_path, node->cmd_matrix, NULL);
-	waitpid(pid, NULL, 0);
+	while(waitpid(pid, NULL, 0)>0);
 }
 
 void	exec_single(t_node *node, t_mini *mini)
 {
 	int original_stdin = dup(STDIN_FILENO);
-    int original_stdout = dup(STDOUT_FILENO);
-	if (mini->curr_input != STDIN_FILENO) 
-	{
+	int original_stdout = dup(STDOUT_FILENO);
+	if (mini->curr_input != STDIN_FILENO)
 		dup2(mini->curr_input, STDIN_FILENO);
-		close(mini->curr_input);
-	}
-	if (mini->curr_output != STDOUT_FILENO) 
-	{
+	if (mini->curr_output != STDOUT_FILENO)
 		dup2(mini->curr_output, STDOUT_FILENO);
-		close(mini->curr_output);
-	}
 	if (node->this_tkn > 10 && node->this_tkn < 20)
 		exec_builtin(node, mini);
 	if (node->this_tkn == 20)
 		exec_command(node, mini);
 	if (dup2(original_stdin, STDIN_FILENO) == -1)
-    	perror("Errore nel ripristinare stdin");
-    if (dup2(original_stdout, STDOUT_FILENO) == -1)
-        perror("Errore nel ripristinare stdout");
+		perror("Errore nel ripristinare stdin");
+	if (dup2(original_stdout, STDOUT_FILENO) == -1)
+		perror("Errore nel ripristinare stdout");
+	dup2(original_stdin, STDIN_FILENO);
+	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
-    close(original_stdout);
+	close(original_stdout);
 }
 
-void	executo_d(t_node *node, t_mini *mini)
+void	exec(t_node *node, t_mini *mini)
 {
-	t_node *temp;
-	int fd[2];
-	int pid;
-
-	temp = node;
-	if (temp == NULL)
-		return ;
-	pipe(fd);
-	pid = fork();
-	if (pid == 0)
-	{
-		close(fd[0]);
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[1]);
-		while(temp->this_tkn > 2 && temp->this_tkn < 10 && temp->next->right_tkn != PIPE)
-		{
-			redirection_init(temp, mini);
-			temp = temp->next;
-		}
-		if (!(temp->this_tkn > 2 && temp->this_tkn < 10))
-			exec_single(temp, mini);
-	}
-	else
-	{
-		close(fd[1]);
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		waitpid(pid, NULL, 0);
-	}
-}
-
-
-void exec(t_node *node, t_mini *mini)
-{
-	int p;
 	t_node *temp;
 
 	temp = node;
 	if (temp == NULL)
 		return ;
-	p = 0;
-	while (p < count_commands_pipes(mini) - 1)
-	{
-		executo_d(temp, mini);
-		temp = temp->next;
-		p++;
-	}
 	while(temp->this_tkn > 2 && temp->this_tkn < 10 && temp->next->right_tkn != PIPE)
-		{
-			redirection_init(temp, mini);
-			temp = temp->next;
-		}
-	exec_single(temp, mini);
-	return;
+	{
+		redirection_init(temp, mini);
+		temp = temp->next;
+	}
+	if (!(temp->this_tkn > 2 && temp->this_tkn < 10))
+		exec_single(temp, mini);
+	if (mini->curr_input != STDIN_FILENO)
+	{
+		close(mini->curr_input);
+		mini->curr_input = STDIN_FILENO;
+	}
+	if (mini->curr_output != STDOUT_FILENO)
+	{
+		close(mini->curr_output);
+		mini->curr_output = STDOUT_FILENO;
+	}
+	return ;
 }
-*/

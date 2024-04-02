@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/02 05:18:40 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 10:50:04 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,8 @@ int	main(int argc, char ** argv, char **env)
 	mini.tmp = NULL;
 	mini.commands = NULL;
 	mini.tkn = NULL;
+	mini.curr_input = 0;
+	mini.curr_output = 1;
 	mini.temp_in = dup(0);
 	mini.temp_out = dup(1);
 	mini.tknflag = 0;
