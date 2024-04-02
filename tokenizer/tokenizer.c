@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:52:05 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/02 14:48:02 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -436,7 +436,6 @@ int fill_nodes(t_node **node, t_mini *mini)
 		return(0);
 	if (*node != NULL)
 	{
-		ft_putendl_fd("\nsto per freeare\n",2);
 		ft_free_tnodes(*node);
 		*node = NULL;
 	}

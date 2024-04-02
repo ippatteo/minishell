@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_err.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/29 15:50:33 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/02 19:27:29 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,32 +108,6 @@ int check_cmds(t_mini *mini)
 		return (1);
 	else
 		return (0);
-}
-
-//trova quote aperte
-int err_quote(t_mini *mini)
-{
-	int i;
-
-	i = 0;
-	while (mini->commands[i])
-	{
-		if (mini->commands[i][0] == D_QUOT || mini->commands[i][0] == QUOT)
-		{
-			if (mini->commands[i][0] == D_QUOT && (ft_strlen(mini->commands[i])-1))
-			{
-				if(mini->commands[i][ft_strlen(mini->commands[i])-1] != D_QUOT)
-					return(0);
-			}
-			else if(mini->commands[i][0] == QUOT && (ft_strlen(mini->commands[i])-1))
-			{
-				if (mini->commands[i][ft_strlen(mini->commands[i])-1] != QUOT)
-					return(0);
-			}
-		}
-		i++;
-	}
-	return (1);
 }
 
 int check_errors(t_mini *mini)

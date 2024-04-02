@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/02 12:44:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:26:54 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_mini
 	char	*sub;
 	char	*tmp;
 	char	**commands;
+	int		pipe_fd[2];
 	int		fdin;
 	int		fdout;
 	int		temp_in;
@@ -84,10 +85,10 @@ typedef struct s_node
 }	t_node;
 
 int check_pipe_errors(t_mini *mini);
-int err_quote(t_mini *mini);
 void ft_free_tnodes(t_node *node);
 void ft_printmap0(char **c);
 void realloc_quotes(t_mini *mini);
+int err_quote(t_mini *mini);
 int check_errors(t_mini *mini);
 int	ft_lstsize(t_node *lst);
 void	ft_lstadd_back(t_node **lst, t_node *new);
@@ -142,5 +143,10 @@ void	ft_exit(t_node *node, t_mini *mini);
 void	exec(t_node *node, t_mini *mini);
 int	pipex(t_node *node, t_mini *mini);
 void	here_doc(t_node *node, t_mini *mini);
+void	redir_mag(t_node *node, t_mini *mini);
+void	redir_magmag(t_node *node, t_mini *mini);
+int	redir_min(t_node *node, t_mini *mini);
+int	redirection_init(t_node *node, t_mini *mini);
+void	exec_single(t_node *node, t_mini *mini);
 
 #endif
