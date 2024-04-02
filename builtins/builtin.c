@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 01:23:57 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 16:02:19 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_echo(t_node *node, t_mini *mini)
 		printf("\n");
 		return ;
 	}
-	if (node->cmd_matrix[1] && ft_strncmp(node->cmd_matrix[1], "-n" , 2) == 0)
+	if (ft_strncmp(node->cmd_matrix[1], "-n" , 2) == 0)
 	{
 		space = -1;
 		i = 2;
@@ -92,67 +92,8 @@ void	ft_env(t_node *node, t_mini *mini)
 	i = 0;
 	while(mini->en[i] != NULL)
 	{
-		printf("%s\n", mini->en[i]);
+		if (ft_strchr(mini->en[i], '='))
+			printf("%s\n", mini->en[i]);
 		i++;
 	}
-}
-
-int	check_space(char *str)
-{
-	int		i;
-	bool	space;
-
-	i = 0;
-	space = false;
-	while(str[i] != '\0')
-	{
-		if (ft_isspace(str[i]) == 1)
-			return(-1);
-		if (str[i] == '=')
-			space = true;
-		i++;
-	}
-	if (space == false)
-		return (-1);
-	return(0);
-}
-void	create_variable(char *str, t_mini *mini)
-{
-	int	i;
-	char *temp;
-
-	i = 0;
-	while(str[i] != '=')
-		i++;
-	temp = ft_substr(str, 0, i + 1);
-	if (ft_getenv(mini->en, temp) == NULL)
-	{
-		i = 0;
-		while(mini->en[i])
-			i++;
-		mini->en[i] = ft_strdup(temp);
-		mini->en[i + 1] = NULL;
-	}
-	else
-	{
-		i = 0;
-		while(ft_strnstr(mini->en[i], temp, ft_strlen(temp)) == NULL)
-			i++;
-		mini->en[i] = ft_strdup(str);
-	}
-}
-
-void	ft_export(t_node *node, t_mini *mini)
-{
-	int	i;
-
-	i = 1;
-	while(node->cmd_matrix[i])
-	{
-		if (check_space(node->cmd_matrix[i]) == -1)
-			ft_putendl_fd("Invalid export variable\n", 2);
-		create_variable(node->cmd_matrix[i], mini);
-		i++;
-	}
-
 }
