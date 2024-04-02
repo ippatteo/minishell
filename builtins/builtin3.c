@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 17:34:43 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:46:16 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,10 @@ char	**copy_matrix_extend(char **original, const char *new_str)
 	while (original[length] != NULL)
 		length++;
 	copy = malloc(sizeof(char *) * (length + 2));
-	while (i++ < length)
+	while (i < length)
 	{
 		copy[i] = strdup(original[i]);
+		i++;
 	}
 	copy[length] = strdup(new_str);
 	copy[length + 1] = NULL;

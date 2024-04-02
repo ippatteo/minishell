@@ -6,7 +6,7 @@
 /*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:08:42 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/03/20 17:21:02 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:58:26 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,5 @@ char				**ft_split(char const *s, char c);
 void				ft_striteri(char *s, void (*f)(unsigned int, char*));
 int					ft_putstr(char *s);
 int					ft_strcmp(char *s1, char *s2);
-
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/02 19:30:30 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:55:36 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,15 +62,10 @@ int	main(int argc, char **argv, char **env)
 	char		*cmd;
 	t_mini		mini;
 	t_node		*node;
-	static int	i;
 
-	(void)argv;
-	(void)argc;
 	node = NULL;
 	cmd = NULL;
-	init_mini(&mini);
-	copy_env(&mini, env);
-	signal_handler();
+	inits(argv, argc, &mini, env);
 	while (1)
 	{
 		cmd = readline(CRED "minishell$ " RESET);
@@ -83,7 +78,6 @@ int	main(int argc, char **argv, char **env)
 		{
 			lexer(&mini, cmd);
 			fill_nodes(&node, &mini);
-			ft_printnode(node);
 			add_history(cmd);
 		}
 	}

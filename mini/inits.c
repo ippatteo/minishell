@@ -1,28 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr.c                                        :+:      :+:    :+:   */
+/*   inits.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/25 11:49:38 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/02 19:57:28 by lpicciri         ###   ########.fr       */
+/*   Created: 2024/04/02 19:47:15 by lpicciri          #+#    #+#             */
+/*   Updated: 2024/04/02 19:54:57 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "../mini.h"
 
-int	ft_putstr(char *s)
+void	inits(char **argv, int argc, t_mini *mini, char **env)
 {
-	int	i;
-
-	if (!s)
-		return (write(1, "(null)", 6));
-	i = 0;
-	while (s[i])
-	{
-		write(1, &s[i], 1);
-		i++;
-	}
-	return (i);
+	(void)argv;
+	(void)argc;
+	init_mini(mini);
+	copy_env(mini, env);
+	signal_handler();
 }
