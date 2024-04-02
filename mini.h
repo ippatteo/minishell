@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/29 23:47:46 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 01:51:11 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 # include <stdbool.h>
 # include <time.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include "libft/libft.h"
 # include <signal.h>
 

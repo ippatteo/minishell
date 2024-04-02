@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/01 21:12:11 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 02:47:35 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,13 @@ void ft_printnode(t_node *node)
 		printf("node right_tkn = %d\n", tmp->right_tkn);
 		printf("node this_tkn = %d\n", tmp->this_tkn);
 		printf("node file= %s\n", tmp->file);
+		if (node->cmd_matrix)
+		{
+			write(1, "cmd_matrix =\n", 14);
+			ft_printmap0(node->cmd_matrix);
+		}
+		else
+			printf("cmd_matrix = NULL\n");
 		printf("\n--------------------\n");
 		tmp = tmp->next;
 	}
@@ -108,6 +115,21 @@ int ft_is_pipe_redir_hd(char *cmd)
 	else
 		return (0);
 }
+
+int is_executable(const char *path) 
+{
+    struct stat st;
+
+    if (stat(path, &st) == 0) {
+        // Controlla se il file è un file regolare e se è eseguibile.
+        if (S_ISREG(st.st_mode) && (st.st_mode & (S_IXUSR | S_IXGRP | S_IXOTH))) {
+            return 1; // Il file è eseguibile.
+        }
+    }
+
+    return 0; // Il file non è eseguibile o non esiste.
+}
+
 int ft_is_command(t_mini *mini, char *cmd)
 {
 	char	*path;
@@ -117,7 +139,7 @@ int ft_is_command(t_mini *mini, char *cmd)
 
 	i = 0;
 	if(access(cmd , X_OK) == 0)
-		return (1);
+		return (20);
 	if (ft_getenv(mini->en, "PATH") == NULL)
 		return (0);
 	folders = ft_split(ft_getenv(mini->en, "PATH"), ':');
@@ -127,10 +149,10 @@ int ft_is_command(t_mini *mini, char *cmd)
 		free(folders[i]);
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if(access(folders[i], X_OK) == 0)
+		if(access(folders[i], X_OK) == 0 && is_executable(folders[i]))
 		{
 			free_matrix(folders);
-			return(1);
+			return(20);
 		}
 		i++;
 	}
@@ -140,12 +162,12 @@ int ft_is_command(t_mini *mini, char *cmd)
 
 int assign_number_of_tkn(t_mini *mini, char *cmd)
 {
-	if (ft_is_builtin(cmd) != 0)
-		return (ft_is_builtin(cmd));
-	else if (ft_is_pipe_redir_hd(cmd))
+	//if (ft_is_builtin(cmd) != 0)
+	//	return (ft_is_builtin(cmd));
+	if (ft_is_pipe_redir_hd(cmd))
 		return(ft_is_pipe_redir_hd(cmd));
-	else if (ft_is_command(mini, cmd))
-		return (20);
+	//else if (ft_is_command(mini, cmd))
+		//return (20);
 	else
 		return (111);
 }
@@ -202,6 +224,7 @@ int ft_tokenizer(t_mini *mini)
 	realloc_quotes(mini);
 	if (!check_pipe_errors(mini))
 		return (0);
+	i = 0;
 	return (1);
 
 }
@@ -303,27 +326,19 @@ int set_fill_error(t_node *new, t_mini *mini, int p, int i)
 
 	t = 1;
 	new->n_pipe = p;
-	if (mini->tkn[i] == ARGS)
+	
+	new->cmd_matrix = ft_calloc(sizeof(char *), fill_cmd_count_args(mini, p) + 2);
+	t = 1;
+	new->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
+	new->cmd_path = find_cmd_or_b_in(mini, i);
+	while (mini->tkn[i] && mini->tkn[i] != PIPE)
 	{
-		new->error = 127;
-		new->cmd_path = ft_strdup(mini->commands[i]);
-		return (1);
+		if	(mini->tkn[i] == ARGS)
+			new->cmd_matrix[t++] = ft_strdup(mini->commands[i]);
+		i++;
 	}
-	else
-	{
-		new->cmd_matrix = ft_calloc(sizeof(char *), fill_cmd_count_args(mini, p) + 2);
-		t = 1;
-		new->cmd_matrix[0] = find_cmd_or_b_in(mini, i);
-		new->cmd_path = find_cmd_or_b_in(mini, i);
-		while (mini->tkn[i] && mini->tkn[i] != PIPE)
-		{
-			if	(mini->tkn[i] == ARGS)
-				new->cmd_matrix[t++] = ft_strdup(mini->commands[i]);
-			i++;
-		}
-		new->cmd_matrix[t] = NULL;
-		return (0);
-	}
+	new->cmd_matrix[t] = NULL;
+	return (0);
 }
 
 int there_is_pipe(t_mini *mini, int i)
@@ -336,6 +351,21 @@ int there_is_pipe(t_mini *mini, int i)
 	}
 	return(END_PIPE);
 }
+
+int cmd_error(t_mini *mini, t_node *new, int i)
+{
+	if (!(ft_is_builtin(mini->commands[i]) || ft_is_command(mini, mini->commands[i])))
+	{
+		new->error = 127;
+		new->cmd_path = ft_strdup(mini->commands[i]);
+		return (0);
+	}
+	else if (ft_is_builtin(mini->commands[i]))
+		mini->tkn[i] = ft_is_builtin(mini->commands[i]);
+	else if (ft_is_command(mini, mini->commands[i]))
+		mini->tkn[i] = ft_is_command(mini, mini->commands[i]);
+	return (1);
+}
 void fill_cmd(t_node **node, t_mini *mini, int p)
 {
 	int i;
@@ -347,17 +377,20 @@ void fill_cmd(t_node **node, t_mini *mini, int p)
 	i = find_pos_cmd(mini, p);
 	new = (t_node *)ft_calloc(sizeof(t_node), 1);
 	set_values_as_null(new);
-	new->this_tkn = mini->tkn[i];
 	new->right_tkn =  there_is_pipe(mini, i);
 	if (p)
 		new->left_tkn = PIPE;
 	else
 		new->left_tkn = START_P;
-	if (set_fill_error(new, mini, p, i))
+	while (mini->tkn[i] != ARGS)
+		i++;
+	if (!cmd_error(mini, new, i))
 	{
 		ft_lstadd_back(node, new);
 		return;
 	}
+	new->this_tkn = mini->tkn[i];
+	set_fill_error(new, mini, p, i);
 	ft_lstadd_back(node, new);
 }
 
@@ -393,7 +426,7 @@ void fill_redir(t_node **node, t_mini *mini, int p)
 	{
 		if	(mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
 		{
-
+			printf("in fillredir\n");
 			new = (t_node *)ft_calloc(sizeof(t_node), 1);
 			fill_redir0(new, mini, i, p);
 			ft_lstadd_back(node, new);
@@ -446,5 +479,9 @@ int fill_nodes(t_node **node, t_mini *mini)
 		fill_cmd(node, mini, p);
 		p++;
 	}
+	i = 0;
+	while (mini->tkn[i])
+		printf(" token=%d ", mini->tkn[i++]);
+	printf("\n");
 	return(1);
 }
