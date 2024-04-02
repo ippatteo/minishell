@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 02:52:42 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 03:40:17 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	redir_mag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	fd = open(node->file , O_CREAT , 0777);
+	fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	mini->curr_output = fd;
 }
 
@@ -53,7 +53,7 @@ void	redir_magmag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	fd = open(node->file, O_CREAT | O_APPEND, 0777);
+	fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	mini->curr_output = fd;
 }
 
@@ -62,7 +62,7 @@ void	redir_min(t_node *node, t_mini *mini)
 	char *path;
 	int	fd;
 
-	fd = open(node->file, 0777);
+	fd = open(node->file, O_RDONLY);
 	if(fd == -1)
 	{
 		g_exit = 2;
@@ -120,10 +120,28 @@ void	exec_command(t_node *node,t_mini *mini)
 
 void	exec_single(t_node *node, t_mini *mini)
 {
+	int original_stdin = dup(STDIN_FILENO);
+    int original_stdout = dup(STDOUT_FILENO);
+	if (mini->curr_input != STDIN_FILENO) 
+	{
+		dup2(mini->curr_input, STDIN_FILENO);
+		close(mini->curr_input);
+	}
+	if (mini->curr_output != STDOUT_FILENO) 
+	{
+		dup2(mini->curr_output, STDOUT_FILENO);
+		close(mini->curr_output);
+	}
 	if (node->this_tkn > 10 && node->this_tkn < 20)
 		exec_builtin(node, mini);
 	if (node->this_tkn == 20)
 		exec_command(node, mini);
+	if (dup2(original_stdin, STDIN_FILENO) == -1)
+    	perror("Errore nel ripristinare stdin");
+    if (dup2(original_stdout, STDOUT_FILENO) == -1)
+        perror("Errore nel ripristinare stdout");
+	close(original_stdin);
+    close(original_stdout);
 }
 
 void	exec(t_node *node, t_mini *mini)
