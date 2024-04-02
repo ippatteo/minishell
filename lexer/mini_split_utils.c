@@ -6,16 +6,11 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/18 16:03:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 19:17:51 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-
-//conta dall'expander quanti caratteri ci sono, serve al substr
-//ma deve esser fatto partire da dopo il $
-
-
 
 //conta quanti caratteri contengono le virgolette, virgolette comprese
 int	count_mem_quote(char *str, char c)
@@ -24,7 +19,7 @@ int	count_mem_quote(char *str, char c)
 
 	mem = 1;
 	str++;
-	while(*str && *str != c)
+	while (*str && *str != c)
 	{
 		mem++;
 		str++;
@@ -36,10 +31,11 @@ int	count_mem_quote(char *str, char c)
 	mem++;
 	return (mem);
 }
+
 //conta quansiasi cosa non sia una parola, virgolette, pipe e redirection
-int count_quot_pipe_redir(char *str, char c)
+int	count_quot_pipe_redir(char *str, char c)
 {
-	if (c == '<' || c =='>')
+	if (c == '<' || c == '>')
 	{
 		++str;
 		if (*str == c)
@@ -57,17 +53,18 @@ int count_quot_pipe_redir(char *str, char c)
 	else
 		return (0);
 }
+
 //conta quanti char ci sono in una parola "normale"
 int	count_words(char *str)
 {
-	int mem;
+	int	mem;
 
 	mem = 0;
 	while (*str)
 	{
 		if ((*str == '>') || (*str == '<')
 			|| (*str == '|') || (*str == 34) || (*str == 39) || (*str == ' '))
-				break ;
+			break ;
 		else
 		{
 			str++;
@@ -81,7 +78,7 @@ int	count_words(char *str)
 //restituisce 0 in caso di syntax error
 size_t	count_mem(t_mini *mini, char *s)
 {
-	int mem;
+	int	mem;
 
 	mem = 0;
 	while (*s)
@@ -110,7 +107,7 @@ size_t	count_mem(t_mini *mini, char *s)
 //una volta allocata la memoria giusta riempe la matrice
 size_t	split_mem(t_mini *mini, char *s, char **str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (*s)
@@ -136,4 +133,3 @@ size_t	split_mem(t_mini *mini, char *s, char **str)
 	str[i] = NULL;
 	return (i);
 }
-

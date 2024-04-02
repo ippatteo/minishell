@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/29 15:49:07 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 18:00:30 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@
 # include <stdbool.h>
 # include <time.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include "libft/libft.h"
 # include <signal.h>
 
-#define END_PIPE -1
 #define BUILTIN 10
 #define ECHO 11
 #define CD 12
@@ -47,8 +47,8 @@
 #define ARGS 111
 #define D_QUOT 34
 #define QUOT 39
-#define END_P 222
-#define START_P -2 
+#define END_PIPE 222
+#define START_P -2
 
 #define CRED "\e[0;31m"
 #define RESET "\001\e[0m\002"
@@ -66,6 +66,8 @@ typedef struct s_mini
 	char	**commands;
 	int		curr_input;
 	int		curr_output;
+	int		temp_in;
+	int		temp_out;
 	//t_node	*node;
 }	t_mini;
 
@@ -82,6 +84,42 @@ typedef struct s_node
 	int	n_pipe;
 }	t_node;
 
+int fill_nodes(t_node **node, t_mini *mini);
+void fill_redir(t_node **node, t_mini *mini, int p);
+void fill_redir0(t_node *new, t_mini *mini, int i, int p);
+void fill_cmd(t_node **node, t_mini *mini, int p);
+int cmd_error(t_mini *mini, t_node *new, int i);
+int there_is_pipe(t_mini *mini, int i);
+int set_fill_error(t_node *new, t_mini *mini, int p, int i);
+void set_values_as_null(t_node *node);
+int fill_cmd_count_args(t_mini *mini, int p);
+int find_pos_cmd(t_mini *mini, int p);
+int count_commands_pipes(t_mini *mini);
+char *find_cmd_or_b_in(t_mini *mini, int pos);
+int go_int(t_mini *mini, int p);
+int ft_tokenizer(t_mini *mini);
+char *ft_command_path(t_mini *mini, char *cmd);
+int assign_number_of_tkn(t_mini *mini, char *cmd);
+int ft_is_command(t_mini *mini, char *cmd);
+int is_executable(const char *path) ;
+int ft_is_pipe_redir_hd(char *cmd);
+char	*ft_strdup_slash(const char *str);
+int ft_is_builtin(char *cmd);
+int str_exp_count(t_mini *mini, char *str);
+int ft_it_is_exp_valid(t_mini *mini, char *s);
+int	count_exp(char *str);
+int	redirection_init(t_node *node, t_mini *mini);
+int	redir_min(t_node *node, t_mini *mini);
+void	redir_magmag(t_node *node, t_mini *mini);
+void	redir_mag(t_node *node, t_mini *mini);
+void	here_doc(t_node *node, t_mini *mini);
+void ft_close_all(t_mini *mini);
+void	exec_single(t_node *node, t_mini *mini);
+void	exec_command(t_node *node,t_mini *mini);
+void	exec_builtin(t_node *node, t_mini *mini);
+int is_there_redir(t_mini *mini);
+void ft_close_all(t_mini *mini);
+int count_commands_pipes(t_mini *mini);
 int check_pipe_errors(t_mini *mini);
 int err_quote(t_mini *mini);
 void ft_free_tnodes(t_node *node);
@@ -108,7 +146,7 @@ int		str_exp_count(t_mini *mini, char *str);
 int		count_exp(char *str);
 int		ft_it_is_exp_valid(t_mini *mini, char *s);
 char	*ft_substr0(char *s, int len);
-void	swapStrings(char **str1, char **str2);
+void	swap_strings(char **str1, char **str2);
 void	copy_env(t_mini *mini, char **e);
 void	ft_printmap(t_mini *mini, char **c);
 int		check_expan(t_mini *mini, char **c);

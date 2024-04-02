@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/03/21 17:08:29 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/02 17:27:48 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-int		ft_isspace(int c)
+int	ft_isspace(int c)
 {
 	c = (unsigned char)c;
 	if (c == '\t' || c == '\n' || c == '\v' || c == '\f' || c == '\r'
@@ -21,26 +21,27 @@ int		ft_isspace(int c)
 	return (0);
 }
 
-void ft_unset(t_mini *mini, char **mtr)
+void	ft_unset(t_mini *mini, char **mtr)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 1;
-	while(mtr[i])
+	while (mtr[i])
 	{
 		j = 0;
-		while(mini->en[j])
+		while (mini->en[j])
 		{
-			if(!ft_strncmp(mini->en[j], mtr[i], ft_strlen(mtr[i])))
+			if (!ft_strncmp(mini->en[j], mtr[i], ft_strlen(mtr[i])))
 			{
 				free(mini->en[j]);
-				while (mini->en[j])
+				while (mini->en[j + 1])
 				{
 					mini->en[j] = mini->en[j + 1];
 					j++;
 				}
-				break;
+				mini->en[j] = NULL;
+				break ;
 			}
 			j++;
 		}
