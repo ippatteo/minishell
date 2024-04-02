@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 16:02:19 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 21:44:02 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ void	ft_echo(t_node *node, t_mini *mini)
 		printf("\n");
 		return ;
 	}
-	if (ft_strncmp(node->cmd_matrix[1], "-n" , 2) == 0)
+	if (node->cmd_matrix[1] && ft_strncmp(node->cmd_matrix[1], "-n" , 2) == 0)
 	{
 		space = -1;
 		i = 2;

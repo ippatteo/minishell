@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 16:59:49 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 20:45:36 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,17 @@ int	check_space(char *str)
 char **copy_matrix_extend(char **original, const char *new_str)
 {
     int length = 0;
-    while (original[length] != NULL) length++; // Conta gli elementi
+	int i;
+	i = 0;
+    while (original[length] != NULL) 
+		length++; // Conta gli elementi
 
     // +2 per la nuova stringa e il terminatore NULL
     char **copy = malloc(sizeof(char *) * (length + 2));
-    for (int i = 0; i < length; i++) {
-        copy[i] = strdup(original[i]); // Copia ogni stringa
+    while (i < length) 
+	{
+        copy[i] = strdup(original[i]); 
+		i++;// Copia ogni stringa
     }
 
     // Aggiunge la nuova stringa
