@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42roma.it>      +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/26 18:08:10 by lpicciri          #+#    #+#             */
-/*   Updated: 2023/02/17 15:16:10 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/02 23:24:44 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	while (s[i])
 	{
 		if (i >= start && j < len)
-		str[j++] = s[i];
-	i++;
+			str[j++] = s[i];
+		i++;
 	}
 	str[j] = '\0';
 	return (str);

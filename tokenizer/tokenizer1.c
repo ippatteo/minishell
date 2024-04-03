@@ -3,21 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer1.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: Invalid date        by                   #+#    #+#             */
-/*   Updated: 2024/04/02 16:53:07 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/04/03 00:04:49 by luca              #+#    #+#             */
+/*   Updated: 2024/04/03 13:58:26 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../mini.h"
 
-//controlla che le pipe siano non prime e non ultime
-int check_pipe_errors(t_mini *mini)
+int	check_pipe_errors(t_mini *mini)
 {
-	int i;
-	int flag_found_cmd;
+	int	i;
+	int	flag_found_cmd;
 
 	i = 1;
 	flag_found_cmd = 0;
@@ -41,50 +39,21 @@ int check_pipe_errors(t_mini *mini)
 	return (1);
 }
 
-
-void ft_printnode(t_node *node)
+int	ft_is_builtin(char *cmd)
 {
-	t_node *tmp;
-	static int i;
-
-	tmp = node;
-	if (!node)
-		return;
-	i = 0;
-	while (tmp != NULL)
-	{
-		printf("node path = %s\n", tmp->cmd_path);
-		printf("node left_tkn = %d\n", tmp->left_tkn);
-		printf("node right_tkn = %d\n", tmp->right_tkn);
-		printf("node this_tkn = %d\n", tmp->this_tkn);
-		printf("node file= %s\n", tmp->file);
-		if (node->cmd_matrix)
-		{
-			write(1, "cmd_matrix =\n", 14);
-			ft_printmap0(node->cmd_matrix);
-		}
-		else
-			printf("cmd_matrix = NULL\n");
-		printf("\n--------------------\n");
-		tmp = tmp->next;
-	}
-}
-
-int ft_is_builtin(char *cmd)
-{
-	if (!ft_strncmp("echo", cmd, 4))
+	if (ft_strlen(cmd) == 4 && !ft_strncmp("echo", cmd, 4))
 		return (ECHO);
-	else if(!ft_strncmp("cd", cmd, 2))
+	else if (ft_strlen(cmd) == 2 && !ft_strncmp("cd", cmd, 2))
 		return (CD);
-	else if(!ft_strncmp("pwd", cmd, 3))
+	else if (ft_strlen(cmd) == 3 && !ft_strncmp("pwd", cmd, 3))
 		return (PWD);
-	else if (!ft_strncmp("export", cmd, 7))
+	else if (ft_strlen(cmd) == 6 && !ft_strncmp("export", cmd, 6))
 		return (EXPORT);
-	else if (!ft_strncmp("unset", cmd, 6))
+	else if (ft_strlen(cmd) == 5 && !ft_strncmp("unset", cmd, 5))
 		return (UNSET);
-	else if (!ft_strncmp("env", cmd, 3))
+	else if (ft_strlen(cmd) == 3 && !ft_strncmp("env", cmd, 3))
 		return (ENV);
-	else if (!ft_strncmp("exit", cmd, 4))
+	else if (ft_strlen(cmd) == 4 && !ft_strncmp("exit", cmd, 4))
 		return (EXIT);
 	else
 		return (0);
@@ -111,17 +80,17 @@ char	*ft_strdup_slash(const char *str)
 	return (str_allocated);
 }
 
-int ft_is_pipe_redir_hd(char *cmd)
+int	ft_is_pipe_redir_hd(char *cmd)
 {
 	if (*cmd == '|')
 		return (PIPE);
-	else if (*cmd == '>' && *(cmd+1) == '>')
+	else if (*cmd == '>' && *(cmd +1) == '>')
 		return (REDIR_MAGMAG);
-	else if (*cmd == '<' && *(cmd+1) == '<')
+	else if (*cmd == '<' && *(cmd +1) == '<')
 		return (HERE_DOC);
-	else if(*cmd == '>')
+	else if (*cmd == '>')
 		return (REDIR_MAG);
-	else if(*cmd == '<')
+	else if (*cmd == '<')
 		return (REDIR_MIN);
 	else
 		return (0);

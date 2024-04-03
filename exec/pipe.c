@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 05:49:50 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 23:14:31 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-/**/
 void	close_pipe(int fd[2], t_node *node)
 {
 	if (node->next && node->this_tkn == PIPE)
@@ -25,7 +24,7 @@ void	close_pipe(int fd[2], t_node *node)
 
 void	pipeline_exec(t_node *node, t_mini *mini)
 {
-	int fd[2];
+	int	fd[2];
 	int	pid;
 
 	pipe(fd);
@@ -42,23 +41,21 @@ void	pipeline_exec(t_node *node, t_mini *mini)
 			if (dup2(fd[1], STDOUT_FILENO) == -1)
 				ft_putendl_fd(strerror(errno), 2);
 		}
-		//close_pipe(fd, node)
-		close(fd[1]);
-		close(fd[0]);
+		close (fd[1]);
+		close (fd[0]);
 		close(mini->temp_in);
 		close(mini->temp_out);
 		execve(node->cmd_path, node->cmd_matrix, NULL);
-		ft_putendl_fd(strerror(errno), 2); //debug
 	}
 }
 
 int	pipex(t_node *node, t_mini *mini)
 {
-	int	pid;
-	t_node *temp;
+	int		pid;
+	t_node	*temp;
 
 	temp = node;
-	while(temp)
+	while (temp)
 	{
 		if (temp->cmd_path != NULL)
 			pipeline_exec(temp, mini);
@@ -68,4 +65,3 @@ int	pipex(t_node *node, t_mini *mini)
 	dup2(mini->temp_out, 1);
 	waitpid(-1, NULL, 0);
 }
-

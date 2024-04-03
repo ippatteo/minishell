@@ -1,28 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_mini_split.c                                    :+:      :+:    :+:   */
+/*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/02 23:19:29 by luca             ###   ########.fr       */
+/*   Created: 2024/04/02 23:29:19 by luca              #+#    #+#             */
+/*   Updated: 2024/04/03 12:47:47 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-char	**ft_mini_split(t_mini *mini, char *s)
+void	init(t_mini *mini, t_node *node)
 {
-	char	**str;
-
-	if (!s)
-		return (NULL);
-	if ((int)count_mem(mini, s) == -1)
-		return (NULL);
-	str = ft_calloc((count_mem(mini, s) + 1), sizeof (char *));
-	if (!str)
-		return (NULL);
-	split_mem(mini, s, str);
-	return (str);
+	node = NULL;
+	mini->tmp = NULL;
+	mini->commands = NULL;
+	mini->tkn = NULL;
+	mini->curr_input = 0;
+	mini->curr_output = 1;
+	mini->temp_in = dup(0);
+	mini->temp_out = dup(1);
+	mini->tknflag = 0;
+	mini->sub = NULL;
+	signal_handler();
 }

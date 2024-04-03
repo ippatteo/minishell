@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_split_utils_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/03/19 06:34:57 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/02 23:22:25 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,11 @@ char	*ft_substr0(char *s, int len)
 	return (s2);
 }
 
-void swapStrings(char **str1, char **str2)
+void	swapstrings(char **str1, char **str2)
 {
-	char *temp = *str1;
+	char	*temp;
 
+	temp = *str1;
 	*str1 = *str2;
 	*str2 = temp;
 }

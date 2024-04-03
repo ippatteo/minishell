@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/04/02 21:44:02 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/03 18:48:05 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,44 +14,59 @@
 
 void	change_cwd(t_mini *mini, char *old_pwd)
 {
-	int	i;
+	int		i;
+	char	*cur_cwd;
 
+	cur_cwd = getcwd(NULL, 0);
 	i = 0;
 	if (ft_getenv(mini->en, "PWD") != NULL)
 	{
-		while(ft_strnstr(mini->en[i], "PWD", 3) == NULL)
+		while (ft_strnstr(mini->en[i], "PWD", 3) == NULL)
 			i++;
-		mini->en[i] = ft_strjoin("PWD=", getcwd(NULL, 0));
+		free(mini->en[i]);
+		mini->en[i] = ft_strjoin("PWD=", cur_cwd);
 	}
 	i = 0;
 	if (ft_getenv(mini->en, "OLDPWD") != NULL)
 	{
-		while(ft_strnstr(mini->en[i], "OLDPWD", 6) == NULL)
+		while (ft_strnstr(mini->en[i], "OLDPWD", 6) == NULL)
 			i++;
+		free(mini->en[i]);
 		mini->en[i] = ft_strjoin("OLDPWD=", old_pwd);
 	}
+	free(old_pwd);
+	free(cur_cwd);
 }
 
 void	ft_cd(t_node *node, t_mini *mini)
 {
-	int	i;
-	char *old_pwd;
+	char	*old_pwd;
 
-	i = 0;
-	if (chdir(node->cmd_matrix[1]) == -1)
+	old_pwd = ft_strdup(ft_getenv(mini->en, "PWD"));
+	if (!node->cmd_matrix[1])
 	{
-		printf("cd: %s: No such file or directory\n", node->cmd_matrix[1]);
+		if (ft_getenv (mini->en, "HOME") == NULL)
+		{
+			g_exit = 1;
+			ft_putendl_fd("cd : HOME not set", 2);
+			return ;
+		}
+		chdir(ft_getenv(mini->en, "HOME"));
+	}
+	else if (chdir(node->cmd_matrix[1]) == -1)
+	{
+		g_exit = 1;
+		ft_putendl_fd("cd: No such file or directory", 2);
 		return ;
 	}
-	else
-		change_cwd(mini, old_pwd);
+	change_cwd(mini, old_pwd);
 	return ;
 }
 
 void	ft_echo(t_node *node, t_mini *mini)
 {
-	int space;
-	int i;
+	int	space;
+	int	i;
 
 	space = 0;
 	i = 1;
@@ -60,15 +75,16 @@ void	ft_echo(t_node *node, t_mini *mini)
 		printf("\n");
 		return ;
 	}
-	if (node->cmd_matrix[1] && ft_strncmp(node->cmd_matrix[1], "-n" , 2) == 0)
+	if (node->cmd_matrix[1] && ft_strncmp(node->cmd_matrix[1], "-n", 2) == 0)
 	{
 		space = -1;
 		i = 2;
 	}
-	while(node->cmd_matrix[i] != NULL)
+	while (node->cmd_matrix[i] != NULL)
 	{
 		printf("%s", node->cmd_matrix[i]);
-		printf(" ");
+		if (node->cmd_matrix[i + 1] != NULL)
+			printf(" ");
 		i++;
 	}
 	if (space == 0)
@@ -80,7 +96,9 @@ void	ft_pwd(t_node *node, t_mini *mini)
 	int	i;
 
 	i = 0;
-	while(ft_strnstr(mini->en[i], "PWD", 3) == NULL)
+	if (ft_getenv(mini->en, "PWD") == NULL)
+		return ;
+	while (ft_strnstr(mini->en[i], "PWD", 3) == NULL)
 		i++;
 	printf("%s\n", mini->en[i] + 4);
 }
@@ -90,7 +108,7 @@ void	ft_env(t_node *node, t_mini *mini)
 	int	i;
 
 	i = 0;
-	while(mini->en[i] != NULL)
+	while (mini->en[i] != NULL)
 	{
 		if (ft_strchr(mini->en[i], '='))
 			printf("%s\n", mini->en[i]);

@@ -3,29 +3,29 @@
 /*                                                        :::      ::::::::   */
 /*   expander2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/02 16:20:25 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/03 13:06:33 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-int check_expan(t_mini *mini, char **c)
+int	check_expan(t_mini *mini, char **c)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	tmp = NULL;
 	while (c[i])
 	{
-
-		if (ft_strlen(c[i]) != (size_t)str_exp_count(mini, c[i]) && c[i][0] != 39)
+		if (ft_strlen (c[i]) != (size_t)str_exp_count(mini, c[i])
+			&& c[i][0] != 39)
 		{
 			tmp = str_exp_realloc(mini, c[i]);
-			swapStrings(&c[i], &tmp);
+			swapstrings(&c[i], &tmp);
 			free(tmp);
 			i++;
 		}
@@ -35,11 +35,9 @@ int check_expan(t_mini *mini, char **c)
 	return (i);
 }
 
-
-
-int str_exp_count_2(t_mini *mini, char *str, char *sub)
+int	str_exp_count_2(t_mini *mini, char *str, char *sub)
 {
-	int mem;
+	int	mem;
 
 	mem = 0;
 	while (*str)
@@ -58,14 +56,13 @@ int str_exp_count_2(t_mini *mini, char *str, char *sub)
 	return (mem);
 }
 
-char *str_exp_realloc_2(t_mini *mini, char *str)
+char	*str_exp_realloc_2(t_mini *mini, char *str)
 {
-	char *sub;
-	char *orig;
-	char *tmp;
+	char	*sub;
+	char	*orig;
+	char	*tmp;
 
 	sub = ft_itoa(g_exit);
-	//printf("sub = %s count = %d ", sub, str_exp_count_2(mini, str, sub));
 	orig = ft_calloc(sizeof(char), str_exp_count_2(mini, str, sub) + 1);
 	tmp = orig;
 	while (*str)
@@ -84,10 +81,10 @@ char *str_exp_realloc_2(t_mini *mini, char *str)
 	return (tmp);
 }
 
-int check_expan_2(t_mini *mini, char **c)
+int	check_expan_2(t_mini *mini, char **c)
 {
-	int i;
-	char *tmp;
+	int		i;
+	char	*tmp;
 
 	i = 0;
 	tmp = NULL;
@@ -96,7 +93,7 @@ int check_expan_2(t_mini *mini, char **c)
 		if (ft_strnstr(c[i], "$?", ft_strlen(c[i])))
 		{
 			tmp = str_exp_realloc_2(mini, c[i]);
-			swapStrings(&c[i], &tmp);
+			swapstrings(&c[i], &tmp);
 			free(tmp);
 			i++;
 		}
@@ -104,4 +101,11 @@ int check_expan_2(t_mini *mini, char **c)
 			i++;
 	}
 	return (i);
+}
+
+int	check_env(char c, char d)
+{
+	if (c == '$' && (ft_isalnum(d) || ft_isalpha(d) || d == '_'))
+		return (0);
+	return (-1);
 }
