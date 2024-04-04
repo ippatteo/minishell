@@ -6,7 +6,7 @@
 /*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 18:35:27 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/04 18:42:56 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,8 @@ void	pipex(t_node *node, t_mini *mini)
 	mini->fdin = dup(mini->temp_in);
 	while (temp)
 	{
-		redir_inout(temp, mini);
+		if (isredir(node) == 0)
+			redir_inout(temp, mini);
 		set_inout(temp, mini);
 		fork_exec(temp, mini);
 		dup2(mini->fdout, 1);
