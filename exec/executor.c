@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/03 18:54:53 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/04 03:30:56 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ void	here_doc(t_node *node, t_mini *mini)
 	{
 		signal_heredoc();
 		str = readline("> ");
+		if (str == NULL)
+			return ;
 		if (ft_strcmp(str, node->file) == 0)
 			break ;
 		write(fd[1], str, ft_strlen(str));
@@ -33,28 +35,27 @@ void	here_doc(t_node *node, t_mini *mini)
 		write(fd[1], "\n", 1);
 		i++;
 	}
-	mini->curr_input = fd[0];
+	mini->fdin = fd[0];
 	close(fd[1]);
+	mini->redir_flag = 1;
 }
 
 void	redir_mag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	if (mini->curr_output != 1)
-		close(mini->curr_output);
 	fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	mini->curr_output = fd;
+	mini->fdout = fd;
+	mini->redir_flag = 1;
 }
 
 void	redir_magmag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	if (mini->curr_output != 1)
-		close(mini->curr_output);
 	fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	mini->curr_output = fd;
+	mini->fdout = fd;
+	mini->redir_flag = 1;
 }
 
 int	redir_min(t_node *node, t_mini *mini)
@@ -69,7 +70,8 @@ int	redir_min(t_node *node, t_mini *mini)
 		ft_putendl_fd("no such file or directory", 2);
 		return (0);
 	}
-	mini->curr_input = fd;
+	mini->fdin = fd;
+	mini->redir_flag = 1;
 	return (1);
 }
 

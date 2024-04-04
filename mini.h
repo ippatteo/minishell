@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/03 19:01:41 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/04 03:29:34 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,12 @@ typedef struct s_mini
 	char	*sub;
 	char	*tmp;
 	char	**commands;
-	int		curr_input;
-	int		curr_output;
+	int		fdin;
+	int		fdout;
 	int		temp_in;
 	int		temp_out;
-	//t_node	*node;
+	int		redir_flag;
+	int		pipefd[2];
 }	t_mini;
 
 typedef struct s_node
@@ -182,7 +183,8 @@ void	ft_exit(t_node *node, t_mini *mini);
 // EXECUTOR
 
 void	exec(t_node *node, t_mini *mini);
-int		pipex(t_node *node, t_mini *mini);
+void	pipex(t_node *node, t_mini *mini);
+int		ispipeline(t_node *node, t_mini *mini);
 void	here_doc(t_node *node, t_mini *mini);
 
 #endif

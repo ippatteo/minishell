@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/03 19:02:03 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/04 03:38:46 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	exec(t_node *node, t_mini *mini)
 	t_node	*temp;
 
 	temp = node;
+	if (ispipeline(temp, mini) == 0)
+		return(pipex(temp, mini));
 	while (temp->this_tkn > 2 && temp->this_tkn < 10)
 	{
 		if (node->file == NULL || !redirection_init(temp, mini))
@@ -41,15 +43,15 @@ void	exec(t_node *node, t_mini *mini)
 
 void	ft_close_all(t_mini *mini)
 {
-	if (mini->curr_input != STDIN_FILENO)
+	if (mini->fdin != STDIN_FILENO)
 	{
-		close(mini->curr_input);
-		mini->curr_input = STDIN_FILENO;
+		close(mini->fdin);
+		mini->fdin = STDIN_FILENO;
 	}
-	if (mini->curr_output != STDOUT_FILENO)
+	if (mini->fdout != STDOUT_FILENO)
 	{
-		close(mini->curr_output);
-		mini->curr_output = STDOUT_FILENO;
+		close(mini->fdout);
+		mini->fdout = STDOUT_FILENO;
 	}
 }
 
@@ -64,4 +66,5 @@ void	signal_heredoc(void)
 {
 	signal(SIGQUIT, handle);
 	signal(SIGINT, sig_handle);
+	signal(SIGTERM, sig_handle);
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+         #
+#    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/20 13:58:39 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/20 17:21:27 by lpicciri         ###   ########.fr        #
+#    Updated: 2024/04/03 23:47:22 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,7 @@ RM = rm -f
 FLAGS = -Wall -Wextra -Werror
 
 .c.o:
-		${CC} ${FLAGS} -g -c $< -o ${<:.c=.o}
+		${CC} ${FLAGS} -c $< -o ${<:.c=.o}
 
 $(NAME): ${OBJS}
 		ar rcs ${NAME} ${OBJS}

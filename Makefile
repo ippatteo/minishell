@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+         #
+#    By: luca <luca@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/24 15:20:25 by lpicciri          #+#    #+#              #
-#    Updated: 2024/03/29 15:44:47 by mcamilli         ###   ########.fr        #
+#    Updated: 2024/04/03 23:46:59 by luca             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ FLAGS = -Wall -Wextra -Werror -g
 
 $(NAME): $(OBJECTS)
 	make -s -C $(LIBFT_PATH)
-	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -g -lreadline -o minishell
+	$(CC) $(FLAGS) $(OBJECTS) $(LIBFT) -lreadline -o minishell
 
 all: $(NAME)
 
