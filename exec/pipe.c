@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 14:20:45 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/04 18:35:27 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,12 @@ void	fork_exec(t_node *node, t_mini *mini)
 	int	pid;
 
 	if (node->this_tkn != 20)
-		return(exec_builtin(node, mini));
+		return (exec_builtin(node, mini));
 	dup2(mini->fdout, STDOUT_FILENO);
-	dup2(mini->fdin, STDIN_FILENO);
 	pid = fork();
 	if (pid == 0)
 	{
-		if (node->left_tkn == -2)
-			close(mini->pipefd[0]);
-		if (node->left_tkn == 222)
-			close(mini->pipefd[1]);
+		close(mini->fdin);
 		execve(node->cmd_path, node->cmd_matrix, NULL);
 		perror("excve");
 	}
@@ -56,68 +52,56 @@ void	fork_exec(t_node *node, t_mini *mini)
 
 void	set_inout(t_node *node, t_mini *mini)
 {
-	int	tmp_fd;
-
-	if (node->right_tkn == PIPE && node->left_tkn == PIPE)
-	{
-		tmp_fd = mini->pipefd[0];
-		pipe(mini->pipefd);
-		dup2(mini->fdin,tmp_fd);
-		mini->fdout = mini->pipefd[1];
-		return ;
-	}
-	if(node->right_tkn != END_PIPE && mini->redir_flag == 0)
-		mini->fdout = mini->pipefd[1];
-	if (node->left_tkn != START_P && mini->redir_flag == 0)
-	{
-		mini->fdin = mini->pipefd[0];
-	}
-}
-
-void	restore_fd(t_mini *mini)
-{
-	// close(mini->pipefd[0]);
-	// close(mini->pipefd[1]);
+	dup2(mini->fdin,0);
 	close(mini->fdin);
-	close(mini->fdout);
-	mini->fdin = dup(mini->temp_in);
-	mini->fdout = dup(mini->temp_out);
+	pipe(mini->pipefd);
+	mini->fdin = mini->pipefd[0];
+	mini->fdout = mini->pipefd[1];
+	if (node->right_tkn == 222)
+		mini->fdout = dup(mini->temp_out);
 }
+
+void	redir_inout(t_node *node, t_mini *mini)
+{
+	while(isredir(node) == 0)
+	{
+		if(isredir(node) == REDIR_MAG || isredir(node) == REDIR_MAGMAG)
+		{
+			close(mini->fdin);
+			redirection_init(node, mini);
+			dup2(mini->fdin, 0);
+			close(mini->fdin);
+		}
+		if (isredir(node) == REDIR_MIN || isredir(node) == HERE_DOC)
+			close(mini->fdin);
+		node = node->next;
+	}
+	dup2(mini->fdout, 1);
+	close(mini->fdout);
+}
+
 
 void	pipex(t_node *node, t_mini *mini)
 {
 	t_node	*temp;
-	temp = node;
-	int	status;
 
+	temp = node;
 	mini->redir_flag = 0;
-	mini->temp_in = dup(STDIN_FILENO);
-	mini->temp_out = dup(STDOUT_FILENO);
-	status = 0;
-	pipe(mini->pipefd);
+	mini->temp_in = dup(0);
+	mini->temp_out = dup(1);
+	mini->fdin = dup(mini->temp_in);
 	while (temp)
 	{
-		while (isredir(temp) == 0)
-		{
-			if (redirection_init (temp, mini) == 0)
-				mini->redir_flag = -1;
-			if (mini->redir_flag != -1)
-				mini->redir_flag = 0;
-			temp = temp->next;
-		}
-		if (mini->redir_flag != -1)
-		{
-			set_inout(temp, mini);
-			fork_exec(temp, mini);
-		}
-		restore_fd(mini);
+		redir_inout(temp, mini);
+		set_inout(temp, mini);
+		fork_exec(temp, mini);
+		dup2(mini->fdout, 1);
+		close(mini->fdout);
 		temp = temp->next;
 	}
-	dup2(mini->temp_in, 0);
 	dup2(mini->temp_out, 1);
-	close(mini->fdin);
-	close(mini->fdout);
-	close(mini->pipefd[0]);
-	close(mini->pipefd[1]);
+	close(mini->temp_out);
+	dup2(mini->temp_in, 0);
+	close(mini->temp_in);
 	while(waitpid(-1, NULL, 0) > 0);
 }
