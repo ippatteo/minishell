@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 05:50:27 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/04 14:20:45 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,8 @@ int	ispipeline(t_node *node, t_mini *mini)
 
 int	isredir(t_node *node)
 {
-	if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG || node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
+	if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG
+		|| node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
 		return (0);
 	return (1);
 }
@@ -37,10 +38,10 @@ void	fork_exec(t_node *node, t_mini *mini)
 {
 	int	pid;
 
+	if (node->this_tkn != 20)
+		return(exec_builtin(node, mini));
 	dup2(mini->fdout, STDOUT_FILENO);
 	dup2(mini->fdin, STDIN_FILENO);
-	if (ft_is_builtin(node->cmd_path))
-		return(exec_builtin(node, mini));
 	pid = fork();
 	if (pid == 0)
 	{
@@ -57,20 +58,20 @@ void	set_inout(t_node *node, t_mini *mini)
 {
 	int	tmp_fd;
 
-	tmp_fd = dup(STDIN_FILENO);
 	if (node->right_tkn == PIPE && node->left_tkn == PIPE)
 	{
-		if (dup2(tmp_fd, mini->pipefd[0]) == -1)
-			perror("dup\n");
+		tmp_fd = mini->pipefd[0];
 		pipe(mini->pipefd);
-		dup2(tmp_fd, mini->fdin);
+		dup2(mini->fdin,tmp_fd);
 		mini->fdout = mini->pipefd[1];
 		return ;
 	}
-	if(node->right_tkn != END_PIPE)
+	if(node->right_tkn != END_PIPE && mini->redir_flag == 0)
 		mini->fdout = mini->pipefd[1];
-	if (node->left_tkn != START_P)
+	if (node->left_tkn != START_P && mini->redir_flag == 0)
+	{
 		mini->fdin = mini->pipefd[0];
+	}
 }
 
 void	restore_fd(t_mini *mini)
@@ -89,7 +90,6 @@ void	pipex(t_node *node, t_mini *mini)
 	temp = node;
 	int	status;
 
-	errno = 0;
 	mini->redir_flag = 0;
 	mini->temp_in = dup(STDIN_FILENO);
 	mini->temp_out = dup(STDOUT_FILENO);
@@ -100,12 +100,16 @@ void	pipex(t_node *node, t_mini *mini)
 		while (isredir(temp) == 0)
 		{
 			if (redirection_init (temp, mini) == 0)
-				break;
-			mini->redir_flag = 0;
+				mini->redir_flag = -1;
+			if (mini->redir_flag != -1)
+				mini->redir_flag = 0;
 			temp = temp->next;
 		}
-		set_inout(temp, mini);
-		fork_exec(temp, mini);
+		if (mini->redir_flag != -1)
+		{
+			set_inout(temp, mini);
+			fork_exec(temp, mini);
+		}
 		restore_fd(mini);
 		temp = temp->next;
 	}
@@ -113,5 +117,7 @@ void	pipex(t_node *node, t_mini *mini)
 	dup2(mini->temp_out, 1);
 	close(mini->fdin);
 	close(mini->fdout);
+	close(mini->pipefd[0]);
+	close(mini->pipefd[1]);
 	while(waitpid(-1, NULL, 0) > 0);
 }
