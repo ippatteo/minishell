@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 18:08:35 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/05 18:34:42 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	exec(t_node *node, t_mini *mini)
 		return (pipex(temp, mini));
 	while (temp->this_tkn > 2 && temp->this_tkn < 10)
 	{
-		if (node->file == NULL || !redirection_init(temp, mini))
+		if (temp->file == NULL || !redirection_init(temp, mini))
 		{
 			g_exit = 2;
 			ft_putendl_fd("unexpected token", 2);

@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:07:30 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/04 13:42:20 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/04 23:07:08 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +95,8 @@ void	exec_single(t_node *node, t_mini *mini)
 	int	original_stdin;
 	int	original_stdout;
 
-	original_stdin = dup(STDIN_FILENO);
-	original_stdout = dup(STDOUT_FILENO);
-	if (mini->fdin != STDIN_FILENO)
-		dup2(mini->fdin, STDIN_FILENO);
-	if (mini->fdout != STDOUT_FILENO)
-		dup2(mini->fdout, STDOUT_FILENO);
+	mini->temp_in = dup(STDIN_FILENO);
+	mini->temp_out = dup(STDOUT_FILENO);
 	if (node->this_tkn > 10 && node->this_tkn < 20)
 		exec_builtin(node, mini);
 	if (node->this_tkn == 20)

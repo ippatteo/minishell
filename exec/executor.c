@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 03:30:56 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/07 11:38:44 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,42 +37,41 @@ void	here_doc(t_node *node, t_mini *mini)
 	}
 	mini->fdin = fd[0];
 	close(fd[1]);
-	mini->redir_flag = 1;
 }
 
 void	redir_mag(t_node *node, t_mini *mini)
 {
-	int	fd;
-
-	fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	mini->fdout = fd;
-	mini->redir_flag = 1;
+	mini->fdout = open(node->file, O_CREAT | O_TRUNC | O_WRONLY , 0644);
+	if (mini->fdout < 0)
+	{
+		g_exit = 1;
+		perror("file error");
+	}
 }
 
 void	redir_magmag(t_node *node, t_mini *mini)
 {
 	int	fd;
 
-	fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	mini->fdout = fd;
-	mini->redir_flag = 1;
+	mini->fdout = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	if (mini->fdout < 0)
+	{
+		g_exit = 1;
+		perror("file error");
+	}
 }
 
 int	redir_min(t_node *node, t_mini *mini)
 {
-	char	*path;
-	int		fd;
-
-	fd = open(node->file, O_RDONLY);
-	if (fd == -1)
+	mini->fdin = open(node->file, O_RDONLY);
+	if (mini->fdin < 0)
 	{
-		g_exit = 2;
+			fprintf(stderr, "ciao\n");
+		g_exit = 1;
 		ft_putendl_fd("no such file or directory", 2);
-		return (0);
+		return (-1);
 	}
-	mini->fdin = fd;
-	mini->redir_flag = 1;
-	return (1);
+	return (0);
 }
 
 int	redirection_init(t_node *node, t_mini *mini)
@@ -83,10 +82,10 @@ int	redirection_init(t_node *node, t_mini *mini)
 		redir_magmag(node, mini);
 	if (node->this_tkn == REDIR_MIN)
 	{
-		if (!redir_min(node, mini))
-			return (0);
+		if (redir_min(node, mini) == -1)
+			return (-1);
 	}
 	if (node->this_tkn == HERE_DOC)
 		here_doc(node, mini);
-	return (1);
+	return (0);
 }
