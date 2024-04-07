@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:07:30 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/04 23:07:08 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/07 14:15:32 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,10 @@ void	exec_single(t_node *node, t_mini *mini)
 		exec_builtin(node, mini);
 	if (node->this_tkn == 20)
 		exec_command(node, mini);
-	if (dup2(original_stdin, STDIN_FILENO) == -1)
+	if (dup2(0, original_stdin) == -1)
 		perror("Errore nel ripristinare stdin");
-	if (dup2(original_stdout, STDOUT_FILENO) == -1)
+	if (dup2(1, original_stdout) == -1)
 		perror("Errore nel ripristinare stdout");
-	dup2(original_stdin, STDIN_FILENO);
-	dup2(original_stdout, STDOUT_FILENO);
 	close(original_stdin);
 	close(original_stdout);
 }

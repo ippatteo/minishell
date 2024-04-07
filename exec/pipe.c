@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/07 11:40:25 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/07 14:22:35 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,7 @@ void	pipex(t_node *node, t_mini *mini)
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->fdin = dup(mini->temp_in);
+	signal_heredoc();
 	while (node)
 	{
 		set_inout(node, mini);

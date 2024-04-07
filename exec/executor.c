@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/07 11:38:44 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/07 14:04:01 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ int	redir_min(t_node *node, t_mini *mini)
 	{
 			fprintf(stderr, "ciao\n");
 		g_exit = 1;
-		ft_putendl_fd("no such file or directory", 2);
+		ft_putendl_fd("no such file\n", 2);
 		return (-1);
 	}
 	return (0);

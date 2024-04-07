@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/04 16:52:27 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/07 14:08:28 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int	main(int argc, char **argv, char **env)
 	cmd = NULL;
 	init(&mini, node);
 	copy_env(&mini, env);
-	signal_handler();
 	while (1)
 	{
+		signal_handler();
 		cmd = readline(CRED "minishell$ " RESET);
 		if (cmd == NULL)
 		{
