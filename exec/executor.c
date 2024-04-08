@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 15:15:21 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/08 20:31:23 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	here_doc(t_node *node, t_mini *mini)
 	{
 		str = readline("> ");
 		if (str == NULL)
-			break ;
+			return ;
 		if (ft_strcmp(str, node->file) == 0)
 			break ;
 		write(fd[1], str, ft_strlen(str));
