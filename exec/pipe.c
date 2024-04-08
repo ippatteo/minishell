@@ -3,14 +3,37 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/07 14:22:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:32:55 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
+
+void	fork_exec(t_node *node, t_mini *mini)
+{
+	int	pid;
+
+	if (node->this_tkn != 20 && node->this_tkn != 111)
+		return (exec_builtin(node, mini));
+	if (access(node->cmd_path, X_OK) == -1)
+	{
+		ft_putstr(node->cmd_path);
+		g_exit = 127;
+		ft_putendl_fd(" : command not found", 2);
+		return ;
+	}
+	dup2(mini->fdout, STDOUT_FILENO);
+	pid = fork();
+	if (pid == 0)
+	{
+		close(mini->fdin);
+		execve(node->cmd_path, node->cmd_matrix, NULL);
+		perror("excve");
+	}
+}
 
 int	ispipeline(t_node *node, t_mini *mini)
 {
@@ -26,44 +49,25 @@ int	ispipeline(t_node *node, t_mini *mini)
 	return (1);
 }
 
-int	isredir(t_node *node)
-{
-	if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG
-		|| node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
-		return (0);
-	return (1);
-}
-
-void	fork_exec(t_node *node, t_mini *mini)
-{
-	int	pid;
-
-	if (node->this_tkn != 20)
-		return (exec_builtin(node, mini));
-	dup2(mini->fdout, STDOUT_FILENO);
-	pid = fork();
-	if (pid == 0)
-	{
-		close(mini->fdin);
-		execve(node->cmd_path, node->cmd_matrix, NULL);
-		perror("excve");
-	}
-}
-
 void	set_inout(t_node *node, t_mini *mini)
 {
-	dup2(mini->fdin,0);
+	int	fd[2];
+
+	dup2(mini->fdin, 0);
 	close(mini->fdin);
-	pipe(mini->pipefd);
-	mini->fdin = mini->pipefd[0];
-	mini->fdout = mini->pipefd[1];
-	if (node->right_tkn == 222)
+	if (mini->pipeline_flg == 1 && node->right_tkn != END_PIPE)
+	{
+		pipe(fd);
+		mini->fdin = fd[0];
+		mini->fdout = fd[1];
+	}
+	if (node->right_tkn == END_PIPE)
 		mini->fdout = dup(mini->temp_out);
 }
 
 int	redir_inout(t_node *node, t_mini *mini)
 {
-	if (node->this_tkn == REDIR_MIN || node->this_tkn== HERE_DOC)
+	if (node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
 	{
 		close(mini->fdin);
 		if (redirection_init(node, mini) == -1)
@@ -71,13 +75,11 @@ int	redir_inout(t_node *node, t_mini *mini)
 		dup2(mini->fdin, 0);
 		close(mini->fdin);
 	}
-	else if(node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG)
+	else if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG)
 	{
 		close(mini->fdout);
 		redirection_init(node, mini);
 	}
-	dup2(mini->fdout, 1);
-	close(mini->fdout);
 	return (0);
 }
 
@@ -85,44 +87,21 @@ void	reset(t_mini *mini)
 {
 	int	status;
 
-	status = 0;
 	dup2(mini->temp_out, 1);
 	close(mini->temp_out);
 	dup2(mini->temp_in, 0);
 	close(mini->temp_in);
-	while(waitpid(-1, &status, 0) > 0)
-	{
-		if (WIFEXITED(status))
-			g_exit = (WEXITSTATUS(status));
-	}
-}
-void ft_printnode(t_node *node)
-{
-	t_node *tmp;
-	static int i;
-
-	tmp = node;
-	if (!node)
-		return;
-	i = 0;
-	while (tmp != NULL)
-	{
-		printf("node path = %s\n", tmp->cmd_path);
-		printf("node left_tkn = %d\n", tmp->left_tkn);
-		printf("node right_tkn = %d\n", tmp->right_tkn);
-		printf("node this_tkn = %d\n", tmp->this_tkn);
-		printf("node file= %s\n", tmp->file);
-		printf("\n--------------------\n");
-		tmp = tmp->next;
-	}
+	while (waitpid(-1, &status, 0) > 0);
 }
 
-void	pipex(t_node *node, t_mini *mini)
+void	exec(t_node *node, t_mini *mini)
 {
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->fdin = dup(mini->temp_in);
-	signal_heredoc();
+	if (ispipeline(node, mini) == 0)
+		mini->pipeline_flg = 1;
+	signal(SIGQUIT, handle);
 	while (node)
 	{
 		set_inout(node, mini);
@@ -131,9 +110,9 @@ void	pipex(t_node *node, t_mini *mini)
 			redir_inout(node, mini);
 			node = node->next;
 		}
-		fork_exec(node, mini);
 		dup2(mini->fdout, 1);
 		close(mini->fdout);
+		fork_exec(node, mini);
 		node = node->next;
 	}
 	reset(mini);

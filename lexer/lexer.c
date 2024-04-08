@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/02 23:45:29 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/08 13:23:22 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,7 @@ void	free_matrix(char **mtr)
 
 int	lexer(t_mini *mini, char *prompt)
 {
+	signal_handler();
 	if (mini->commands != NULL)
 		free_matrix(mini->commands);
 	mini->commands = ft_mini_split(mini, prompt);

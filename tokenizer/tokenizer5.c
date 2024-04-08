@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 00:01:23 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 00:36:55 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/08 11:28:57 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,6 @@ int	fill_nodes(t_node **node, t_mini *mini)
 		p++;
 	}
 	exec(*node, mini);
-	ft_close_all(mini);
 	signal_handler();
 	return (1);
 }

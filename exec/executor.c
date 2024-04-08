@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/07 14:04:01 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/08 15:15:21 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,9 @@ void	here_doc(t_node *node, t_mini *mini)
 		ft_putendl_fd(strerror(errno), 2);
 	while (1)
 	{
-		signal_heredoc();
 		str = readline("> ");
 		if (str == NULL)
-			return ;
+			break ;
 		if (ft_strcmp(str, node->file) == 0)
 			break ;
 		write(fd[1], str, ft_strlen(str));
@@ -41,7 +40,7 @@ void	here_doc(t_node *node, t_mini *mini)
 
 void	redir_mag(t_node *node, t_mini *mini)
 {
-	mini->fdout = open(node->file, O_CREAT | O_TRUNC | O_WRONLY , 0644);
+	mini->fdout = open(node->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (mini->fdout < 0)
 	{
 		g_exit = 1;
@@ -66,7 +65,6 @@ int	redir_min(t_node *node, t_mini *mini)
 	mini->fdin = open(node->file, O_RDONLY);
 	if (mini->fdin < 0)
 	{
-			fprintf(stderr, "ciao\n");
 		g_exit = 1;
 		ft_putendl_fd("no such file\n", 2);
 		return (-1);

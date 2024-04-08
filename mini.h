@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/07 14:23:34 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:19:55 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_mini
 	int		fdout;
 	int		temp_in;
 	int		temp_out;
-	int		redir_flag;
+	int		pipeline_flg;
 	int		pipefd[2];
 }	t_mini;
 
@@ -186,5 +186,7 @@ void	exec(t_node *node, t_mini *mini);
 void	pipex(t_node *node, t_mini *mini);
 int		ispipeline(t_node *node, t_mini *mini);
 void	here_doc(t_node *node, t_mini *mini);
+int		isredir(t_node *node);
+void	handle(int signum);
 
 #endif

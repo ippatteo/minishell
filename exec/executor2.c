@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 16:07:30 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/07 14:15:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/08 16:13:32 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,40 +71,4 @@ void	exec_builtin(t_node *node, t_mini *mini)
 		ft_env(node, mini);
 	if (node->this_tkn == EXIT)
 		ft_exit(node, mini);
-}
-
-void	exec_command(t_node *node, t_mini *mini)
-{
-	int	pid;
-	int	status;
-
-	pid = fork();
-	signal_heredoc();
-	if (pid == 0)
-		execve(node->cmd_path, node->cmd_matrix, NULL);
-	while (waitpid (pid, &status, 0) > 0)
-		;
-	if (WIFSIGNALED(status))
-		g_exit = (int)(128 + WTERMSIG(status));
-	if (WIFEXITED(status))
-		g_exit = (int)(WEXITSTATUS(status));
-}
-
-void	exec_single(t_node *node, t_mini *mini)
-{
-	int	original_stdin;
-	int	original_stdout;
-
-	mini->temp_in = dup(STDIN_FILENO);
-	mini->temp_out = dup(STDOUT_FILENO);
-	if (node->this_tkn > 10 && node->this_tkn < 20)
-		exec_builtin(node, mini);
-	if (node->this_tkn == 20)
-		exec_command(node, mini);
-	if (dup2(0, original_stdin) == -1)
-		perror("Errore nel ripristinare stdin");
-	if (dup2(1, original_stdout) == -1)
-		perror("Errore nel ripristinare stdout");
-	close(original_stdin);
-	close(original_stdout);
 }
