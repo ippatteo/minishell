@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/08 16:19:55 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/08 17:02:38 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_mini
 	int		fdout;
 	int		temp_in;
 	int		temp_out;
-	int		pipeline_flg;
+	int		redir_flg;
 	int		pipefd[2];
 }	t_mini;
 

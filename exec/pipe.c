@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 16:32:55 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/08 17:07:35 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ void	fork_exec(t_node *node, t_mini *mini)
 		ft_putendl_fd(" : command not found", 2);
 		return ;
 	}
-	dup2(mini->fdout, STDOUT_FILENO);
 	pid = fork();
 	if (pid == 0)
 	{
@@ -55,12 +54,9 @@ void	set_inout(t_node *node, t_mini *mini)
 
 	dup2(mini->fdin, 0);
 	close(mini->fdin);
-	if (mini->pipeline_flg == 1 && node->right_tkn != END_PIPE)
-	{
-		pipe(fd);
-		mini->fdin = fd[0];
-		mini->fdout = fd[1];
-	}
+	pipe(fd);
+	mini->fdin = fd[0];
+	mini->fdout = fd[1];
 	if (node->right_tkn == END_PIPE)
 		mini->fdout = dup(mini->temp_out);
 }
@@ -99,20 +95,25 @@ void	exec(t_node *node, t_mini *mini)
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->fdin = dup(mini->temp_in);
-	if (ispipeline(node, mini) == 0)
-		mini->pipeline_flg = 1;
+	mini->redir_flg = 0;
 	signal(SIGQUIT, handle);
 	while (node)
 	{
 		set_inout(node, mini);
 		while (isredir(node) == 0)
 		{
-			redir_inout(node, mini);
+			if(redir_inout(node, mini) == -1)
+				return ;
+			mini->redir_flg = 1;
 			node = node->next;
 		}
-		dup2(mini->fdout, 1);
-		close(mini->fdout);
+		if (mini->redir_flg != 1)
+		{
+			dup2(mini->fdout, 1);
+			close(mini->fdout);
+		}
 		fork_exec(node, mini);
+		mini->redir_flg = 0;
 		node = node->next;
 	}
 	reset(mini);

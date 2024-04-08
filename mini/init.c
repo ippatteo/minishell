@@ -6,7 +6,7 @@
 /*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 23:29:19 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 16:20:05 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/08 17:02:32 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init(t_mini *mini, t_node *node)
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->tknflag = 0;
-	mini->pipeline_flg = 0;
+	mini->redir_flg = 0;
 	mini->sub = NULL;
 	signal_handler();
 }
