@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 10:31:03 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/09 11:27:02 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,22 +70,18 @@ void	set_inout(t_node *node, t_mini *mini)
 
 int	redir_inout(t_node *node, t_mini *mini)
 {
-	while (isredir(node) == 0 && node != NULL)
+	if (node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
 	{
-		if (node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
-		{
-			close(mini->fdin);
-			if (redirection_init(node, mini) == -1)
-				return (-1);
-			dup2(mini->fdin, 0);
-			close(mini->fdin);
-		}
-		else if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG)
-		{
-			close(mini->fdout);
-			redirection_init(node, mini);
-		}
-		node = node->next;
+		close(mini->fdin);
+		if (redirection_init(node, mini) == -1)
+			return (-1);
+		dup2(mini->fdin, 0);
+		close(mini->fdin);
+	}
+	else if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG)
+	{
+		close(mini->fdout);
+		redirection_init(node, mini);
 	}
 	dup2(mini->fdout, 1);
 	close(mini->fdout);
@@ -103,18 +99,47 @@ void	reset(t_mini *mini)
 	while (waitpid(-1, &status, 0) > 0);
 }
 
+
+void ft_printnode(t_node *node)
+{
+	t_node *tmp;
+	static int i;
+
+	tmp = node;
+	if (!node)
+		return;
+	i = 0;
+	while (tmp != NULL)
+	{
+		printf("node path = %s\n", tmp->cmd_path);
+		printf("node left_tkn = %d\n", tmp->left_tkn);
+		printf("node right_tkn = %d\n", tmp->right_tkn);
+		printf("node this_tkn = %d\n", tmp->this_tkn);
+		printf("node file= %s\n", tmp->file);
+		printf("\n--------------------\n");
+		tmp = tmp->next;
+	}
+}
+
 void	exec(t_node *node, t_mini *mini)
 {
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->fdin = dup(mini->temp_in);
+	ft_printnode(node);
 	if (ispipeline(node, mini) == 0)
 		mini->pipeline = 1;
 	while (node)
 	{
 		set_inout(node, mini);
-		if (redir_inout(node, mini) == -1)
-			return ;
+		while (node)
+		{
+			redir_inout(node, mini);
+			if (node->this_tkn == 20 || node->this_tkn == 111 || (node->this_tkn < 18 && node->this_tkn > 10))
+				break ;
+			node = node->next;
+		}
+		printf("%d\n", node->this_tkn);
 		fork_exec(node, mini);
 		node = node->next;
 	}

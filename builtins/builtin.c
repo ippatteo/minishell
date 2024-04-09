@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/04/04 03:07:14 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/09 11:13:31 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	ft_echo(t_node *node, t_mini *mini)
 	i = 1;
 	if (node->cmd_matrix == NULL)
 	{
-		ft_putendl_fd("\n", mini->fdout);
+		printf("\n");
 		return ;
 	}
 	if (node->cmd_matrix[1] && ft_strncmp(node->cmd_matrix[1], "-n", 2) == 0)
@@ -82,13 +82,13 @@ void	ft_echo(t_node *node, t_mini *mini)
 	}
 	while (node->cmd_matrix[i] != NULL)
 	{
-		ft_putstr_fd(node->cmd_matrix[i], mini->fdout);
+		printf("%s", node->cmd_matrix[i]);
 		if (node->cmd_matrix[i + 1] != NULL)
-			ft_putchar_fd(' ', mini->fdout);
+			printf(" ");
 		i++;
 	}
 	if (space == 0)
-		ft_putchar_fd('\n', mini->fdout);
+		printf("\n");
 }
 
 void	ft_pwd(t_node *node, t_mini *mini)
