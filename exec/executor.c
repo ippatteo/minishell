@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 12:32:04 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:26:21 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,6 @@ void	redir_mag(t_node *node, t_mini *mini)
 
 void	redir_magmag(t_node *node, t_mini *mini)
 {
-	int	fd;
-
 	mini->fdout = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (mini->fdout < 0)
 	{

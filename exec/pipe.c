@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 12:33:25 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/09 16:16:57 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,9 @@ void	fork_exec(t_node *node, t_mini *mini)
 		return ;
 	}
 	pid = fork();
+
+	if (pid == -1)
+		perror("pid\n");
 	if (pid == 0)
 	{
 		signal(SIGQUIT, handle);
@@ -55,19 +58,17 @@ int	ispipeline(t_node *node, t_mini *mini)
 void	set_inout(t_node *node, t_mini *mini)
 {
 	int	fd[2];
-
 	dup2(mini->fdin, 0);
 	close(mini->fdin);
 	if (mini->pipeline == 1)
 	{
-		pipe(fd);
+		if(pipe(fd) == -1)
+			perror("pipe\n");
 		mini->fdin = fd[0];
 		mini->fdout = fd[1];
 	}
 	if (node->right_tkn == 222 || mini->pipeline == 0)
-	{
 		mini->fdout = dup(mini->temp_out);
-	}
 }
 
 int	redir_inout(t_node *node, t_mini *mini)
@@ -77,7 +78,7 @@ int	redir_inout(t_node *node, t_mini *mini)
 		close(mini->fdin);
 		if (redirection_init(node, mini) == -1)
 			return (-1);
-		dup2(mini->fdin, 0);
+		dup2(mini->fdin, STDIN_FILENO);
 		close(mini->fdin);
 	}
 	else if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG)
@@ -85,7 +86,7 @@ int	redir_inout(t_node *node, t_mini *mini)
 		close(mini->fdout);
 		redirection_init(node, mini);
 	}
-	dup2(mini->fdout, 1);
+	dup2(mini->fdout, STDOUT_FILENO);
 	close(mini->fdout);
 	return (0);
 }
@@ -107,6 +108,8 @@ void	exec(t_node *node, t_mini *mini)
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->fdin = dup(mini->temp_in);
+	mini->fdout = dup(mini->temp_out);
+	mini->pipeline = 0;
 	// ft_printnode(node);
 	if (ispipeline(node, mini) == 0)
 		mini->pipeline = 1;
