@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/09 10:54:43 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/09 17:46:27 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,7 @@ void	ft_exit(t_node *node, t_mini *mini);
 
 void	exec(t_node *node, t_mini *mini);
 void	pipex(t_node *node, t_mini *mini);
-int		ispipeline(t_node *node, t_mini *mini);
+int		ispipeline(t_node *node);
 void	here_doc(t_node *node, t_mini *mini);
 int		isredir(t_node *node);
 void	handle(int signum);
