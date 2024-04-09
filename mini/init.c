@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 23:29:19 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 10:56:42 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:27:53 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	init(t_mini *mini, t_node *node)
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->tknflag = 0;
-	mini->redir_flg = 0;
+	mini->pipeline = 0;
 	mini->sub = NULL;
 	signal_handler();
 }

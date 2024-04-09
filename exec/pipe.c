@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 11:27:02 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/09 12:33:25 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	ispipeline(t_node *node, t_mini *mini)
 	temp = node;
 	while (temp)
 	{
-		if (temp->left_tkn == -2)
+		if (temp->left_tkn == 2)
 			return (0);
 		temp = temp->next;
 	}
@@ -64,8 +64,10 @@ void	set_inout(t_node *node, t_mini *mini)
 		mini->fdin = fd[0];
 		mini->fdout = fd[1];
 	}
-	if (node->right_tkn == 222)
+	if (node->right_tkn == 222 || mini->pipeline == 0)
+	{
 		mini->fdout = dup(mini->temp_out);
+	}
 }
 
 int	redir_inout(t_node *node, t_mini *mini)
@@ -100,33 +102,12 @@ void	reset(t_mini *mini)
 }
 
 
-void ft_printnode(t_node *node)
-{
-	t_node *tmp;
-	static int i;
-
-	tmp = node;
-	if (!node)
-		return;
-	i = 0;
-	while (tmp != NULL)
-	{
-		printf("node path = %s\n", tmp->cmd_path);
-		printf("node left_tkn = %d\n", tmp->left_tkn);
-		printf("node right_tkn = %d\n", tmp->right_tkn);
-		printf("node this_tkn = %d\n", tmp->this_tkn);
-		printf("node file= %s\n", tmp->file);
-		printf("\n--------------------\n");
-		tmp = tmp->next;
-	}
-}
-
 void	exec(t_node *node, t_mini *mini)
 {
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->fdin = dup(mini->temp_in);
-	ft_printnode(node);
+	// ft_printnode(node);
 	if (ispipeline(node, mini) == 0)
 		mini->pipeline = 1;
 	while (node)
@@ -139,7 +120,6 @@ void	exec(t_node *node, t_mini *mini)
 				break ;
 			node = node->next;
 		}
-		printf("%d\n", node->this_tkn);
 		fork_exec(node, mini);
 		node = node->next;
 	}
