@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ceck_quot.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/03 17:48:34 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/05 01:47:07 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,44 @@ char	*ft_getenv(char **en, char *s)
 	}
 	return (NULL);
 }
+
+int	c_error_quote(char *str, char c)
+{
+	int	mem;
+
+	str++;
+	mem = 1;
+	while (*str && *str != c)
+	{
+		str++;
+		mem++;
+	}
+	if (*str == '\0')
+	{
+		ft_putendl_fd("quote aperte col cazzo che lo gestisco\n", 2);
+		g_exit = 127;
+		return (0);
+	}
+	else
+		return(++mem);
+}
+
+//questa va nel .h
+int	no_open_quote(char *str)
+{
+	while (*str)
+	{
+		if(*str == D_QUOT || *str == QUOT)
+		{
+			if(!c_error_quote(str, *str))
+				return(0);
+			else
+				str += c_error_quote(str, *str);
+		}
+		else
+			str++;
+	}
+	return (1);
+}
+
+

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_split_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/02 23:23:30 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/05 01:12:33 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,6 @@ int	count_quot_pipe_redir(char *str, char c)
 		++str;
 		return (1);
 	}
-	else if ((*str == 34) || (*str == 39))
-		return (count_mem_quote(str, c));
 	else
 		return (0);
 }
@@ -60,12 +58,20 @@ int	count_words(char *str)
 	while (*str)
 	{
 		if ((*str == '>') || (*str == '<')
-			|| (*str == '|') || (*str == 34) || (*str == 39) || (*str == ' '))
+			|| (*str == '|') || (*str == ' '))
 			break ;
 		else
 		{
-			str++;
-			mem++;
+			if ((*str == 34) || (*str == 39))
+			{
+				mem += count_mem_quote(str, *str);
+				str += count_mem_quote(str, *str);
+			}
+			else
+			{
+				str++;
+				mem++;
+			}
 		}
 	}
 	return (mem);
@@ -79,7 +85,7 @@ size_t	count_mem(t_mini *mini, char *s)
 	while (*s)
 	{
 		if ((*s == '>') || (*s == '<')
-			|| (*s == '|') || (*s == 34) || (*s == 39))
+			|| (*s == '|'))
 		{
 			mem += count_quot_pipe_redir(s, *s) + 1;
 			if (!count_quot_pipe_redir(s, *s))
@@ -108,7 +114,7 @@ size_t	split_mem(t_mini *mini, char *s, char **str)
 	while (*s)
 	{
 		if ((*s == '>') || (*s == '<')
-			|| (*s == '|') || (*s == 34) || (*s == 39))
+			|| (*s == '|'))
 		{
 			str[i] = ft_substr(s, 0, count_quot_pipe_redir(s, *s));
 			s += count_quot_pipe_redir(s, *s);

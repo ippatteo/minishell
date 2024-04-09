@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/08 19:25:44 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:54:43 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ typedef struct s_mini
 	int		temp_in;
 	int		temp_out;
 	int		redir_flg;
+	int		open_quot; //aggiunger
+	int		open_d_quot; //aggiungere
 	int		pipeline;
 	int		pipefd[2];
 }	t_mini;
@@ -86,9 +88,16 @@ typedef struct s_node
 	int				n_pipe;
 }	t_node;
 
+int		is_executable(const char *path); //da aggiungere al
+char	*str_quot_realloc_2(t_mini *mini, char *str);
+int		str_quot_count_2(t_mini *mini, char *str);
+int		delete_quotes(t_mini *mini, char **c);
+int		check_for_quotes(char *str);
+int		check_quot_2(t_mini *mini, char **c);
+void	semaphore_quotes(char d, t_mini *mini);
+int		no_open_quote(char *str);//aggiungere
 int		ft_exp_qutes(char *c);
 void	init(t_mini *mini, t_node *node);
-int		fill_nodes(t_node **node, t_mini *mini);
 void	fill_redir(t_node **node, t_mini *mini, int p);
 void	fill_redir0(t_node *new, t_mini *mini, int i, int p);
 void	fill_cmd(t_node **node, t_mini *mini, int p);
@@ -101,7 +110,6 @@ int		find_pos_cmd(t_mini *mini, int p);
 int		count_commands_pipes(t_mini *mini);
 char	*find_cmd_or_b_in(t_mini *mini, int pos);
 int		go_int(t_mini *mini, int p);
-int		ft_tokenizer(t_mini *mini);
 char	*ft_command_path(t_mini *mini, char *cmd);
 int		assign_number_of_tkn(t_mini *mini, char *cmd);
 int		ft_is_command(t_mini *mini, char *cmd);
@@ -138,12 +146,12 @@ void	ft_lstadd_back(t_node **lst, t_node *new);
 void	ft_lstadd_front(t_node **lst, t_node *new);
 t_node	*ft_lstlast(t_node *lst);
 void	ft_lstadd_back(t_node **lst, t_node *new);
-int		fill_nodes(t_node **node, t_mini *mini);
+int		fill_nodes(t_node **node, t_mini *mini, char *prompt);
 void	ft_printnode(t_node *node);
 int		check_expan_2(t_mini *mini, char **c);
 char	*ft_is_file(char *cmd);
 int		ft_is_command(t_mini *mini, char *cmd);
-int		ft_tokenizer(t_mini *mini);
+int		ft_tokenizer(t_mini *mini, char *prompt);
 void	free_matrix(char **mtr);
 int		check_env(char c, char d);
 char	*ft_getenv(char **en, char *s);

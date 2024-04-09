@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 00:03:41 by luca              #+#    #+#             */
-/*   Updated: 2024/04/03 12:38:32 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/08 00:56:08 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	ft_is_command(t_mini *mini, char *cmd)
 	int		i;
 
 	i = 0;
-	if (access(cmd, X_OK) == 0)
+	if (!access(cmd, X_OK) && is_executable(cmd))
 		return (20);
 	if (ft_getenv(mini->en, "PATH") == NULL)
 		return (0);
@@ -31,7 +31,7 @@ int	ft_is_command(t_mini *mini, char *cmd)
 		free(folders[i]);
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access (folders[i++], X_OK) == 0)
+		if (!access (folders[i++], X_OK) && is_executable(folders[i - 1]))
 		{
 			free_matrix(folders);
 			return (20);
@@ -57,7 +57,7 @@ char	*ft_command_path(t_mini *mini, char *cmd)
 	int		i;
 
 	i = 0;
-	if (access (cmd, X_OK) == 0)
+	if (!access (cmd, X_OK) && is_executable(cmd))
 		return (ft_strdup(cmd));
 	folders = ft_split(ft_getenv(mini->en, "PATH"), ':');
 	while (folders[i])
@@ -66,7 +66,7 @@ char	*ft_command_path(t_mini *mini, char *cmd)
 		free(folders[i]);
 		folders[i] = ft_strjoin(tmp, cmd);
 		free(tmp);
-		if (access(folders[i], X_OK) == 0)
+		if (!access(folders[i], X_OK) && is_executable(folders[i]))
 		{
 			tmp = ft_strdup(folders[i]);
 			free_matrix(folders);
@@ -78,11 +78,13 @@ char	*ft_command_path(t_mini *mini, char *cmd)
 	return (NULL);
 }
 
-int	ft_tokenizer(t_mini *mini)
+int	ft_tokenizer(t_mini *mini, char *prompt)
 {
 	int	i;
 
 	i = 0;
+	if(!lexer(mini, prompt))
+		return(0);
 	if (mini->tknflag == 1)
 		free(mini->tkn);
 	mini->tkn = ft_calloc(count_matrix(mini->commands) + 1, sizeof(char));
@@ -93,13 +95,6 @@ int	ft_tokenizer(t_mini *mini)
 	}
 	mini->tkn[i] = '\0';
 	mini->tknflag = 1;
-	if (!err_quote(mini))
-	{
-		g_exit = 127;
-		ft_putendl_fd("d_quote col cazzo che lo implemento", 2);
-		return (0);
-	}
-	realloc_quotes(mini);
 	if (!check_pipe_errors(mini))
 		return (0);
 	i = 0;

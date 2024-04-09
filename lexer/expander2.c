@@ -3,49 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   expander2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/03 13:06:33 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/07 21:59:49 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-
-int	check_expan(t_mini *mini, char **c)
+int check_for_quotes(char *str)
 {
-	int		i;
-	char	*tmp;
-
-	i = 0;
-	tmp = NULL;
-	while (c[i])
-	{
-		if (ft_strlen (c[i]) != (size_t)str_exp_count(mini, c[i])
-			&& c[i][0] != 39)
-		{
-			tmp = str_exp_realloc(mini, c[i]);
-			swapstrings(&c[i], &tmp);
-			free(tmp);
-			i++;
-		}
-		else
-			i++;
-	}
-	return (i);
-}
-
-int	str_exp_count_2(t_mini *mini, char *str, char *sub)
-{
-	int	mem;
-
-	mem = 0;
 	while (*str)
 	{
-		if (*str == '$' && *(str + 1) == '?')
+		if (*str == QUOT || *str == D_QUOT)
+			return (1);
+		str++;
+	}
+	return (0);
+}
+
+
+int	str_quot_count_2(t_mini *mini, char *str)
+{
+	int	mem;
+	char c;
+	
+	mem = 0;
+	c = 0;
+	while (*str)
+	{
+		if (*str == 39 || *str == 34)
 		{
-			str += 2;
-			mem += ft_strlen(sub);
+			c = *str;
+			str++;
+			while (*str != c)
+			{
+				str++;
+				mem++;
+			}
+			str++;
 		}
 		else
 		{
@@ -56,32 +52,33 @@ int	str_exp_count_2(t_mini *mini, char *str, char *sub)
 	return (mem);
 }
 
-char	*str_exp_realloc_2(t_mini *mini, char *str)
+char	*str_quot_realloc_2(t_mini *mini, char *str)
 {
-	char	*sub;
 	char	*orig;
 	char	*tmp;
+	char	c;
 
-	sub = ft_itoa(g_exit);
-	orig = ft_calloc(sizeof(char), str_exp_count_2(mini, str, sub) + 1);
+	c = 0;
+	orig = ft_calloc(sizeof(char), str_quot_count_2(mini, str) + 1);
 	tmp = orig;
 	while (*str)
 	{
-		if (*str == '$' && *(str + 1) == '?')
+		if (*str == 39 || *str == 34)
 		{
-			ft_strlcpy(orig, sub, 8);
-			orig += ft_strlen(sub);
-			str += 2;
+			c = *str;
+			str++;
+			while(*str != c)
+				*(orig++) = *(str++);
+			str++;
 		}
 		else
 			*(orig++) = *(str++);
 	}
-	free(sub);
 	*orig = '\0';
 	return (tmp);
 }
 
-int	check_expan_2(t_mini *mini, char **c)
+int	check_quot_2(t_mini *mini, char **c)
 {
 	int		i;
 	char	*tmp;
@@ -90,9 +87,9 @@ int	check_expan_2(t_mini *mini, char **c)
 	tmp = NULL;
 	while (c[i])
 	{
-		if (ft_strnstr(c[i], "$?", ft_strlen(c[i])))
+		if (check_for_quotes(c[i]))
 		{
-			tmp = str_exp_realloc_2(mini, c[i]);
+			tmp = str_quot_realloc_2(mini, c[i]);
 			swapstrings(&c[i], &tmp);
 			free(tmp);
 			i++;
@@ -103,9 +100,3 @@ int	check_expan_2(t_mini *mini, char **c)
 	return (i);
 }
 
-int	check_env(char c, char d)
-{
-	if (c == '$' && (ft_isalnum(d) || ft_isalpha(d) || d == '_'))
-		return (0);
-	return (-1);
-}

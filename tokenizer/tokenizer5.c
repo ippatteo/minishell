@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer5.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 00:01:23 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 17:57:24 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:58:58 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,15 @@ void	ft_free_tnodes(t_node *node)
 	}
 }
 
-int	fill_nodes(t_node **node, t_mini *mini)
+int	fill_nodes(t_node **node, t_mini *mini, char *prompt)
 {
 	int	i;
 	int	p;
 
 	p = 0;
-	if (mini->commands[0] == NULL)
+	if (!ft_tokenizer(mini, prompt))
 		return (0);
-	if (!ft_tokenizer(mini))
+	if (mini->commands[0] == NULL)
 		return (0);
 	if (*node != NULL)
 	{
@@ -92,4 +92,19 @@ int	fill_nodes(t_node **node, t_mini *mini)
 	exec(*node, mini);
 	signal_handler();
 	return (1);
+}
+int is_executable(const char *path) //da aggiungere al
+{
+	struct stat statbuf;
+
+	if (stat(path, &statbuf) == 0)
+	{
+		if (S_ISREG(statbuf.st_mode))
+		{
+			if (statbuf.st_mode & S_IXUSR || statbuf.st_mode & S_IXGRP
+				|| statbuf.st_mode & S_IXOTH)
+				return (1);
+		}
+	}
+	return (0) ;
 }

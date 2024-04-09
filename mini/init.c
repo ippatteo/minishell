@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 23:29:19 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 20:31:46 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:56:42 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	init(t_mini *mini, t_node *node)
 	mini->tkn = NULL;
 	mini->fdin = 0;
 	mini->fdout = 1;
+	mini->open_quot = 0;
+	mini->open_d_quot = 0;
 	mini->temp_in = dup(0);
 	mini->temp_out = dup(1);
 	mini->tknflag = 0;

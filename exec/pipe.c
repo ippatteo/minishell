@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 20:50:10 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/09 10:31:03 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ void	fork_exec(t_node *node, t_mini *mini)
 	int	pid;
 
 	if (node->this_tkn != 20 && node->this_tkn != 111)
-		return (exec_builtin(node, mini));
+	{
+		exec_builtin(node, mini);
+		return ;
+	}
 	if (access(node->cmd_path, X_OK) == -1)
 	{
 		g_exit = 127;
@@ -55,7 +58,7 @@ void	set_inout(t_node *node, t_mini *mini)
 
 	dup2(mini->fdin, 0);
 	close(mini->fdin);
-	if(mini->pipeline == 1)
+	if (mini->pipeline == 1)
 	{
 		pipe(fd);
 		mini->fdin = fd[0];
@@ -67,7 +70,7 @@ void	set_inout(t_node *node, t_mini *mini)
 
 int	redir_inout(t_node *node, t_mini *mini)
 {
-	while(isredir(node) == 0 && node != NULL)
+	while (isredir(node) == 0 && node != NULL)
 	{
 		if (node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
 		{

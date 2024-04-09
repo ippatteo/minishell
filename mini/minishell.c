@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/08 12:26:28 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/09 10:55:19 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,7 @@ int	main(int argc, char **argv, char **env)
 		}
 		if (*cmd != 0)
 		{
-			lexer(&mini, cmd);
-			fill_nodes(&node, &mini);
+			fill_nodes(&node, &mini, cmd);
 			add_history(cmd);
 			free(cmd);
 		}
