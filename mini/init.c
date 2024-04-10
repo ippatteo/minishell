@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/02 23:29:19 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 15:02:02 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/10 10:02:25 by luca             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ void	init(t_mini *mini, t_node *node)
 	mini->open_d_quot = 0;
 	mini->temp_in = 0;
 	mini->temp_out = 0;
-	mini->tknflag = 0;
-	mini->pipeline = 0;
+	mini->redir_flg_input = 0;
+	mini->redir_flg_output = 0;
 	mini->sub = NULL;
 	signal_handler();
 }
