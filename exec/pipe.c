@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 12:33:25 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/09 14:33:49 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ void	fork_exec(t_node *node, t_mini *mini)
 	pid = fork();
 	if (pid == 0)
 	{
+		 if (mini->fdin != 0) {
+            dup2(mini->fdin, 0);
+            close(mini->fdin);
+        }
+        if (mini->fdout != 1) {
+            dup2(mini->fdout, 1);
+            close(mini->fdout);
+        }
 		signal(SIGQUIT, handle);
 		close(mini->fdin);
 		execve(node->cmd_path, node->cmd_matrix, NULL);
