@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 12:05:46 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:51:59 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,3 @@ int	isredir(t_node *node)
 		return (0);
 	return (1);
 }
-

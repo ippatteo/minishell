@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 12:04:05 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:51:43 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	here_doc(t_node *node, t_mini *mini)
 	int		i;
 
 	i = 0;
-
 	if (pipe(fd) == -1)
 		ft_putendl_fd(strerror(errno), 2);
 	while (1)
@@ -62,7 +61,7 @@ void	redir_magmag(t_node *node, t_mini *mini)
 
 int	redir_min(t_node *node, t_mini *mini)
 {
-	int fd;
+	int	fd;
 
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
@@ -78,7 +77,6 @@ int	redir_min(t_node *node, t_mini *mini)
 
 int	redirection_init(t_node *node, t_mini *mini)
 {
-
 	if (node->this_tkn == REDIR_MAG)
 		redir_mag(node, mini);
 	if (node->this_tkn == REDIR_MAGMAG)

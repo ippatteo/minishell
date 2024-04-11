@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 00:01:23 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 05:16:48 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:58:24 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,10 @@ int	fill_nodes(t_node **node, t_mini *mini, char *prompt)
 	signal_handler();
 	return (1);
 }
-int is_executable(const char *path) //da aggiungere al
+
+int	is_executable(const char *path)
 {
-	struct stat statbuf;
+	struct stat	statbuf;
 
 	if (stat(path, &statbuf) == 0)
 	{
@@ -108,5 +109,5 @@ int is_executable(const char *path) //da aggiungere al
 				return (1);
 		}
 	}
-	return (0) ;
+	return (0);
 }

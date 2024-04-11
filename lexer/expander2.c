@@ -6,12 +6,13 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/07 21:59:49 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:55:39 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-int check_for_quotes(char *str)
+
+int	check_for_quotes(char *str)
 {
 	while (*str)
 	{
@@ -22,12 +23,11 @@ int check_for_quotes(char *str)
 	return (0);
 }
 
-
 int	str_quot_count_2(t_mini *mini, char *str)
 {
-	int	mem;
-	char c;
-	
+	int		mem;
+	char	c;
+
 	mem = 0;
 	c = 0;
 	while (*str)
@@ -67,7 +67,7 @@ char	*str_quot_realloc_2(t_mini *mini, char *str)
 		{
 			c = *str;
 			str++;
-			while(*str != c)
+			while (*str != c)
 				*(orig++) = *(str++);
 			str++;
 		}
@@ -99,4 +99,3 @@ int	check_quot_2(t_mini *mini, char **c)
 	}
 	return (i);
 }
-

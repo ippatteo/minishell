@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/11 11:53:51 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:11:11 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ typedef struct s_node
 	int				n_pipe;
 }	t_node;
 
+int		ft_it_is_exp_valid_2(int q, int count_exp);
+int		check_env(char c, char d);
 int		valid_redir(t_mini *mini);
 int		redir_inout(t_node *node, t_mini *mini);
 int		is_executable(const char *path); //da aggiungere al
@@ -194,6 +196,8 @@ void	ft_exit(t_node *node, t_mini *mini);
 
 // EXECUTOR
 
+void	set_inout(t_node *node, t_mini *mini);
+int		ispipeline(t_node *node, t_mini *mini);
 int		valid_pipeline(t_node *node);
 void	exec(t_node *node, t_mini *mini);
 void	pipex(t_node *node, t_mini *mini);

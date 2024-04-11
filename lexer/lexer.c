@@ -6,13 +6,11 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/07 22:47:08 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:57:00 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-
-//conta il numero di char dentro una matrice + i null
 
 void	ft_printmap0(char **c)
 {
@@ -84,7 +82,7 @@ void	free_matrix(char **mtr)
 int	lexer(t_mini *mini, char *prompt)
 {
 	if (!no_open_quote(prompt))
-		return(0);
+		return (0);
 	if (mini->commands != NULL)
 		free_matrix(mini->commands);
 	mini->commands = ft_mini_split(mini, prompt);

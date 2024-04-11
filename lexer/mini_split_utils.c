@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/05 01:12:33 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:50:46 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ size_t	count_mem(t_mini *mini, char *s)
 	return (mem);
 }
 
-//una volta allocata la memoria giusta riempe la matrice
 size_t	split_mem(t_mini *mini, char *s, char **str)
 {
 	int	i;

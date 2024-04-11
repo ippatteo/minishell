@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 12:06:42 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:09:06 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,36 +39,6 @@ void	fork_exec(t_node *node, t_mini *mini)
 	}
 }
 
-int	ispipeline(t_node *node, t_mini *mini)
-{
-	t_node	*temp;
-
-	temp = node;
-	while (temp)
-	{
-		if (temp->left_tkn == 2)
-			return (0);
-		temp = temp->next;
-	}
-	return (1);
-}
-
-void	set_inout(t_node *node, t_mini *mini)
-{
-	int	fd[2];
-	dup2(mini->fdin, STDIN_FILENO);
-	close(mini->fdin);
-	if (mini->pipeline == 1)
-	{
-		if(pipe(fd) == -1)
-			perror("pipe\n");
-		mini->fdin = fd[0];
-		mini->fdout = fd[1];
-	}
-	if (node->right_tkn == 222 || mini->pipeline == 0)
-		mini->fdout = dup(mini->temp_out);
-}
-
 int	redir_inout(t_node *node, t_mini *mini)
 {
 	if (node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
@@ -94,7 +64,9 @@ void	reset(t_mini *mini)
 	close(mini->temp_out);
 	dup2(mini->temp_in, 0);
 	close(mini->temp_in);
-	while (waitpid(-1, &status, 0) > 0);
+	while (waitpid(-1, &status, 0) > 0)
+	{
+	}
 }
 
 void	signal_heredoc(void)
@@ -119,7 +91,8 @@ void	exec(t_node *node, t_mini *mini)
 		while (node)
 		{
 			redir_inout(node, mini);
-			if (node->this_tkn == 20 || node->this_tkn == 111 || (node->this_tkn < 18 && node->this_tkn > 10))
+			if (node->this_tkn == 111
+				|| (node->this_tkn < 21 && node->this_tkn > 10))
 				break ;
 			node = node->next;
 		}
