@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/04/03 18:20:22 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 04:41:12 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +47,12 @@ void	ft_unset(t_mini *mini, char **mtr)
 		}
 		i++;
 	}
+	g_exit = 0;
 }
 
 void	ft_exit(t_node *node, t_mini *mini)
 {
+	g_exit = 0;
 	ft_exit_all(node, mini);
 	exit(0);
 }

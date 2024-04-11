@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   builtin3.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/04/03 18:23:48 by lpicciri         ###   ########.fr       */
+/*   Created: 2024/04/11 04:49:36 by mcamilli          #+#    #+#             */
+/*   Updated: 2024/04/11 04:58:23 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../mini.h"
 
@@ -69,19 +70,6 @@ void	create_variable(char *str, t_mini *mini)
 	free(temp);
 }
 
-int	ft_exp_qutes(char *c)
-{
-	int	i;
-
-	i = 0;
-	write(1, "declare -x ", 12);
-	while (c[i] && c[i] != '=')
-		write(1, &c[i++], 1);
-	if (c[i] == '=')
-		write(1, &c[i], 1);
-	return (i);
-}
-
 void	ft_export(t_node *node, t_mini *mini)
 {
 	int	i;
@@ -91,22 +79,19 @@ void	ft_export(t_node *node, t_mini *mini)
 	if (node->cmd_matrix[1] == NULL)
 	{
 		i = 0;
-		while (mini->en[i] != NULL)
-		{
-			p = ft_exp_qutes(mini->en[i]);
-			if (mini->en[i][p])
-				printf("\"%s\"\n", mini->en[i] + (p + 1));
-			else
-				printf("\n");
-			i++;
-		}
+		ft_print_export(mini);
+		g_exit = 0;
 		return ;
 	}
 	i = 1;
 	while (node->cmd_matrix[i])
 	{
 		if (check_space(node->cmd_matrix[i], node, mini) == 1)
+		{
+			g_exit = 0;
 			return ;
+		}
 		create_variable(node->cmd_matrix[i++], mini);
 	}
+	g_exit = 0;
 }

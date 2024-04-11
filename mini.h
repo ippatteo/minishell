@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/10 18:25:11 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 04:54:32 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,7 @@ void	signal_handler(void);
 
 // BUILTINS
 
+void	ft_print_export(t_mini *mini);
 void	ft_cd(t_node *node, t_mini *mini);
 void	ft_echo(t_node *node, t_mini *mini);
 void	ft_pwd(t_node *node, t_mini *mini);

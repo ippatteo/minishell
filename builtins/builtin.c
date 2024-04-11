@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/04/09 11:13:31 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 04:57:31 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ void	ft_cd(t_node *node, t_mini *mini)
 	{
 		if (ft_getenv (mini->en, "HOME") == NULL)
 		{
+			free(old_pwd);
 			g_exit = 1;
 			ft_putendl_fd("cd : HOME not set", 2);
 			return ;
@@ -55,15 +56,17 @@ void	ft_cd(t_node *node, t_mini *mini)
 	}
 	else if (chdir(node->cmd_matrix[1]) == -1)
 	{
+		free(old_pwd);
 		g_exit = 1;
 		ft_putendl_fd("cd: No such file or directory", 2);
 		return ;
 	}
 	change_cwd(mini, old_pwd);
+	g_exit = 0;
 	return ;
 }
 
-void	ft_echo(t_node *node, t_mini *mini)
+void	ft_echo(t_node *node, t_mini *mini) //gexit nel parse
 {
 	int	space;
 	int	i;
@@ -91,7 +94,7 @@ void	ft_echo(t_node *node, t_mini *mini)
 		printf("\n");
 }
 
-void	ft_pwd(t_node *node, t_mini *mini)
+void	ft_pwd(t_node *node, t_mini *mini) //g_exit nel parser
 {
 	int	i;
 
@@ -114,4 +117,5 @@ void	ft_env(t_node *node, t_mini *mini)
 			printf("%s\n", mini->en[i]);
 		i++;
 	}
+	g_exit = 0;
 }

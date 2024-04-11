@@ -1,34 +1,44 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   valid_redir.c                                      :+:      :+:    :+:   */
+/*   builtin_print_exp.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 12:38:22 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/11 04:59:56 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/04/11 04:49:50 by mcamilli          #+#    #+#             */
+/*   Updated: 2024/04/11 04:55:20 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-
-valid_redir(t_mini *mini)
+int	ft_exp_qutes(char *c)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(mini->tkn)
+	write(1, "declare -x ", 12);
+	while (c[i] && c[i] != '=')
+		write(1, &c[i++], 1);
+	if (c[i] == '=')
+		write(1, &c[i], 1);
+	return (i);
+}
+
+void ft_print_export(t_mini *mini)
+{
+	int p;
+	int i;
+
+	p = 0;
+	i = 0;
+	while (mini->en[i] != NULL)
 	{
-		if (mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
-		{
-			if (!mini->tkn[i + 1] || mini->tkn[i + 1] == PIPE)
-			{
-				g_exit = 2;
-				ft_putendl_fd("unexpected token", 2);
-				return(0);
-			}
-		}
-		return (1);
+		p = ft_exp_qutes(mini->en[i]);
+		if (mini->en[i][p])
+			printf("\"%s\"\n", mini->en[i] + (p + 1));
+		else
+			printf("\n");
+		i++;
 	}
 }

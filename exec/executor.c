@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/10 16:38:45 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 04:39:44 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@ void	here_doc(t_node *node, t_mini *mini)
 	char	**cmd;
 	int		fd[2];
 	int		i;
-	//
-	//int		fdd;
 
 	i = 0;
 	if (pipe(fd) == -1)
@@ -37,7 +35,6 @@ void	here_doc(t_node *node, t_mini *mini)
 		i++;
 	}
 	dup2(fd[0], STDIN_FILENO);
-	//mini->fdin = fd[0];
 	close(fd[0]);
 	close(fd[1]);
 }

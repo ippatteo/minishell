@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/10 15:10:38 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 05:01:29 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	fork_exec(t_node *node, t_mini *mini)
 	if (access(node->cmd_path, X_OK) == -1)
 	{
 		g_exit = 127;
-		ft_putstr(node->cmd_path);
+		ft_putstr_fd(node->cmd_path, 2);
 		ft_putendl_fd(" : command not found", 2);
 		return ;
 	}
