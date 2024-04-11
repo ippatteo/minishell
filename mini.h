@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/11 04:54:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 06:02:35 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ typedef struct s_node
 	int				n_pipe;
 }	t_node;
 
+int		valid_redir(t_mini *mini);
 int		redir_inout(t_node *node, t_mini *mini);
 int		is_executable(const char *path); //da aggiungere al
 char	*str_quot_realloc_2(t_mini *mini, char *str);
@@ -193,6 +194,7 @@ void	ft_exit(t_node *node, t_mini *mini);
 
 // EXECUTOR
 
+int		valid_pipeline(t_node *node);
 void	exec(t_node *node, t_mini *mini);
 void	pipex(t_node *node, t_mini *mini);
 int		ispipeline(t_node *node, t_mini *mini);

@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 05:01:29 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 06:12:32 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,13 @@ void	reset(t_mini *mini)
 
 void	exec(t_node *node, t_mini *mini)
 {
+	int p;
+	
 	mini->temp_in = dup(STDIN_FILENO);
 	mini->temp_out = dup(STDOUT_FILENO);
 	mini->fdin = dup(mini->temp_in);
 	mini->fdout = dup(mini->temp_out);
 	mini->pipeline = 0;
-	// ft_printnode(node);
 	if (ispipeline(node, mini) == 0)
 		mini->pipeline = 1;
 	while (node)

@@ -1,34 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   valid_redir.c                                      :+:      :+:    :+:   */
+/*   invalid_pipeline.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/26 12:38:22 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/11 05:09:22 by mcamilli         ###   ########.fr       */
+/*   Created: 2024/04/11 05:42:39 by mcamilli          #+#    #+#             */
+/*   Updated: 2024/04/11 06:05:14 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
 
-
-int valid_redir(t_mini *mini)
+int valid_pipeline(t_node *node)
 {
-	int i;
+	int p;
 
-	i = 0;
-	while(mini->tkn)
+	p = node->n_pipe;
+	while (node->n_pipe == p || node)
 	{
-		if (mini->tkn[i] <= HERE_DOC && mini->tkn[i] >= REDIR_MIN)
-		{
-			if (!mini->tkn[i + 1] || mini->tkn[i + 1] == PIPE)
-			{
-				g_exit = 2;
-				ft_putendl_fd("unexpected token", 2);
-				return(0);
-			}
-		}
-		return (1);
+		if(node->this_tkn > 10 && node->this_tkn <= 20)
+			return (1);
+		if (node->next != NULL)
+			node = node->next;
+		else 
+			break;
 	}
+	ft_putendl_fd("error : no command to input!", 2);
+	return (0);
 }

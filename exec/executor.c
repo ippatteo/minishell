@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 04:39:44 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 06:01:24 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@ void	here_doc(t_node *node, t_mini *mini)
 	int		i;
 
 	i = 0;
+	
 	if (pipe(fd) == -1)
 		ft_putendl_fd(strerror(errno), 2);
 	while (1)
-	{
+	{	
+		
 		str = readline("> ");
 		if (str == NULL)
 			return ;
@@ -35,6 +37,7 @@ void	here_doc(t_node *node, t_mini *mini)
 		i++;
 	}
 	dup2(fd[0], STDIN_FILENO);
+	//mini->fdin = fd[0];
 	close(fd[0]);
 	close(fd[1]);
 }
@@ -77,6 +80,7 @@ int	redir_min(t_node *node, t_mini *mini)
 
 int	redirection_init(t_node *node, t_mini *mini)
 {
+	
 	if (node->this_tkn == REDIR_MAG)
 		redir_mag(node, mini);
 	if (node->this_tkn == REDIR_MAGMAG)
@@ -87,6 +91,9 @@ int	redirection_init(t_node *node, t_mini *mini)
 			return (-1);
 	}
 	if (node->this_tkn == HERE_DOC)
-		here_doc(node, mini);
+	{
+		if (valid_pipeline(node))
+			here_doc(node, mini);
+	}
 	return (0);
 }
