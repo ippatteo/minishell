@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/11 06:02:35 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 11:53:51 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,6 +200,8 @@ void	pipex(t_node *node, t_mini *mini);
 int		ispipeline(t_node *node, t_mini *mini);
 void	here_doc(t_node *node, t_mini *mini);
 int		isredir(t_node *node);
-void	handle(int signum);
+void	handle_c(int signum);
+void	handle_d(int signum);
+void	init_vars(t_node *node, t_mini *mini);
 
 #endif

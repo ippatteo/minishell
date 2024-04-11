@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 06:01:24 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:04:05 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,13 @@ void	here_doc(t_node *node, t_mini *mini)
 	int		i;
 
 	i = 0;
-	
+
 	if (pipe(fd) == -1)
 		ft_putendl_fd(strerror(errno), 2);
 	while (1)
-	{	
-		
+	{
 		str = readline("> ");
-		if (str == NULL)
+		if (!str)
 			return ;
 		if (ft_strcmp(str, node->file) == 0)
 			break ;
@@ -37,7 +36,6 @@ void	here_doc(t_node *node, t_mini *mini)
 		i++;
 	}
 	dup2(fd[0], STDIN_FILENO);
-	//mini->fdin = fd[0];
 	close(fd[0]);
 	close(fd[1]);
 }
@@ -65,7 +63,7 @@ void	redir_magmag(t_node *node, t_mini *mini)
 int	redir_min(t_node *node, t_mini *mini)
 {
 	int fd;
-	
+
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
 	{
@@ -80,7 +78,7 @@ int	redir_min(t_node *node, t_mini *mini)
 
 int	redirection_init(t_node *node, t_mini *mini)
 {
-	
+
 	if (node->this_tkn == REDIR_MAG)
 		redir_mag(node, mini);
 	if (node->this_tkn == REDIR_MAGMAG)

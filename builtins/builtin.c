@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:22:30 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 04:57:31 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:08:59 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ void	ft_echo(t_node *node, t_mini *mini) //gexit nel parse
 
 	space = 0;
 	i = 1;
+	g_exit = 0;
 	if (node->cmd_matrix == NULL)
 	{
 		printf("\n");
@@ -104,6 +105,7 @@ void	ft_pwd(t_node *node, t_mini *mini) //g_exit nel parser
 	while (ft_strnstr(mini->en[i], "PWD", 3) == NULL)
 		i++;
 	printf("%s\n", mini->en[i] + 4);
+	g_exit = 0;
 }
 
 void	ft_env(t_node *node, t_mini *mini)

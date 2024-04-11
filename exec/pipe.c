@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipe.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 06:12:32 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 12:06:42 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,10 @@ void	fork_exec(t_node *node, t_mini *mini)
 		return ;
 	}
 	pid = fork();
-
 	if (pid == -1)
 		perror("pid\n");
 	if (pid == 0)
 	{
-		signal(SIGQUIT, handle);
 		close(mini->fdin);
 		execve(node->cmd_path, node->cmd_matrix, NULL);
 		perror("excve");
@@ -75,11 +73,8 @@ int	redir_inout(t_node *node, t_mini *mini)
 {
 	if (node->this_tkn == REDIR_MIN || node->this_tkn == HERE_DOC)
 	{
-		//close(mini->fdin);
 		if (redirection_init(node, mini) == -1)
 			return (-1);
-		//dup2(mini->fdin, STDIN_FILENO);
-		//close(mini->fdin);
 	}
 	else if (node->this_tkn == REDIR_MAG || node->this_tkn == REDIR_MAGMAG)
 	{
@@ -87,7 +82,7 @@ int	redir_inout(t_node *node, t_mini *mini)
 		redirection_init(node, mini);
 	}
 	dup2(mini->fdout, STDOUT_FILENO);
-	close(mini->fdout);	
+	close(mini->fdout);
 	return (0);
 }
 
@@ -102,11 +97,14 @@ void	reset(t_mini *mini)
 	while (waitpid(-1, &status, 0) > 0);
 }
 
+void	signal_heredoc(void)
+{
+	signal(SIGTERM, handle_c);
+	signal(SIGINT, handle_d);
+}
 
 void	exec(t_node *node, t_mini *mini)
 {
-	int p;
-	
 	mini->temp_in = dup(STDIN_FILENO);
 	mini->temp_out = dup(STDOUT_FILENO);
 	mini->fdin = dup(mini->temp_in);
@@ -114,6 +112,7 @@ void	exec(t_node *node, t_mini *mini)
 	mini->pipeline = 0;
 	if (ispipeline(node, mini) == 0)
 		mini->pipeline = 1;
+	signal_heredoc();
 	while (node)
 	{
 		set_inout(node, mini);
@@ -124,6 +123,8 @@ void	exec(t_node *node, t_mini *mini)
 				break ;
 			node = node->next;
 		}
+		if (!node)
+			return ;
 		fork_exec(node, mini);
 		node = node->next;
 	}
