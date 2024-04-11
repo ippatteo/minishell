@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/07 20:24:43 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:41:53 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,15 @@ int	count_exp(char *str)
 	}
 	return (mem);
 }
+
 int	ft_it_is_exp_valid_2(int q, int count_exp)
 {
 	if (!q)
 		return (count_exp + 1);
 	else if (q == count_exp + 3)
-		return(count_exp + 3);
+		return (count_exp + 3);
 	else if (q > count_exp + 3)
-		return(0);
+		return (0);
 }
 
 int	ft_it_is_exp_valid(t_mini *mini, char *s)
@@ -56,7 +57,7 @@ int	ft_it_is_exp_valid(t_mini *mini, char *s)
 
 	tmp = NULL;
 	q = 0;
-	if(*s == D_QUOT)
+	if (*s == D_QUOT)
 		q = count_mem_quote(s++, D_QUOT);
 	if (q == 2)
 		return (2);
@@ -69,7 +70,7 @@ int	ft_it_is_exp_valid(t_mini *mini, char *s)
 	if (!ft_getenv(mini->en, tmp))
 	{
 		free(tmp);
-		return(ft_it_is_exp_valid_2(q, count_exp(s + 1)));
+		return (ft_it_is_exp_valid_2(q, count_exp(s + 1)));
 	}
 	else
 	{
@@ -77,9 +78,10 @@ int	ft_it_is_exp_valid(t_mini *mini, char *s)
 		return (0);
 	}
 }
-int str_count_further(t_mini *mini, char *str)//sarebbe da mette na flag
+
+int	str_count_further(t_mini *mini, char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (*str == D_QUOT && mini->open_quot == 0)
@@ -87,7 +89,7 @@ int str_count_further(t_mini *mini, char *str)//sarebbe da mette na flag
 		mini->open_quot = 1;
 		return (1);
 	}
-	else if(*str == D_QUOT && mini->open_quot)
+	else if (*str == D_QUOT && mini->open_quot)
 	{
 		mini->open_quot = 0;
 		return (1);
@@ -109,8 +111,9 @@ int str_count_further(t_mini *mini, char *str)//sarebbe da mette na flag
 }
 
 
-void str_go_further(t_mini *mini, char **orig, char **str)//sarebbe da mette na flag
+void str_go_further(t_mini *mini, char **orig, char **str)
 {
+	printf("entra\n");
 	if (**str == D_QUOT && !mini->open_quot)
 	{
 		mini->open_quot = 1;
@@ -129,7 +132,7 @@ void str_go_further(t_mini *mini, char **orig, char **str)//sarebbe da mette na 
 	}
 	else if (**str == QUOT && !mini->open_quot)
 	{
-		(*str)++; // Salta la virgoletta singola iniziale
+		(*str)++;
     	while (**str != QUOT)
     		{
         **orig = **str;
@@ -158,7 +161,7 @@ void semaphore_quotes(char d, t_mini *mini)
 		mini->open_quot = 1;
 	else if (d == QUOT && mini->open_quot && !mini->open_d_quot)
 		mini->open_quot = 0;
-	
+
 }
 int	str_exp_count(t_mini *mini, char *str)
 {

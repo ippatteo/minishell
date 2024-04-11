@@ -6,7 +6,7 @@
 /*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 12:04:05 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:42:29 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,25 +15,17 @@
 void	here_doc(t_node *node, t_mini *mini)
 {
 	char	*str;
-	char	**cmd;
 	int		fd[2];
-	int		i;
 
-	i = 0;
-
-	if (pipe(fd) == -1)
-		ft_putendl_fd(strerror(errno), 2);
+	pipe(fd);
 	while (1)
 	{
 		str = readline("> ");
-		if (!str)
-			return ;
-		if (ft_strcmp(str, node->file) == 0)
+		if (!str || ft_strcmp(str, node->file) == 0)
 			break ;
 		write(fd[1], str, ft_strlen(str));
 		free(str);
 		write(fd[1], "\n", 1);
-		i++;
 	}
 	dup2(fd[0], STDIN_FILENO);
 	close(fd[0]);

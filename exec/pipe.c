@@ -6,11 +6,21 @@
 /*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/24 19:13:52 by luca              #+#    #+#             */
-/*   Updated: 2024/04/11 12:06:42 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:13:21 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
+
+void	ctrl_back(int signum)
+{
+	if (signum == SIGQUIT)
+	{
+		write(2, "Quit (core dumped)\n", 19);
+		rl_replace_line("", 0);
+		rl_on_new_line();
+	}
+}
 
 void	fork_exec(t_node *node, t_mini *mini)
 {
@@ -28,6 +38,7 @@ void	fork_exec(t_node *node, t_mini *mini)
 		ft_putendl_fd(" : command not found", 2);
 		return ;
 	}
+	signal(SIGQUIT ,ctrl_back);
 	pid = fork();
 	if (pid == -1)
 		perror("pid\n");
@@ -97,12 +108,6 @@ void	reset(t_mini *mini)
 	while (waitpid(-1, &status, 0) > 0);
 }
 
-void	signal_heredoc(void)
-{
-	signal(SIGTERM, handle_c);
-	signal(SIGINT, handle_d);
-}
-
 void	exec(t_node *node, t_mini *mini)
 {
 	mini->temp_in = dup(STDIN_FILENO);
@@ -112,7 +117,6 @@ void	exec(t_node *node, t_mini *mini)
 	mini->pipeline = 0;
 	if (ispipeline(node, mini) == 0)
 		mini->pipeline = 1;
-	signal_heredoc();
 	while (node)
 	{
 		set_inout(node, mini);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_split_utils_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/02 23:22:25 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/11 13:36:24 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,11 @@ int	count_matrix(char **matrix)
 		a++;
 	}
 	return (a);
+}
+
+int	check_env(char c, char d)
+{
+	if (c == '$' && d && (ft_isalnum(d) || ft_isalpha(d) || d == '_'))
+		return (0);
+	return (-1);
 }
