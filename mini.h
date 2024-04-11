@@ -6,7 +6,11 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/04/11 14:11:11 by mcamilli         ###   ########.fr       */
+=======
+/*   Updated: 2024/04/11 12:59:12 by lpicciri         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/token_exec
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +76,7 @@ typedef struct s_mini
 	int		open_quot; //aggiunger
 	int		open_d_quot; //aggiungere
 	int		pipeline;
+	int		here_doc_flag;
 	int		pipefd[2];
 }	t_mini;
 

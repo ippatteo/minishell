@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/04/11 14:06:05 by mcamilli         ###   ########.fr       */
+=======
+/*   Updated: 2024/04/11 13:36:13 by lpicciri         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/token_exec
 /*                                                                            */
 /* ************************************************************************** */
 

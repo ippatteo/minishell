@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   expander.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2024/04/11 14:05:45 by mcamilli         ###   ########.fr       */
+=======
+/*   Updated: 2024/04/11 13:41:53 by lpicciri         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/token_exec
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +43,19 @@ int	count_exp(char *str)
 	}
 	return (mem);
 }
+<<<<<<< HEAD
+=======
+
+int	ft_it_is_exp_valid_2(int q, int count_exp)
+{
+	if (!q)
+		return (count_exp + 1);
+	else if (q == count_exp + 3)
+		return (count_exp + 3);
+	else if (q > count_exp + 3)
+		return (0);
+}
+>>>>>>> refs/remotes/origin/token_exec
 
 int	ft_it_is_exp_valid(t_mini *mini, char *s)
 {
@@ -68,7 +85,95 @@ int	ft_it_is_exp_valid(t_mini *mini, char *s)
 		return (0);
 	}
 }
+<<<<<<< HEAD
 
+=======
+
+int	str_count_further(t_mini *mini, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (*str == D_QUOT && mini->open_quot == 0)
+	{
+		mini->open_quot = 1;
+		return (1);
+	}
+	else if (*str == D_QUOT && mini->open_quot)
+	{
+		mini->open_quot = 0;
+		return (1);
+	}
+	else if (*str == QUOT && !mini->open_quot)
+	{
+		i++;
+		str++;
+		while (*str != QUOT)
+		{
+			i++;
+			str++;
+		}
+		i++;
+	}
+	else
+		i++;
+	return (i);
+}
+
+
+void str_go_further(t_mini *mini, char **orig, char **str)
+{
+	printf("entra\n");
+	if (**str == D_QUOT && !mini->open_quot)
+	{
+		mini->open_quot = 1;
+		**orig = **str;
+		(*orig)++;
+		(*str)++;
+		return;
+	}
+	else if(**str == D_QUOT && mini->open_quot)
+	{
+		mini->open_quot = 0;
+		**orig = **str;
+		(*orig)++;
+		(*str)++;
+		return;
+	}
+	else if (**str == QUOT && !mini->open_quot)
+	{
+		(*str)++;
+    	while (**str != QUOT)
+    		{
+        **orig = **str;
+     (*orig)++;
+        (*str)++;
+    }
+    (*str)++;
+	}
+	else
+	{
+		printf("else\n");
+		**orig = **str;
+		(*orig)++;
+		(*str)++;
+	}
+}
+
+void semaphore_quotes(char d, t_mini *mini)
+{
+	mini->sub = NULL;
+	if (d == D_QUOT && !mini->open_d_quot && !mini->open_quot)
+		mini->open_d_quot = 1;
+	else if (d == D_QUOT && mini->open_d_quot && !mini->open_quot)
+		mini->open_d_quot = 0;
+	if (d == QUOT && !mini->open_quot && !mini->open_d_quot)
+		mini->open_quot = 1;
+	else if (d == QUOT && mini->open_quot && !mini->open_d_quot)
+		mini->open_quot = 0;
+
+}
+>>>>>>> refs/remotes/origin/token_exec
 int	str_exp_count(t_mini *mini, char *str)
 {
 	char	*tmp;
