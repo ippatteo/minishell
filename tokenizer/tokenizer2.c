@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenizer2.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/03 00:03:41 by luca              #+#    #+#             */
-/*   Updated: 2024/04/08 00:56:08 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:55:55 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,8 @@ int	ft_tokenizer(t_mini *mini, char *prompt)
 	int	i;
 
 	i = 0;
-	if(!lexer(mini, prompt))
-		return(0);
+	if (!lexer(mini, prompt))
+		return (0);
 	if (mini->tknflag == 1)
 		free(mini->tkn);
 	mini->tkn = ft_calloc(count_matrix(mini->commands) + 1, sizeof(char));

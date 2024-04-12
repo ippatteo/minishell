@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   expander3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 20:15:45 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/07 21:45:04 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 14:54:16 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../mini.h"
-int check_for_expan(char *str)
+
+int	check_for_expan(char *str)
 {
 	while (*str)
 	{
@@ -112,11 +113,4 @@ int	check_expan_2(t_mini *mini, char **c)
 			i++;
 	}
 	return (i);
-}
-
-int	check_env(char c, char d)
-{
-	if (c == '$' && d && (ft_isalnum(d) || ft_isalpha(d) || d == '_'))
-		return (0);
-	return (-1);
 }

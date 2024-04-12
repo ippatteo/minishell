@@ -6,7 +6,7 @@
 /*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 15:16:16 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/04/05 01:47:07 by mcamilli         ###   ########.fr       */
+/*   Updated: 2024/04/11 13:53:42 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,18 +73,17 @@ int	c_error_quote(char *str, char c)
 		return (0);
 	}
 	else
-		return(++mem);
+		return (++mem);
 }
 
-//questa va nel .h
 int	no_open_quote(char *str)
 {
 	while (*str)
 	{
-		if(*str == D_QUOT || *str == QUOT)
+		if (*str == D_QUOT || *str == QUOT)
 		{
-			if(!c_error_quote(str, *str))
-				return(0);
+			if (!c_error_quote(str, *str))
+				return (0);
 			else
 				str += c_error_quote(str, *str);
 		}
@@ -93,5 +92,3 @@ int	no_open_quote(char *str)
 	}
 	return (1);
 }
-
-

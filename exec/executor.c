@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   redir.c                                            :+:      :+:    :+:   */
+/*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/07 22:24:37 by luca              #+#    #+#             */
-/*   Updated: 2024/04/10 11:48:14 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/11 15:15:35 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,77 +15,57 @@
 void	here_doc(t_node *node, t_mini *mini)
 {
 	char	*str;
-	char	**cmd;
 	int		fd[2];
-	int		i;
 
-	i = 0;
 	if (pipe(fd) == -1)
 		ft_putendl_fd(strerror(errno), 2);
 	while (1)
 	{
 		str = readline("> ");
-		if (str == NULL)
-			return ;
-		if (ft_strcmp(str, node->file) == 0)
+		if (!str || ft_strcmp(str, node->file) == 0)
 			break ;
 		write(fd[1], str, ft_strlen(str));
 		free(str);
 		write(fd[1], "\n", 1);
-		i++;
 	}
-	mini->fdin = fd[0];
-	mini->redir_flg_input = 1;
+	dup2(fd[0], STDIN_FILENO);
+	close(fd[0]);
 	close(fd[1]);
 }
 
 void	redir_mag(t_node *node, t_mini *mini)
 {
-	int	fdout;
-
-	fdout = open(node->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
+	mini->fdout = open(node->file, O_CREAT | O_TRUNC | O_WRONLY, 0644);
 	if (mini->fdout < 0)
 	{
 		g_exit = 1;
 		perror("file error");
 	}
-	if(dup2(fdout, STDOUT_FILENO) == -1)
-		perror("dup mag \n");
-	close(fdout);	
-	mini->redir_flg_output = 1;
 }
 
 void	redir_magmag(t_node *node, t_mini *mini)
 {
-	int	fdout;
-
-	fdout = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	mini->fdout = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (mini->fdout < 0)
 	{
 		g_exit = 1;
 		perror("file error");
 	}
-	if(dup2(fdout, STDOUT_FILENO) == -1)
-		perror("dup mag mag\n");
-	close(fdout);
-	mini->redir_flg_output = 1;
 }
 
 int	redir_min(t_node *node, t_mini *mini)
 {
-	int	fdin;
+	int	fd;
 
-	fdin = open(node->file, O_RDONLY);
-	if (mini->fdin < 0)
+	fd = open(node->file, O_RDONLY);
+	if (fd < 0)
 	{
 		g_exit = 1;
 		ft_putendl_fd("no such file\n", 2);
 		return (-1);
 	}
-	if(dup2(fdin, STDIN_FILENO) == -1)
-		perror("dup min\n");
-	close(fdin);
-	mini->redir_flg_input = 1;
+	dup2(fd, STDIN_FILENO);
+	close(fd);
 	return (0);
 }
 

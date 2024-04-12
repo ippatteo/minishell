@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: luca <luca@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/14 12:08:37 by mcamilli          #+#    #+#             */
-/*   Updated: 2024/04/10 10:02:10 by luca             ###   ########.fr       */
+/*   Updated: 2024/04/11 15:12:31 by lpicciri         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,11 @@ typedef struct s_mini
 	int		fdout;
 	int		temp_in;
 	int		temp_out;
-	int		redir_flg_input;
-	int		redir_flg_output;
+	int		redir_flg;
 	int		open_quot; //aggiunger
 	int		open_d_quot; //aggiungere
 	int		pipeline;
+	int		here_doc_flag;
 	int		pipefd[2];
 }	t_mini;
 
@@ -89,6 +89,9 @@ typedef struct s_node
 	int				n_pipe;
 }	t_node;
 
+int		ft_it_is_exp_valid_2(int q, int count_exp);
+int		valid_redir(t_mini *mini);
+int		redir_inout(t_node *node, t_mini *mini);
 int		is_executable(const char *path); //da aggiungere al
 char	*str_quot_realloc_2(t_mini *mini, char *str);
 int		str_quot_count_2(t_mini *mini, char *str);
@@ -181,6 +184,7 @@ void	signal_handler(void);
 
 // BUILTINS
 
+void	ft_print_export(t_mini *mini);
 void	ft_cd(t_node *node, t_mini *mini);
 void	ft_echo(t_node *node, t_mini *mini);
 void	ft_pwd(t_node *node, t_mini *mini);
@@ -192,13 +196,17 @@ void	ft_exit(t_node *node, t_mini *mini);
 
 // EXECUTOR
 
+void	set_inout(t_node *node, t_mini *mini);
+int		ispipeline(t_node *node, t_mini *mini);
+int		valid_pipeline(t_node *node);
 void	exec(t_node *node, t_mini *mini);
-int		ispipeline(t_node *node);
+void	pipex(t_node *node, t_mini *mini);
+int		ispipeline(t_node *node, t_mini *mini);
 void	here_doc(t_node *node, t_mini *mini);
 int		isredir(t_node *node);
-void	handle(int signum);
-void	setup_redir(t_node *node, t_mini *mini);
-int		isbuiltin(t_node *node);
-int		check_builtin(t_node *node, t_mini *mini);
+void	handle_c(int signum);
+void	handle_d(int signum);
+void	init_vars(t_node *node, t_mini *mini);
+void	init_vargs(t_node *node, t_mini *mini);
 
 #endif

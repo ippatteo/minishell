@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lpicciri <lpicciri@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mcamilli <mcamilli@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/20 12:58:58 by luca              #+#    #+#             */
-/*   Updated: 2024/04/03 18:20:22 by lpicciri         ###   ########.fr       */
+/*   Updated: 2024/04/11 19:03:43 by mcamilli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,42 @@ void	ft_unset(t_mini *mini, char **mtr)
 		}
 		i++;
 	}
+	g_exit = 0;
+}
+
+void	ft_free_and_exit(t_node *node, t_mini *mini, int n)
+{
+	ft_exit_all(node, mini);
+	exit(n);
 }
 
 void	ft_exit(t_node *node, t_mini *mini)
 {
-	ft_exit_all(node, mini);
-	exit(0);
+	int	i;
+
+	i = 0;
+	if (!node->cmd_matrix[1])
+		ft_free_and_exit(node, mini, g_exit);
+	while (node->cmd_matrix[i])
+		i++;
+	if (i > 2)
+	{
+		write(2, "exit: too many arguments\n", 25);
+		ft_free_and_exit(node, mini, 127);
+		return ;
+	}
+	if (i == 2)
+	{
+		if (node->cmd_matrix[1][0] == 48 && !node->cmd_matrix[1][1])
+			ft_free_and_exit(node, mini, 0);
+		if (ft_atoi(node->cmd_matrix[1]) == 0)
+		{
+			write(2, "exit error\n", 11);
+			ft_free_and_exit(node, mini, 127);
+		}
+		else
+			ft_free_and_exit(node, mini, (u_char)atoi(node->cmd_matrix[1]));
+	}
 }
 
 int	check_space(char *str, t_node *node, t_mini *mini)
