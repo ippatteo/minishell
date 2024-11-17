@@ -6,7 +6,7 @@
 /*   By: matteocamilli <matteocamilli@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/11/17 09:57:20 by matteocamil      ###   ########.fr       */
+/*   Updated: 2024/11/17 10:21:53 by matteocamil      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,27 @@ int	main(int argc, char **argv, char **env)
 			return (0);
 		}
 		if (*cmd != 0)
-		{
-			printf("launching radar...\n");
+		{	printf("ELECTRICITY has been shut down\n");
+			sleep(1);
+			printf("accessing emergency radars\n");
 			sleep(2);
-			printf("non human life form found\n");
+			printf("scanning starship...\n");
+			sleep(2);
+			printf("NON-human life forms found\n");
+			sleep(1);
+			printf("looking for positions\n");
+			sleep(2);
+			printf("loading NON-human EGGS on radar\n");
+			sleep(2);
+			printf("loading NON-human MOTHER on radar\n");
+			sleep(2);
+			printf("an EMERGENCY signal has been sent\n");
+			sleep(1);
+			printf("SURVIVE until rescue\n");
+			sleep(2);
+			printf("LAUNCHING...\n");
+			sleep(10);
+
 		}
 	}
 	return (0);
