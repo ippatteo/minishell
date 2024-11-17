@@ -6,7 +6,7 @@
 /*   By: matteocamilli <matteocamilli@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/24 14:42:15 by lpicciri          #+#    #+#             */
-/*   Updated: 2024/11/17 10:25:33 by matteocamil      ###   ########.fr       */
+/*   Updated: 2024/11/17 16:29:03 by matteocamil      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ int	main(int argc, char **argv, char **env)
 			printf("an EMERGENCY signal has been sent\n");
 			sleep(4);
 			printf("SURVIVE until rescue\n");
+			sleep(4);
+			printf("watch your sounds,too much noise will alert MOTHER\n");
 			sleep(4);
 			printf("LAUNCHING...\n");
 			sleep(10);
